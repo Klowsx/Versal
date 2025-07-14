@@ -1,0 +1,22 @@
+{
+  "name": "versal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "fastify": "^5.4.0",
+    "fastify-cors": "^6.1.0",
+    "fastify-plugin": "^5.0.1",
+    "mongoose": "^8.16.3",
+    "stripe": "^18.3.0"
+  }
+}
