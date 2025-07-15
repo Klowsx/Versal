@@ -2,7 +2,19 @@ const User = require("./user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+function isValidPassword(password) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}$/;
+  return regex.test(password);
+}
+
 async function registerUser({ email, password, username }) {
+  if (!isValidPassword(password)) {
+    return {
+      error:
+        "Password must be at least 8 characters long, include a lowercase, an uppercase letter, and a special character.",
+    };
+  }
+
   const existing = await User.findOne({ email });
   if (existing) return { error: "Email already in use" };
 
