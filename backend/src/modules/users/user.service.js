@@ -7,11 +7,11 @@ function isValidPassword(password) {
   return regex.test(password);
 }
 
-async function registerUser({ email, password, username }) {
+async function registerUser({ email, password, username, fullName }) {
   if (!isValidPassword(password)) {
     return {
       error:
-        "Password must be at least 8 characters long, include a lowercase, an uppercase letter, and a special character.",
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial.",
     };
   }
 
@@ -19,7 +19,7 @@ async function registerUser({ email, password, username }) {
   if (existing) return { error: "Email already in use" };
 
   const hash = await bcrypt.hash(password, 10);
-  const user = await User.create({ email, password: hash, username });
+  const user = await User.create({ email, password: hash, username, fullName });
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
@@ -30,10 +30,10 @@ async function registerUser({ email, password, username }) {
 
 async function loginUser({ email, password }) {
   const user = await User.findOne({ email });
-  if (!user) return { error: "Invalid credentials" };
+  if (!user) return { error: "Credenciales invalidas" };
 
   const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) return { error: "Invalid credentials" };
+  if (!isValid) return { error: "Credenciales invalidas" };
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",

@@ -1,11 +1,12 @@
 const register = {
   body: {
     type: "object",
-    required: ["email", "password", "username"],
+    required: ["email", "password", "username", "fullName"],
     properties: {
       email: { type: "string", format: "email" },
       password: { type: "string", minLength: 6 },
       username: { type: "string" },
+      fullName: { type: "string", minLength: 3 },
     },
   },
 };
