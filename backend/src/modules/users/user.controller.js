@@ -1,9 +1,9 @@
 const userService = require("./user.service");
 
 async function register(request, reply) {
-  const { email, password, username } = request.body;
+  const { email, password, username, fullName } = request.body;
 
-  const result = await userService.registerUser({ email, password, username });
+  const result = await userService.registerUser({ email, password, username, fullName });
 
   if (result.error) {
     return reply.code(400).send({ error: result.error });
