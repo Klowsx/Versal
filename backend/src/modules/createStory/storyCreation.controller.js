@@ -6,11 +6,11 @@ async function createStory(request, reply) {
             title,
             descripcion,
             coverImage,
-            personajePrincipal,
+            personajePrincipales,
             categoria,
             etiquetas,
             audiencia,
-            idiomas,
+            idioma,
             derechos,
             clasificacion
         } = request.body
@@ -19,11 +19,11 @@ async function createStory(request, reply) {
             title,
             descripcion,
             coverImage,
-            personajePrincipal,
+            personajePrincipales,
             categoria,
             etiquetas,
             audiencia,
-            idiomas,
+            idioma,
             derechos,
             clasificacion
         });
