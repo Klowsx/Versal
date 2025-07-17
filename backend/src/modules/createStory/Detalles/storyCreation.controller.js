@@ -1,4 +1,4 @@
-const story = require("./storyCreation.model")
+const story = require("./storyCreation.model") 
 
 async function createStory(request, reply) {
     try{

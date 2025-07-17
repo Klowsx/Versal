@@ -4,7 +4,7 @@ const jwt = require("@fastify/jwt");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/modules/users/user.routes");
 const authPlugin = require("./src/plugins/auth.plugin");
-const storyCreationRoutes = require("./src/modules/createStory/storyCreation.routes");
+const storyCreationRoutes = require("./src/modules/createStory/Detalles/storyCreation.routes");
 dotenv.config();
 connectDB();
 fastify.register(jwt, { secret: process.env.JWT_SECRET });
