@@ -1,3 +1,5 @@
+const fp = require("fastify-plugin");
+
 async function authPlugin(fastify) {
   fastify.decorate("authenticate", async function (request, reply) {
     try {
@@ -8,4 +10,4 @@ async function authPlugin(fastify) {
   });
 }
 
-module.exports = authPlugin;
+module.exports = fp(authPlugin);
