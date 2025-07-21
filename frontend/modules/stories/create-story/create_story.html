@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crear Historia</title>
-  <link rel="stylesheet" href="create_story.css" />
+  <link rel="stylesheet" href="write_story.css" />
 </head>
 <body>
 
@@ -20,8 +20,8 @@
         <h2>Información Básica</h2>
         <label for="title">Título de la Historia *</label>
         <input type="text" id="title" name="title" required placeholder="Ingresa el título de tu historia..." />
-        <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" placeholder="Describe tu historia..."></textarea>
+        <label for="description">Descripción</label>
+        <textarea id="description" name="description" placeholder="Describe tu historia..."></textarea>
         <small>Describe tu historia para atraer lectores</small>
       </section>
 
@@ -35,44 +35,43 @@
       <!-- Personajes -->
       <section class="card card-green">
         <h2>Personajes Principales</h2>
-        <div id="personajesContainer">
-          <input type="text" name="personajePrincipales[]" placeholder="Nombre del personaje 1" />
+        <div id="charactersContainer">
+          <input type="text" name="mainCharacters[]" placeholder="Nombre del personaje 1" />
         </div>
-        <button type="button" id="addPersonajeBtn" class="btn-outline">+ Agregar Personaje</button>
+        <button type="button" id="addCharacterBtn" class="btn-outline">+ Agregar Personaje</button>
       </section>
 
       <!-- Categorización -->
       <section class="card card-yellow">
         <h2>Categorización</h2>
         <div class="row">
-          <select id="categoria" name="categoria" required>
+          <select id="category" name="category" required>
             <option disabled selected value="">Selecciona una categoría</option>
             <option value="Accion">Acción</option>
             <option value="Aventura">Aventura</option>
             <option value="Romance">Romance</option>
             <option value="Fantasia">Fantasía</option>
             <option value="Humor">Humor</option>
-            <!-- Agrega más si deseas -->
           </select>
-          <select id="audiencia" name="audiencia" required>
+          <select id="audience" name="audience" required>
             <option disabled selected value="">Selecciona la audiencia</option>
             <option value="Juvenil">Juvenil</option>
             <option value="Adultos">Adultos</option>
           </select>
         </div>
-        <input type="text" id="etiquetas" name="etiquetas" placeholder="Etiquetas separadas por coma" />
+        <input type="text" id="tags" name="tags" placeholder="Etiquetas separadas por coma" />
       </section>
 
       <!-- Configuración Adicional -->
       <section class="card card-purple">
         <h2>Configuración Adicional</h2>
         <div class="row">
-          <input type="text" id="idioma" name="idioma" placeholder="Idioma" value="Español" />
-          <input type="text" id="derechos" name="derechos" placeholder="Derechos de Autor" value="Todos los derechos reservados" />
+          <input type="text" id="language" name="language" placeholder="Idioma" value="Español" />
+          <input type="text" id="rights" name="rights" placeholder="Derechos de Autor" value="Todos los derechos reservados" />
         </div>
         <div class="alert">
           <label>
-            <input type="checkbox" id="clasificacion" name="clasificacion" />
+            <input type="checkbox" id="adultContent" name="adultContent" />
             ⚠️ Esta historia contiene contenido para adultos (+18)
           </label>
         </div>

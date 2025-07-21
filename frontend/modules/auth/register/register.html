@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registro - Versal</title>
-  <link rel="stylesheet" href="styles/style.css"/>
+  <link rel="stylesheet" href="../style.css"/>
 </head>
 <body>
 
 
   <div class="container">
   <div class="form-header">
-    <img src="resources/logoversal.png" alt="Logo de Versal" class="logo" />
+    <img src="../../../resources/logoversal.png" alt="Logo de Versal" class="logo" />
     <h2>Únete a Versal</h2>
     <p>Crea tu cuenta gratuita y comienza a descubrir miles de historias increíbles</p>
   </div>
@@ -20,8 +20,8 @@
     <input type="text" name="fullName" placeholder="Tu nombre completo" required />
     <input type="text" name="username" placeholder="Nombre de usuario" required />
     <input type="email" name="email" placeholder="Correo electrónico" required />
-    <input type="password" name="password" placeholder="Crea una contraseña segura" required />
-    <input type="password" name="confirmPassword" placeholder="Confirma tu contraseña" required />
+    <input type="password" name="password" placeholder="Crea una contraseña segura" minlength="8" maxlength="20" required />
+    <input type="password" name="confirmPassword" placeholder="Confirma tu contraseña" minlength="8" maxlength="20" required />
 
     <label style="font-size: 0.8rem;">
       <input type="checkbox" required />
@@ -29,11 +29,11 @@
     </label>
 
     <button type="submit">Crear Cuenta Gratuita</button>
-    <p>¿Ya tienes una cuenta? <a href="index.html">Inicia sesión aquí</a></p>
+    <p>¿Ya tienes una cuenta? <a href="../login/login.html">Inicia sesión aquí</a></p>
   </form>
 </div>
 
 
-  <script src="index.js"></script>
+  <script src="register.js"></script>
 </body>
 </html>

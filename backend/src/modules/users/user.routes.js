@@ -23,6 +23,7 @@ async function userRoutes(fastify) {
       },
     },
     async (request, reply) => {
+      console.log("Intento de registro:", request.body);
       const result = await userController.register(request, reply);
 
       if (result.error) {

@@ -4,7 +4,6 @@ dotenv.config();
 const fastify = require("fastify")();
 const cors = require("@fastify/cors");
 const jwt = require("@fastify/jwt");
-const cors = require("@fastify/cors"); 
 const connectDB = require("./src/config/db");
 
 const authPlugin = require("./src/plugins/auth.plugin");
@@ -22,6 +21,10 @@ fastify.register(userRoutes, { prefix: "/api/user", authenticate: fastify.authen
 // Rutas de las historias
 fastify.register(storyCreationRoutes, { prefix: "/api/story" });
 
+fastify.register(cors, {
+  origin: "*", 
+  credentials: true
+});
 
 fastify.listen({ port: 3000 }, (err, address) => {
   if (err) {
