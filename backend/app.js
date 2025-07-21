@@ -15,16 +15,17 @@ fastify.register(jwt, { secret: process.env.JWT_SECRET });
 
 fastify.register(authPlugin);
 
+//CORS
+fastify.register(cors, {
+  origin: "*",
+  credentials: true,
+});
+
 // Rutas de usuario
 fastify.register(userRoutes, { prefix: "/api/user", authenticate: fastify.authenticate });
 
 // Rutas de las historias
 fastify.register(storyCreationRoutes, { prefix: "/api/story" });
-
-fastify.register(cors, {
-  origin: "*", 
-  credentials: true
-});
 
 fastify.listen({ port: 3000 }, (err, address) => {
   if (err) {
