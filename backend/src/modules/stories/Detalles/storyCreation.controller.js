@@ -1,4 +1,4 @@
-const story = require("./storyCreation.model") 
+const story = require("./storyCreation.model"); 
 
 async function createStory(request, reply) {
     try{
@@ -30,7 +30,8 @@ async function createStory(request, reply) {
 
         return reply.status(201).send({
             message: "Historia creada con exito",
-            story: nuevaStory
+            story: nuevaStory,
+            storyId: nuevaStory._id
         })
     } catch (err) {
         console.error("Error al crear historia", err);
