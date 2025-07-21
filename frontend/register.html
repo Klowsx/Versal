@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro - Versal</title>
+  <link rel="stylesheet" href="styles/style.css"/>
+</head>
+<body>
+
+
+  <div class="container">
+  <div class="form-header">
+    <img src="resources/logoversal.png" alt="Logo de Versal" class="logo" />
+    <h2>Únete a Versal</h2>
+    <p>Crea tu cuenta gratuita y comienza a descubrir miles de historias increíbles</p>
+  </div>
+
+  <form id="registerForm">
+    <input type="text" name="fullName" placeholder="Tu nombre completo" required />
+    <input type="text" name="username" placeholder="Nombre de usuario" required />
+    <input type="email" name="email" placeholder="Correo electrónico" required />
+    <input type="password" name="password" placeholder="Crea una contraseña segura" required />
+    <input type="password" name="confirmPassword" placeholder="Confirma tu contraseña" required />
+
+    <label style="font-size: 0.8rem;">
+      <input type="checkbox" required />
+      Acepto los <a href="#">Términos de Servicio</a> y la <a href="#">Política de Privacidad</a>
+    </label>
+
+    <button type="submit">Crear Cuenta Gratuita</button>
+    <p>¿Ya tienes una cuenta? <a href="index.html">Inicia sesión aquí</a></p>
+  </form>
+</div>
+
+
+  <script src="index.js"></script>
+</body>
+</html>

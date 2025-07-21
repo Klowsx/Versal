@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Historia</title>
+  <link rel="stylesheet" href="create_story.css" />
+</head>
+<body>
+
+  <header>
+    <h1>📘 Crear Historia</h1>
+    <p>Comparte tu creatividad con el mundo</p>
+  </header>
+
+  <main class="container">
+    <form id="storyForm">
+      <!-- Información Básica -->
+      <section class="card card-blue">
+        <h2>Información Básica</h2>
+        <label for="title">Título de la Historia *</label>
+        <input type="text" id="title" name="title" required placeholder="Ingresa el título de tu historia..." />
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" placeholder="Describe tu historia..."></textarea>
+        <small>Describe tu historia para atraer lectores</small>
+      </section>
+
+      <!-- Portada -->
+      <section class="card card-pink">
+        <h2>Portada de la Historia</h2>
+        <input type="text" id="coverImage" name="coverImage" placeholder="URL de la imagen de portada (PNG, JPG, WEBP)" />
+        <small>PNG, JPG, WEBP hasta 5MB<br>Recomendado: 400x600px</small>
+      </section>
+
+      <!-- Personajes -->
+      <section class="card card-green">
+        <h2>Personajes Principales</h2>
+        <div id="personajesContainer">
+          <input type="text" name="personajePrincipales[]" placeholder="Nombre del personaje 1" />
+        </div>
+        <button type="button" id="addPersonajeBtn" class="btn-outline">+ Agregar Personaje</button>
+      </section>
+
+      <!-- Categorización -->
+      <section class="card card-yellow">
+        <h2>Categorización</h2>
+        <div class="row">
+          <select id="categoria" name="categoria" required>
+            <option disabled selected value="">Selecciona una categoría</option>
+            <option value="Accion">Acción</option>
+            <option value="Aventura">Aventura</option>
+            <option value="Romance">Romance</option>
+            <option value="Fantasia">Fantasía</option>
+            <option value="Humor">Humor</option>
+            <!-- Agrega más si deseas -->
+          </select>
+          <select id="audiencia" name="audiencia" required>
+            <option disabled selected value="">Selecciona la audiencia</option>
+            <option value="Juvenil">Juvenil</option>
+            <option value="Adultos">Adultos</option>
+          </select>
+        </div>
+        <input type="text" id="etiquetas" name="etiquetas" placeholder="Etiquetas separadas por coma" />
+      </section>
+
+      <!-- Configuración Adicional -->
+      <section class="card card-purple">
+        <h2>Configuración Adicional</h2>
+        <div class="row">
+          <input type="text" id="idioma" name="idioma" placeholder="Idioma" value="Español" />
+          <input type="text" id="derechos" name="derechos" placeholder="Derechos de Autor" value="Todos los derechos reservados" />
+        </div>
+        <div class="alert">
+          <label>
+            <input type="checkbox" id="clasificacion" name="clasificacion" />
+            ⚠️ Esta historia contiene contenido para adultos (+18)
+          </label>
+        </div>
+      </section>
+
+      <!-- Botones -->
+      <div class="buttons">
+        <button type="submit" class="btn-primary">Crear Historia</button>
+      </div>
+    </form>
+
+    <div class="center">
+      <p>¿Ya tienes tu historia lista? ¡Comienza a escribir!</p>
+      <button class="btn-success" id="startWritingBtn">✏️ Empezar a Escribir</button>
+    </div>
+  </main>
+
+  <script src="create_story.js"></script>
+</body>
+</html>
