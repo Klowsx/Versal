@@ -1,7 +1,7 @@
 const { writeStory, getLatestDraft } = require("./storyWriting.controller");
 
 async function storyWritingRoute(fastify, options) {
-  fastify.post("/", {
+  fastify.post("/writing", {
     handler: writeStory,
   });
   fastify.get("/draft/:storyId", {

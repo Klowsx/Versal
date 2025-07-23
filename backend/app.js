@@ -5,9 +5,7 @@ const fastify = require("fastify")();
 const cors = require("@fastify/cors");
 const jwt = require("@fastify/jwt");
 const connectDB = require("./src/config/db");
-const storyCreationRoutes = require("./src/modules/stories/Detalles/storyCreation.routes");
-const storyWritingRoute = require("./src/modules/stories/Historia/storyWriting.route");
-const publicarStoryRoute = require("./src/modules/stories/Actualizar/publicarStory.route");
+const storyRoutes = require("./src/modules/stories/storyRoutes");
 const authPlugin = require("./src/plugins/auth.plugin");
 const userRoutes = require("./src/modules/users/user.routes");
 dotenv.config();
@@ -26,9 +24,7 @@ fastify.register(cors, {
 fastify.register(userRoutes, { prefix: "/api/user", authenticate: fastify.authenticate });
 
 // Rutas de las historias
-fastify.register(storyCreationRoutes, { prefix: "/api/story" });
-fastify.register(storyWritingRoute, { prefix: "/api/writing" });
-fastify.register(publicarStoryRoute, { prefix: "/api/publish"});
+fastify.register(storyRoutes, { prefix: "/api/stories", authenticate: fastify.authenticate });
 
 fastify.listen({ port: 3000 }, (err, address) => {
   if (err) {
