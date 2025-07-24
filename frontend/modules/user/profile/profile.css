@@ -1,0 +1,193 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #f3e8ff, #ffffff);
+  color: #4c1d95;
+}
+
+/* Ajuste para que el navbar no tape el contenido */
+.main-container {
+  padding-top: 60px; /* Ajusta si el navbar cambia de tamaño */
+  display: flex;
+  max-width: 1000px;
+  margin: 2rem auto 0 auto;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Contenedor para estadísticas y botones juntos */
+.sidebar-bottom {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+/* Estadísticas */
+.stats {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  gap: 1rem;
+  margin-bottom: 0;
+  background: #f5f3ff;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+/* Grupo de botones al lado */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-basis: 150px;
+}
+
+.btn-group .btn {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #9333ea;
+  color: white;
+  margin-bottom: 0;
+}
+
+/* Info section */
+.info {
+  flex: 2;
+  min-width: 300px;
+}
+
+/* Tarjetas */
+.card {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.center {
+  text-align: center;
+}
+
+/* Imagen avatar */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  border: 4px solid #e9d5ff;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  background: linear-gradient(to right, #fbbf24, #f59e0b);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  margin: 0.5rem 0;
+}
+
+/* Texto info */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+label {
+  font-weight: bold;
+  color: #6b21a8;
+  font-size: 0.9rem;
+}
+
+p {
+  margin: 0.5rem 0 1rem;
+  color: #1f2937;
+}
+
+/* Biografía ocupa dos columnas */
+.bio {
+  grid-column: span 2;
+}
+
+/* Encabezado info con título y botón alineados */
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Botón editar */
+.edit-btn {
+  background-color: #9333ea;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #7c27d9;
+}
+
+/* Ajuste para alinear stats y botones juntos */
+.sidebar-bottom {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: center; /* Centrar verticalmente */
+  flex-wrap: wrap; /* Que baje si no cabe */
+}
+
+.stats {
+  flex: 1;
+  min-width: 200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  gap: 1rem;
+  margin-bottom: 0;
+  background: #f5f3ff;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 200px;
+}
+
+.btn-group .btn {
+  flex: 1 1 auto; /* Que cada botón tome espacio disponible */
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #9333ea;
+  color: white;
+  margin-bottom: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+

@@ -1,0 +1,131 @@
+/* navbar.css */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-placeholder {
+  width: 100%;
+}
+
+/* Navbar */
+.versal-navbar {
+  background: white;
+  border-bottom: 2px solid #e5e5ff;
+  box-shadow: 0 2px 8px rgb(124 58 237 / 0.15);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.versal-navbar .navbar-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.versal-navbar .logo img {
+  height: 70px;
+  width: auto;
+  cursor: pointer;
+}
+
+.versal-navbar .nav-item {
+  position: relative;
+}
+
+.versal-navbar .nav-link,
+.versal-navbar .icon-button {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: #4c1d95;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  border-radius: 9999px;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.versal-navbar .nav-link:hover,
+.versal-navbar .icon-button:hover {
+  background: #f3eaff;
+}
+
+.versal-navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(124 58 237 / 0.15);
+  min-width: 180px;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.versal-navbar .dropdown-menu.right {
+  right: 0;
+  left: auto;
+}
+
+.versal-navbar .dropdown-menu a {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #4c1d95;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.versal-navbar .dropdown-menu a:hover {
+  background: #f3eaff;
+}
+
+.versal-navbar .nav-item:hover .dropdown-menu {
+  display: block;
+}
+
+.versal-navbar .search-container {
+  flex: 1 1 300px;
+}
+
+.versal-navbar .search-container input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem 1rem;
+  border: 2px solid #ddd6fe;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  outline-color: #a78bfa;
+}
+
+@media (max-width: 768px) {
+  .versal-navbar .navbar-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .versal-navbar .search-container {
+    flex: 1 1 100%;
+  }
+
+  .versal-navbar .search-container input {
+    max-width: 100%;
+  }
+}

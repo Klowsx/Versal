@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Perfil</title>
+  <link rel="stylesheet" href="profile.css" />
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="main-container">
+    <section class="sidebar">
+      <div class="card center">
+        <img id="avatar" src="../../../resources/profile.png" alt="Foto de perfil" class="avatar" />
+        <h2 id="fullName">Nombre Apellido</h2>
+        <p id="username">@usuario</p>
+        <span id="badge" class="badge">🌟 Básico</span>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="card stats">
+          <div><strong id="histCount">0</strong><span>Historias Escritas</span></div>
+          <div><strong id="favCount">0</strong><span>Favoritas</span></div>
+          <div><strong id="followersCount">0</strong><span>Seguidores</span></div>
+          <div><strong id="followingCount">0</strong><span>Siguiendo</span></div>
+        </div>
+
+        <div class="card btn-group">
+          <button class="btn">📖 Mis Historias</button>
+          <button class="btn">📚 Mi Biblioteca</button>
+          <button class="btn">⚙️ Configuración</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="info">
+  <div class="card">
+    <div class="info-header">
+      <h2>📋 Información Personal</h2>
+      <button class="btn edit-btn" onclick="window.location.href='/frontend/modules/user/edit-profile/editprofile.html'">✏️ Editar Perfil</button>
+    </div>
+    <div class="info-grid">
+      <div>
+        <label>Nombre</label>
+        <p id="nombre">...</p>
+      </div>
+      <div>
+        <label>Nombre de Usuario</label>
+        <p id="userTag">@...</p>
+      </div>
+      <div>
+        <label>Correo Electrónico</label>
+        <p id="email">...</p>
+      </div>
+      <div class="bio">
+        <label>Biografía</label>
+        <p id="bio">...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
+  <script src="profile.js"></script>
+  
+</body>
+</html>

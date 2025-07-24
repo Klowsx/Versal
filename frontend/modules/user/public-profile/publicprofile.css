@@ -1,0 +1,271 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(to bottom right, #f3e8ff, #ffffff, #ede9fe);
+  color: #4b0082;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e9d5ff;
+  padding: 1rem 2rem;
+  z-index: 100;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-icon {
+  color: #9333ea;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #d8b4fe;
+  color: #7e22ce;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.icon-only {
+  padding: 0.5rem;
+}
+
+.main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.profile-hero {
+  position: relative;
+  margin-bottom: 4rem;
+}
+
+.hero-bg {
+  height: 260px;
+  background: linear-gradient(to right, #9333ea, #7e22ce, #4f46e5);
+  border-radius: 1.5rem;
+  position: relative;
+}
+
+.profile-content {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 40px);
+  text-align: center;
+  width: 100%;
+  color: white;
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 999px;
+  border: 4px solid white;
+  object-fit: cover;
+  background: #eee;
+}
+
+.verificado {
+  position: absolute;
+  bottom: 0;
+  right: -5px;
+  background: #9333ea;
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+.name-username h1 {
+  font-size: 2rem;
+  margin: 0.5rem 0;
+}
+
+.name-username p {
+  color: #e9d5ff;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.premium {
+  background: linear-gradient(to right, #fbbf24, #d97706);
+  color: white;
+  border: none;
+}
+
+.follow-section {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.coins {
+  background: #f59e0b;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.btn-follow {
+  background: white;
+  color: #7e22ce;
+  padding: 0.5rem 2rem;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #ddd6fe;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.bio {
+  white-space: pre-line;
+  color: #5b21b6;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stories-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.story-card {
+  background: #faf5ff;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  transition: background 0.3s ease;
+}
+
+.story-card:hover {
+  background: #f3e8ff;
+}
+
+.story-cover {
+  width: 80px;
+  height: 110px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  background: #ddd;
+}
+
+.story-info h3 {
+  margin: 0;
+  color: #6b21a8;
+  font-size: 1rem;
+}
+
+.story-stats {
+  font-size: 0.85rem;
+  color: #7e22ce;
+  margin: 0.25rem 0;
+}
+
+.story-info p {
+  color: #6b21a8;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.categoria {
+  background: #ede9fe;
+  color: #7e22ce;
+}
+
+.estado.en-curso {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.estado.pausada {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.estado.completada {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.stories-count {
+  background: #ede9fe;
+  color: #6b21a8;
+}

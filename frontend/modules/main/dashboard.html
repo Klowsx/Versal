@@ -4,31 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Versal</title>
+
+    <!-- Estilos -->
     <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
   </head>
   <body>
-    <div class="page">
-      <header class="header">
-        <div class="container nav">
-          <a href="/">
-            <img src="/versal-logo.png" alt="Versal" class="logo" />
-          </a>
-          <div class="search-bar">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Buscar historias, autores, géneros..."
-            />
-          </div>
-          <div class="nav-buttons">
-            <a href="/premium" class="btn btn-premium">Premium</a>
-            <a href="/login" class="btn btn-outline">Iniciar Sesión</a>
-            <a href="/signup" class="btn btn-primary">Registrarse</a>
-          </div>
-        </div>
-      </header>
+    <!-- Navbar dinámico -->
+    <div id="navbar-placeholder"></div>
 
+    <div class="page">
       <main class="main">
+        <!-- Hero -->
         <section class="hero">
           <h1 class="hero-title">Descubre Historias Increíbles</h1>
           <p class="hero-subtitle">
@@ -37,110 +24,51 @@
           <a href="#" class="btn btn-hero">Explorar Ahora</a>
         </section>
 
+        <!-- Historias destacadas -->
         <section class="featured">
           <div class="section-header">
             <h2>Historias Destacadas</h2>
             <a href="/featured">Ver todas →</a>
           </div>
-          <div class="cards" id="featured-stories"></div>
+          <div class="cards" id="featured-stories">
+            <!-- Tarjetas dinámicas aquí -->
+          </div>
         </section>
 
+        <!-- Historias recomendadas -->
         <section class="recommended">
           <div class="section-header">
             <h2>Recomendadas para Ti</h2>
             <a href="/recommended">Ver todas →</a>
           </div>
-          <div class="cards small" id="recommended-stories"></div>
+          <div class="cards small" id="recommended-stories">
+            <!-- Tarjetas dinámicas aquí -->
+          </div>
         </section>
 
-        <section class="cta-premium">
-          <h2>Desbloquea la Experiencia Premium</h2>
-          <p>
-            Disfruta de lectura sin anuncios, acceso anticipado a nuevos capítulos y contenido exclusivo
-          </p>
-          <a href="/premium" class="btn btn-white">Obtener Premium</a>
-        </section>
-      </main>
+      </div>
 
+            <!-- Footer -->
       <footer class="footer">
-        <div class="container footer-top">
-          <div class="footer-col">
-            <img src="/versal-logo.png" alt="Versal" class="logo-small" />
-            <p>
-              La plataforma líder para descubrir y disfrutar historias increíbles de autores talentosos de todo el mundo.
-            </p>
+        <div class="footer-content">
+          <div class="footer-left">
+            <p><strong>Versal</strong> — Tu plataforma para leer, escribir y compartir historias únicas.</p>
+            <p><a href="/frontend/modules/main/tyc.html">Términos y condiciones</a></p>
           </div>
-          <div class="footer-col">
-            <h4>Empresa</h4>
-            <ul>
-              <li><a href="#">Acerca de Nosotros</a></li>
-              <li><a href="#">Contacto</a></li>
-              <li><a href="#">Carreras</a></li>
-              <li><a href="#">Prensa</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Comunidad</h4>
-            <ul>
-              <li><a href="#">Para Autores</a></li>
-              <li><a href="#">Foro</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Eventos</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="#">Términos de Servicio</a></li>
-              <li><a href="#">Política de Privacidad</a></li>
-              <li><a href="#">Política de Cookies</a></li>
-              <li><a href="#">Derechos de Autor</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>© 2024 Versal. Todos los derechos reservados.</p>
-          <div class="social-links">
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">TikTok</a>
+          <div class="footer-right">
+            <p>© 2025 Versal</p>
+            <div class="social-links">
+              <a href="#">Twitter</a>
+              <a href="#">Instagram</a>
+            </div>
           </div>
         </div>
       </footer>
-    </div>
 
-    <script>
-      const featuredStories = [
-        { id: 1, title: "El Jardín de los Secretos Perdidos", author: "Isabella Martínez", reads: "245K", rating: 4.9 },
-        { id: 2, title: "Corazones en la Tormenta", author: "Alejandro Ruiz", reads: "189K", rating: 4.7 },
-        { id: 3, title: "La Última Heredera", author: "Carmen Delgado", reads: "312K", rating: 4.8 },
-      ];
+    
 
-      const recommendedStories = [
-        { id: 4, title: "Susurros del Alma", author: "María González", reads: "67K", votes: "12K" },
-        { id: 5, title: "El Eco de Tus Pasos", author: "Diego Fernández", reads: "89K", votes: "15K" },
-        { id: 6, title: "Lágrimas de Luna", author: "Ana Morales", reads: "134K", votes: "23K" },
-        { id: 7, title: "El Refugio del Tiempo", author: "Carlos Vega", reads: "78K", votes: "14K" },
-        { id: 8, title: "Promesas Rotas", author: "Lucía Herrera", reads: "156K", votes: "28K" },
-        { id: 9, title: "El Misterio de Valeria", author: "Roberto Silva", reads: "92K", votes: "17K" },
-      ];
-
-      const featuredContainer = document.getElementById("featured-stories");
-      featuredStories.forEach((s) => {
-        const el = document.createElement("div");
-        el.className = "card";
-        el.innerHTML = `<h3>${s.title}</h3><p>por ${s.author}</p><span>${s.reads} lecturas · ⭐ ${s.rating}</span>`;
-        featuredContainer.appendChild(el);
-      });
-
-      const recommendedContainer = document.getElementById("recommended-stories");
-      recommendedStories.forEach((s) => {
-        const el = document.createElement("div");
-        el.className = "card small";
-        el.innerHTML = `<h4>${s.title}</h4><p>${s.author}</p><span>${s.reads} · ❤️ ${s.votes}</span>`;
-        recommendedContainer.appendChild(el);
-      });
-    </script>
+    <!-- Scripts -->
+    <script src="/frontend/modules/main/navbar/navbar.js"></script>
+    <script src="/frontend/modules/dashboard/dashboard.js"></script>
   </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="navbar.css" />
+  <title>Navbar Test</title>
+</head>
+<body>
+  <div class="navbar-placeholder">
+    <header class="versal-navbar">
+      <div class="navbar-container">
+        <a href="/" class="logo">
+          <img src="/frontend/resources/logoversal.png" alt="Versal Logo" />
+        </a>
+
+        <div class="nav-item dropdown">
+          <button class="nav-link">Explorar ▼</button>
+          <div class="dropdown-menu" id="categorias-dropdown"></div>
+        </div>
+
+        <div class="search-container">
+          <input type="text" placeholder="Buscar historias, autores, géneros..." />
+        </div>
+
+        <a href="\frontend\modules\stories\create-story\create_story.html" class="icon-button" title="Escribir">Crear historia</a>
+
+        <!-- Botón Premium -->
+        <a href="/premium" class="icon-button" title="Adquirir Premium">💎 Premium</a>
+
+        <div class="nav-item dropdown">
+          <button class="icon-button" title="Perfil">👤</button>
+          <div class="dropdown-menu right">
+            <a href="/frontend/modules/user/public-profile/publicprofile.html">Perfil público</a>
+            <a href="/frontend/modules/user/profile/profile.html">Ver perfil</a>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+</body>
+</html>
