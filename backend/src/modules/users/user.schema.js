@@ -13,7 +13,9 @@ const userBase = {
       properties: {
         type: { type: "string", enum: ["basic", "premium"] },
         status: { type: "string", enum: ["active", "expired"] },
+        endDate: { type: "string", format: "date-time", nullable: true },
       },
+      required: ["type", "status"],
     },
     totalCoinsReceived: { type: "number" },
     followers: { type: "array", items: { type: "string" } },

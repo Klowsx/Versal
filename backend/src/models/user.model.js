@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const subscriptionSchema = new mongoose.Schema({
   type: { type: String, enum: ["basic", "premium"], default: "basic" },
   status: { type: String, enum: ["active", "expired"], default: "active" },
+  endDate: { type: Date, default: null },
 });
 
 const userSchema = new mongoose.Schema({
@@ -16,7 +17,7 @@ const userSchema = new mongoose.Schema({
   bio: { type: String, default: null },
   subscription: {
     type: subscriptionSchema,
-    default: () => ({ type: "basic", status: "active" }),
+    default: () => ({ type: "basic", status: "active", endDate: null }),
   },
   totalCoinsReceived: { type: Number, default: 0 },
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
