@@ -8,7 +8,7 @@ body {
 
 /* Ajuste para que el navbar no tape el contenido */
 .main-container {
-  padding-top: 60px; /* Ajusta si el navbar cambia de tamaño */
+  padding-top: 100px; /* Ajusta si el navbar cambia de tamaño */
   display: flex;
   max-width: 1000px;
   margin: 2rem auto 0 auto;

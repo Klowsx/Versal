@@ -6,20 +6,34 @@
       password: document.querySelector('input[name="password"]'),
     };
 
-    const API_URL = "http://localhost:3000/api/user";
+    const API_URL = "http://localhost:3000/api/user/login";
 
     const methods = {
-      async fetchAPI(url, options = {}) {
+      async fetchLogin(credentials) {
         try {
-          const response = await fetch(url, options);
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          });
+
           if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Error desconocido");
+            let errorMessage = "Error desconocido";
+            try {
+              const error = await response.json();
+              errorMessage = error.error || error.message || errorMessage;
+            } catch {
+              // No es JSON válido o viene vacío
+            }
+            throw new Error(errorMessage);
           }
-          return response.json();
+
+          return await response.json(); // { user, token }
         } catch (err) {
-          console.error("Error en fetchAPI:", err);
-          alert(err.message || "No se pudo conectar con la API.");
+          console.error("Error en fetchLogin:", err);
+          alert(err.message || "No se pudo conectar con el servidor.");
           return null;
         }
       },
@@ -34,17 +48,16 @@
           password: htmlElements.password.value.trim(),
         };
 
-        const options = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(credentials),
-        };
+        console.log("Intentando login con:", credentials);
 
-        const result = await methods.fetchAPI(`${API_URL}/login`, options);
+        const result = await methods.fetchLogin(credentials);
+
         if (result && result.token) {
           localStorage.setItem("token", result.token);
           alert("Inicio de sesión exitoso.");
           window.location.href = "/frontend/modules/main/dashboard.html";
+        } else {
+          console.warn("Inicio de sesión fallido. Respuesta:", result);
         }
       },
     };

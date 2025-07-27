@@ -13,7 +13,7 @@ body {
 }
 
 header {
-  margin-top: 100px;
+  margin-top: 110px;
 }
 
 .editor-container {
@@ -212,4 +212,15 @@ header {
   display: block;
   margin: 10px 0;
   border-radius: 8px;
+}
+
+.btn-back {
+  position: fixed; /* Mantiene el botón estático al hacer scroll */
+  top: 90px; /* Ajusta este valor para bajar el botón */
+  left: 20px; /* Mantiene la separación del margen izquierdo */
+  color: #6b21a8; /* Color de texto blanco */
+  padding: 10px 15px; /* Relleno interno */
+  border-radius: 8px; /* Bordes redondeados */
+  text-decoration: none; /* Quita el subrayado del enlace */
+  z-index: 1000; /* Asegura que el botón esté por encima de otros elementos */
 }

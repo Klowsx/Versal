@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalle de Historia</title>
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+  <link rel="stylesheet" href="preview.css" />
+    
+</head>
+
+
+<body class="background">
+
+  <div id="navbar-placeholder"></div>
+
+  <header class="header">
+    <div class="container nav">
+      <div class="nav-left">
+        <a href="/" class="back-button">←</a>
+        <a href="/" class="logo">Versal</a>
+      </div>
+      <div class="nav-right">
+        <a href="/premium" class="btn btn-outline amber">Premium</a>
+        <a href="/perfil" class="btn btn-outline purple">Perfil</a>
+        <a href="/login" class="btn btn-outline purple">Iniciar Sesión</a>
+        <a href="/signup" class="btn btn-primary">Registrarse</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main">
+    <div class="grid">
+      <!-- Portada y acciones -->
+      <div class="card cover-card">
+        <div class="cover-image">
+          <img src="" alt="Portada Historia" id="story-cover" />
+        </div>
+        <div class="cover-actions">
+          <button class="btn btn-primary">Leer Ahora</button>
+          <div class="btn-group">
+            <button class="btn btn-outline">Biblioteca</button>
+            <button class="btn btn-outline">Guardar</button>
+          </div>
+          <button class="btn btn-outline">Compartir Historia</button>
+        </div>
+      </div>
+
+      <!-- Detalles de historia -->
+      <div class="details">
+        <div class="tags" id="story-tags">
+          <!-- Tags dinámicos -->
+        </div>
+        <h1 id="story-title"></h1>
+
+        <div class="author-section">
+          <div class="avatar"></div>
+          <div>
+            <p class="author-name" id="story-author"></p>
+            <p class="author-subtitle">Autora Bestseller</p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <span id="story-views">Lecturas</span>
+          <span id="story-likes">Me gusta</span>
+          <span id="story-rating">Calificación</span>
+        </div>
+
+        <div class="card">
+          <h3>Sinopsis</h3>
+          <p id="synopsis-1"></p>
+          <p id="synopsis-2"></p>
+          <p id="synopsis-3"></p>
+        </div>
+
+
+
+        <div class="card">
+          <h3>Información de la Historia</h3>
+          <div class="story-info">
+            <div>
+              <p><strong>Estado:</strong> <span id="story-status"></span></p>
+              <p><strong>Capítulos:</strong> <span id="story-chapters"></span></p>
+              <p><strong>Idioma:</strong> <span id="story-language"></span></p>
+            </div>
+            <div>
+              <p><strong>Última actualización:</strong> <span id="story-updated"></span></p>
+              <p><strong>Tiempo de lectura:</strong> <span id="story-time"></span></p>
+              <p><strong>Clasificación:</strong> <span id="story-rating-age"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+    <script src="/frontend/modules/main/navbar/navbar.js"></script>
+</body>
+</html>

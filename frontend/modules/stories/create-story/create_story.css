@@ -95,7 +95,7 @@ textarea {
 
 .btn-success {
   padding: 0.8rem 1.5rem;
-  background: #0f9d58;
+  background: #6b21a8;
   color: white;
   border: none;
   border-radius: 8px;
@@ -103,13 +103,38 @@ textarea {
   font-weight: bold;
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .center {
   text-align: center;
   margin-top: 1rem;
+}
+
+.btn-back {
+  position: fixed; /* Mantiene el botón estático al hacer scroll */
+  top: 90px; /* Ajusta este valor para bajar el botón */
+  left: 20px; /* Mantiene la separación del margen izquierdo */
+  color: #6b21a8; /* Color de texto blanco */
+  padding: 10px 15px; /* Relleno interno */
+  border-radius: 8px; /* Bordes redondeados */
+  text-decoration: none; /* Quita el subrayado del enlace */
+  z-index: 1000; /* Asegura que el botón esté por encima de otros elementos */
+}
+
+.character-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.character-input-wrapper input {
+  flex: 1;
+}
+
+.delete-character-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #d00;
 }

@@ -10,22 +10,26 @@
   <div class="navbar-placeholder">
     <nav class="versal-navbar">
       <div class="navbar-container">
-        <a href="/" class="logo">
+        <a href="/frontend/modules/main/dashboard.html" class="logo">
           <img src="/frontend/resources/logoversal.png" alt="Versal Logo" />
         </a>
 
         <div class="nav-item dropdown">
           <button class="nav-link">Explorar ▼</button>
-          <div class="dropdown-menu" id="categorias-dropdown"></div>
+          <div class="dropdown-menu" id="categorias-dropdown">
+            <a href="#" data-filter="todas">Todas</a>
+            <a href="#" data-filter="categoria">Categorías</a>
+            <a href="#" data-filter="etiqueta">Etiquetas</a>
+          </div>
         </div>
 
         <div class="search-container">
-          <input type="text" placeholder="Buscar historias, autores, géneros..." />
+          <input type="text" id="search-input" placeholder="Buscar historias, autores, géneros..." />
+          <div id="filter-indicator" class="filter-indicator"></div>
         </div>
 
         <a href="/frontend/modules/stories/create-story/create_story.html" class="icon-button" title="Escribir">Crear historia</a>
 
-        <!-- Botón Premium -->
         <a href="/premium" class="icon-button" title="Adquirir Premium">💎 Premium</a>
 
         <div class="nav-item dropdown">
@@ -33,10 +37,13 @@
           <div class="dropdown-menu right">
             <a href="/frontend/modules/user/public-profile/publicprofile.html">Perfil público</a>
             <a href="/frontend/modules/user/profile/profile.html">Ver perfil</a>
+            <a href="/frontend/modules/auth/login/login.html">Cerrar Sesión</a>
           </div>
         </div>
       </div>
     </nav>
   </div>
+
+  <script src="navbar.js"></script>
 </body>
 </html>

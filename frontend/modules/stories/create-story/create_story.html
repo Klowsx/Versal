@@ -10,67 +10,67 @@
 <body>
 
   <div id="navbar-placeholder"></div>
-
+  <a href="/frontend/modules/main/dashboard.html" class="btn-back">
+    🡰
+  </a>
   <header>
     <h1>📘 Crear Historia</h1>
-    <p>Comparte tu creatividad con el munsdo</p>
+    <p>Comparte tu creatividad con el mundo</p>
   </header>
 
   <main class="container">
     <form id="storyForm" enctype="multipart/form-data">
-      <!-- Información Básica -->
       <section class="card card-blue">
         <h2>Información Básica</h2>
         <label for="title">Título de la Historia *</label>
-        <input type="text" id="title" name="title" required placeholder="Ingresa el título de tu historia..." />
-        <label for="description">Descripción</label>
+        <input type="text" id="title" name="title" placeholder="Ingresa el título de tu historia..." />
+        <span id="titleError" class="error-message"></span>
+
+        <label for="description">Descripción *</label>
         <textarea id="description" name="description" placeholder="Describe tu historia..."></textarea>
         <small>Describe tu historia para atraer lectores</small>
+        <span id="descriptionError" class="error-message"></span>
       </section>
 
-      <!-- Portada -->
       <section class="card card-pink">
-        <h2>Portada de la Historia</h2>
+        <h2>Portada de la Historia *</h2>
         <input type="file" id="coverImage" name="coverImage" accept="image/png, image/jpeg, image/webp" />
         <small>PNG, JPG, WEBP hasta 5MB<br>Recomendado: 400x600px</small>
+        <span id="coverImageError" class="error-message"></span>
       </section>
 
-      <!-- Personajes -->
       <section class="card card-green">
-        <h2>Personajes Principales</h2>
+        <h2>Personajes Principales *</h2>
         <div id="charactersContainer">
-          <input type="text" name="mainCharacters[]" placeholder="Nombre del personaje 1" />
-        </div>
+  <div class="character-input-wrapper">
+    <input type="text" name="mainCharacters[]" placeholder="Nombre del personaje 1" />
+    <button type="button" class="delete-character-btn" title="Eliminar personaje">×</button>
+  </div>
+</div>
+
         <button type="button" id="addCharacterBtn" class="btn-outline">+ Agregar Personaje</button>
+        <span id="charactersError" class="error-message"></span>
       </section>
 
-      <!-- Categorización -->
       <section class="card card-yellow">
-        <h2>Categorización</h2>
+        <h2>Categorización *</h2>
         <div class="row">
-          <select id="category" name="category" required>
-            <option disabled selected value="">Selecciona una categoría</option>
-            <option value="Accion">Acción</option>
-            <option value="Aventura">Aventura</option>
-            <option value="Romance">Romance</option>
-            <option value="Fantasia">Fantasía</option>
-            <option value="Humor">Humor</option>
-          </select>
-          <select id="audience" name="audience" required>
-            <option disabled selected value="">Selecciona la audiencia</option>
-            <option value="Juvenil">Juvenil</option>
-            <option value="Adultos">Adultos</option>
+          <select id="category" name="category">
+          <option selected value="">Cargando categorías...</option>
           </select>
         </div>
+        <span id="categoryError" class="error-message"></span>
+
+        <label for="tags">Etiquetas *</label>
         <input type="text" id="tags" name="tags" placeholder="Etiquetas separadas por coma" />
+        <span id="tagsError" class="error-message"></span>
       </section>
 
-      <!-- Configuración Adicional -->
       <section class="card card-purple">
         <h2>Configuración Adicional</h2>
         <div class="row">
+          <label for="language">Idioma</label>
           <input type="text" id="language" name="language" placeholder="Idioma" value="Español" />
-          <input type="text" id="rights" name="rights" placeholder="Derechos de Autor" value="Todos los derechos reservados" />
         </div>
         <div class="alert">
           <label>
@@ -79,16 +79,11 @@
           </label>
         </div>
       </section>
-
-      <!-- Botones -->
-      <div class="buttons">
-        <button type="submit" class="btn-primary">Crear Historia</button>
-      </div>
     </form>
 
     <div class="center">
       <p>¿Ya tienes tu historia lista? ¡Comienza a escribir!</p>
-      <button class="btn-success" id="startWritingBtn">✏️ Empezar a Escribir</button>
+      <button class="btn-success" id="startWritingBtn"> Crear historia </button>
     </div>
   </main>
 

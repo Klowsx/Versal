@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Historias</title>
+  <link rel="stylesheet" href="mystory.css" />
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+  <div class="wrapper">
+    <header class="header">
+      <div class="container header-container">
+        <div class="header-left">
+          <a href="/" class="btn-back">&larr;</a>
+          <a href="/" class="logo">
+            <img src="/versal-logo.png" alt="Versal Logo">
+          </a>
+          <h1 class="page-title">Mis Historias</h1>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Estadísticas generales (dinámicas) -->
+      <section class="estadisticas">
+        <div class="stat-card">
+          <div class="stat-value" id="totalHistorias">0</div>
+          <div class="stat-label">Total de Historias</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value text-green" id="publicadas">0</div>
+          <div class="stat-label">Publicadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value text-orange" id="borradores">0</div>
+          <div class="stat-label">Borradores</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="lecturasTotales">0</div>
+          <div class="stat-label">Lecturas Totales</div>
+        </div>
+      </section>
+
+      <!-- Historias individuales (iterables desde backend) -->
+      <section class="historias-grid" id="historiasContainer">
+        <div class="historia-card">
+          <div class="portada">
+            <img id="avatar" src="../../../resources/profile.png" alt="Portada" />
+            <span class="badge publicada">Publicada</span>
+          </div>
+          <div class="contenido">
+            <span class="categoria">Romance Fantástico</span>
+            <h3 class="titulo">El Jardín de los Secretos Perdidos</h3>
+            <p class="descripcion">Una historia épica de fantasía romántica llena de magia, aventuras y romance prohibido...</p>
+
+            <div class="tags">
+              <span>#fantasía</span>
+              <span>#romance</span>
+              <span>#magia</span>
+              <span>+1</span>
+            </div>
+
+            <div class="acciones">
+              <a href="/leer/1" class="btn-outline">Ver</a>
+              <a href="/escribir/1" class="btn-solid">Editar</a>
+            </div>
+          </div>
+        </div>
+        <!-- Aquí el backend debería inyectar más .historia-card -->
+      </section>
+    </main>
+  </div>
+
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
+</body>
+</html>

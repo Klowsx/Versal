@@ -101,38 +101,52 @@
           if (oldPass && newPass) {
             await methods.submitPasswordChange(oldPass, newPass);
           }
+
           await methods.submitProfileUpdate();
+
           alert("Perfil actualizado correctamente.");
-          window.location.reload();
-        } catch(error) {
-          // El error específico ya se muestra en la función que falla
+
+          // ✅ Redirección luego de guardar
+          window.location.href = "/profile.html"; // Ajusta a tu página de perfil
+        } catch (error) {
           console.error("Fallo el envío del formulario:", error);
         } finally {
-            saveButton.disabled = false;
-            saveButton.textContent = 'Guardar Cambios';
+          saveButton.disabled = false;
+          saveButton.textContent = 'Guardar Cambios';
         }
       },
 
-      submitProfileUpdate: async () => {
+          submitProfileUpdate: async () => {
         const formData = new FormData(elements.form);
-        // No es necesario eliminar los campos de contraseña, ya que el backend no los usa
-        // para esta petición, pero es buena práctica para no enviar datos innecesarios.
-        formData.delete('oldPassword');
-        formData.delete('newPassword');
-        formData.delete('confirmPassword');
-        
-        try {
-          const response = await fetch(`${API_BASE_URL}/me`, {
-            method: "PUT",
-            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
-            body: formData,
-          });
-          if (!response.ok) throw new Error("Error al actualizar la información del perfil.");
-        } catch (error) {
-          alert(`Error de perfil: ${error.message}`);
-          throw error;
+
+        const file = elements.fileInput.files[0];
+
+        if (!file || file.size === 0) {
+          formData.delete("profileImage");
         }
-      },
+
+
+      formData.delete("oldPassword");
+      formData.delete("newPassword");
+      formData.delete("confirmPassword");
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/me`, {
+          method: "PUT",
+          headers: { 
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            // NO pongas Content-Type: multipart/form-data aquí. fetch lo maneja solo con FormData
+          },
+          body: formData,
+        });
+
+        if (!response.ok) throw new Error("Error al actualizar la información del perfil.");
+      } catch (error) {
+        alert(`Error de perfil: ${error.message}`);
+        throw error;
+      }
+    },
+
 
       submitPasswordChange: async (oldPassword, newPassword) => {
         if (newPassword !== elements.confirmPassword.value) {
