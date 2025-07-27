@@ -1,15 +1,16 @@
-// Versal/backend/src/modules/transactions/transaction.routes.js
 const transactionController = require("./transaction.controller");
 const {
   createSubscriptionCheckoutSchema,
   createCoinPackCheckoutSchema,
   stripeWebhookSchema,
   getUserTransactionsSchema,
+  getSubscriptionPlansSchema,
+  getCoinPacksSchema,
 } = require("./transaction.schema");
 
 async function transactionRoutes(fastify) {
   fastify.post(
-    "/stripe-webhook",
+    "/transactions/stripe-webhook",
     {
       schema: stripeWebhookSchema,
       config: {
@@ -19,26 +20,38 @@ async function transactionRoutes(fastify) {
     transactionController.stripeWebhook
   );
 
+  fastify.get(
+    "/products/subscriptions",
+    { schema: getSubscriptionPlansSchema },
+    transactionController.getSubscriptionPlans
+  );
+
+  fastify.get(
+    "/products/coin-packs",
+    { schema: getCoinPacksSchema },
+    transactionController.getCoinPacks
+  );
+
   fastify.register(async function (privateRoutes) {
     privateRoutes.addHook("onRequest", fastify.authenticate);
 
     // Ruta para iniciar una sesión de checkout de suscripción
     privateRoutes.post(
-      "/checkout/subscription",
+      "/transactions/checkout/subscription",
       { schema: createSubscriptionCheckoutSchema },
       transactionController.createSubscriptionCheckout
     );
 
     // Ruta para iniciar una sesión de checkout de compra de pack de monedas
     privateRoutes.post(
-      "/checkout/coin-pack",
+      "/transactions/checkout/coin-pack",
       { schema: createCoinPackCheckoutSchema },
       transactionController.createCoinPackCheckout
     );
 
     // Ruta para obtener las transacciones del usuario
     privateRoutes.get(
-      "/me",
+      "/transactions/me",
       { schema: getUserTransactionsSchema },
       transactionController.getUserTransactions
     );

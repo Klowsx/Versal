@@ -84,9 +84,20 @@ async function getUserTransactions(request, reply) {
   }
 }
 
+async function getSubscriptionPlans(request, reply) {
+  const result = await transactionService.getSubscriptionPlans();
+  reply.send(result);
+}
+async function getCoinPacks(request, reply) {
+  const result = await transactionService.getCoinPacks();
+  reply.send(result);
+}
+
 module.exports = {
   createSubscriptionCheckout,
   createCoinPackCheckout,
   stripeWebhook,
   getUserTransactions,
+  getSubscriptionPlans,
+  getCoinPacks,
 };

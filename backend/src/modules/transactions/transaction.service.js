@@ -2,6 +2,8 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Transaction = require("../../models/transaction.model");
 const User = require("../../models/user.model");
+const { COIN_PACKS } = require("../../config/products");
+const { SUBSCRIPTION_PLANS } = require("../../config/products");
 const {
   Types: { ObjectId },
 } = require("mongoose");
@@ -143,7 +145,6 @@ async function handleStripeWebhookEvent(event) {
         const transaction = await Transaction.findOne({ stripeCheckoutSessionId: session.id });
 
         if (transaction) {
-          // Verificar si ya fue procesada (para evitar re-procesar eventos duplicados)
           if (transaction.status === "completed") {
             console.log(
               `Transacción ${transaction._id} ya está completada. Ignorando evento duplicado.`
@@ -151,7 +152,6 @@ async function handleStripeWebhookEvent(event) {
             return { message: "Evento ya procesado." };
           }
 
-          // Obtener el PaymentIntent para pagos únicos (coin packs) o Subscription para suscripciones
           let paymentIntentOrSubscription;
           if (session.mode === "payment" && session.payment_intent) {
             paymentIntentOrSubscription = await stripe.paymentIntents.retrieve(
@@ -164,42 +164,38 @@ async function handleStripeWebhookEvent(event) {
           }
 
           transaction.status = "completed";
-          transaction.amount = session.amount_total / 100; // Stripe devuelve en céntimos
+          transaction.amount = session.amount_total / 100;
           transaction.currency = session.currency;
           transaction.stripeCustomerId = session.customer;
           await transaction.save();
 
-          // Lógica adicional basada en el tipo de transacción
-          const userId = session.metadata.userId; // Obtenido del metadata que enviamos al crear la sesión
+          const userId = session.metadata.userId;
           const user = await User.findById(userId);
 
           if (user) {
             if (session.metadata.type === "subscription") {
-              // Actualizar el estado de suscripción del usuario
               user.isPremium = true;
               user.premiumSubscriptionId = transaction.stripeSubscriptionId;
-              user.subscriptionPlanId = session.metadata.planId; // Guardar el plan ID de Stripe
-              // Opcional: Si tienes un esquema de suscripción anidado como el original, puedes actualizarlo aquí también:
+              user.subscriptionPlanId = session.metadata.planId;
+
               user.subscription.type = "premium";
               user.subscription.status = "active";
-              user.subscription.endDate = null; // O calcula una fecha de fin si tu plan es de duración fija
+              user.subscription.endDate = null;
               await user.save();
               console.log(`Usuario ${user.username} suscrito a premium.`);
             } else if (session.metadata.type === "coin_pack_purchase") {
               const coinPackId = session.metadata.coinPackId;
-              const coinsToAdd = getCoinsForPack(coinPackId); // Obtener la cantidad de monedas
+              const coinsToAdd = getCoinsForPack(coinPackId);
 
               if (coinsToAdd > 0) {
-                // *** CAMBIO CLAVE AQUÍ: Usamos $inc para una actualización atómica de monedas ***
                 await User.findByIdAndUpdate(
                   user._id,
                   { $inc: { coins: coinsToAdd } },
-                  { new: true } // Para obtener el documento actualizado si lo necesitas
+                  { new: true }
                 );
                 console.log(
                   `Usuario ${user.username} compró ${coinsToAdd} monedas. Monedas añadidas atómicamente.`
                 );
-                // Nota: `user` objeto local no se actualizará con el nuevo valor de `coins` sin refetch
               } else {
                 console.warn(
                   `No se encontraron monedas para el pack: ${coinPackId}. No se añadieron monedas al usuario ${user.username}.`
@@ -303,20 +299,16 @@ async function handleStripeWebhookEvent(event) {
 }
 
 function getCoinsForPack(coinPackId) {
-  const coinPacksMap = {
-    price_1RpOvtR09FDM2B1YL43aCKKi: 100,
-    price_1RpOi7R09FDM2B1Y6ifORS0i: 500,
-    price_1RpOtXR09FDM2B1YmqgNXXiC: 1000,
-  };
+  const pack = COIN_PACKS.find((p) => p.stripePriceId === coinPackId);
 
-  const coins = coinPacksMap[coinPackId];
-  if (coins === undefined) {
+  if (!pack) {
     console.warn(
-      `Advertencia: No se encontró la cantidad de monedas para el pack con Stripe Price ID: ${coinPackId}`
+      `Advertencia: No se encontró un paquete de monedas configurado para el Stripe Price ID: ${coinPackId}`
     );
     return 0;
   }
-  return coins;
+
+  return pack.coins;
 }
 
 async function getUserTransactions(userId) {
@@ -329,9 +321,21 @@ async function getUserTransactions(userId) {
   }
 }
 
+async function getSubscriptionPlans() {
+  console.log("Obteniendo planes de suscripción disponibles en service...");
+  return { plans: SUBSCRIPTION_PLANS };
+}
+
+async function getCoinPacks() {
+  console.log("Obteniendo packs de monedas disponibles en service...");
+  return { packs: COIN_PACKS };
+}
+
 module.exports = {
   createStripeCheckoutSessionForSubscription,
   createStripeCheckoutSessionForCoinPack,
   handleStripeWebhookEvent,
   getUserTransactions,
+  getSubscriptionPlans,
+  getCoinPacks,
 };

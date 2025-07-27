@@ -65,7 +65,7 @@ fastify.register(storyRoutes, { prefix: "/api/stories" });
 fastify.register(interactionRoutes, { prefix: "/api/interactions" });
 
 // Rutas de transacciones
-fastify.register(transactionRoutes, { prefix: "/api/transactions" });
+fastify.register(transactionRoutes, { prefix: "/api" });
 
 // Rutas de capítulos
 fastify.register(chapterRoutes, { prefix: "/api" });

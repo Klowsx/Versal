@@ -23,6 +23,21 @@ const transactionProperties = {
   updatedAt: { type: "string", format: "date-time" },
 };
 
+const planProperties = {
+  id: { type: "string" },
+  name: { type: "string" },
+  description: { type: "string" },
+  stripePriceId: { type: "string" },
+};
+
+const packProperties = {
+  id: { type: "string" },
+  name: { type: "string" },
+  description: { type: "string" },
+  coins: { type: "number" },
+  stripePriceId: { type: "string" },
+};
+
 const createSubscriptionCheckoutSchema = {
   summary: "Iniciar checkout para una suscripción",
   description: "Crea una sesión de checkout de Stripe para una nueva suscripción.",
@@ -128,10 +143,48 @@ const getUserTransactionsSchema = {
   },
 };
 
+const getSubscriptionPlansSchema = {
+  summary: "Obtener planes de suscripción",
+  description: "Devuelve una lista de todos los planes de suscripción disponibles para la compra.",
+  tags: ["Products"],
+  response: {
+    200: {
+      description: "Respuesta exitosa.",
+      type: "object",
+      properties: {
+        plans: {
+          type: "array",
+          items: { type: "object", properties: planProperties },
+        },
+      },
+    },
+  },
+};
+
+const getCoinPacksSchema = {
+  summary: "Obtener paquetes de monedas",
+  description: "Devuelve una lista de todos los paquetes de monedas disponibles para la compra.",
+  tags: ["Products"],
+  response: {
+    200: {
+      description: "Respuesta exitosa.",
+      type: "object",
+      properties: {
+        packs: {
+          type: "array",
+          items: { type: "object", properties: packProperties },
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   createSubscriptionCheckoutSchema,
   createCoinPackCheckoutSchema,
   stripeWebhookSchema,
   transactionProperties,
   getUserTransactionsSchema,
+  getSubscriptionPlansSchema,
+  getCoinPacksSchema,
 };
