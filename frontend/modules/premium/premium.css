@@ -1,0 +1,181 @@
+/* Estilos para la página Premium - Versión Compacta */
+
+body {
+  background: linear-gradient(135deg, #f3eaff 0%, #e9ddff 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #4c1d95;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.premium-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 2rem 1rem;
+  width: 100%;
+  margin-top: 80px;
+}
+
+.premium-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+.premium-header {
+  background: linear-gradient(90deg, #7c3aed, #6d28d9);
+  color: white;
+  padding: 2rem 1.5rem;
+}
+
+.premium-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.premium-header p {
+  font-size: 0.8rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.benefits {
+  padding: 1.5rem 2rem;
+  text-align: left;
+}
+
+.benefits h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #5b21b6;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.benefits ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.benefits li {
+  font-size: 0.95rem;
+  color: #4c1d95;
+  font-weight: 500;
+}
+
+.plan {
+  background-color: #f9f5ff;
+  padding: 1.25rem 1.5rem;
+  margin: 0 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #4d1d9569;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plan-info h3 {
+  color: #5b21b6;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+.plan-info p {
+  color: #6d28d9;
+  font-size: 0.85rem;
+}
+
+.plan-price {
+  text-align: right;
+  color: #5b21b6;
+}
+
+.plan-price-amount {
+  font-size: 1.8rem; /* Precio más pequeño */
+  font-weight: 800;
+}
+
+.premium-footer {
+  padding: 1.5rem 2rem; /* Menos padding */
+}
+
+.buy-btn {
+  background-color: #7c3aed;
+  color: white;
+  font-size: 1rem; /* Botón más pequeño */
+  font-weight: 600;
+  padding: 0.7rem 1rem; /* Menos padding en el botón */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-bottom: 0.8rem;
+}
+
+.buy-btn:hover {
+  background-color: #6d28d9;
+}
+
+.buy-btn:disabled {
+  background-color: #c4b5fd;
+  cursor: not-allowed;
+}
+
+.terms {
+  font-size: 0.75rem;
+  color: #a78bfa;
+}
+
+.terms a {
+  color: #8b5cf6;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.status-box {
+  border-radius: 8px;
+  padding: 1rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-box.premium {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.btn-back-container {
+  width: 100%;
+}
+
+.btn-back {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #6b21a8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  padding: 3px 20px 3px 20px;
+}
+
+.btn-back:hover {
+  border-bottom: 2px solid #3e2a5c;
+}
