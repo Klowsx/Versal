@@ -1,7 +1,7 @@
 const interactionController = require("./interaction.controller");
 const {
-  addInteractionSchema,
-  getInteractionsSchema,
+  addInteractionToChapter,
+  getInteractionsForChapter,
   deleteInteractionSchema,
 } = require("./interaction.schema");
 
@@ -9,34 +9,15 @@ async function interactionRoutes(fastify) {
   fastify.register(async function (privateRoutes) {
     privateRoutes.addHook("onRequest", fastify.authenticate);
 
-    privateRoutes.post(
-      "/stories/:id/interactions",
-      { schema: addInteractionSchema },
-      interactionController.addInteractionToContent
-    );
-    privateRoutes.post(
-      "/chapters/:id/interactions",
-      { schema: addInteractionSchema },
-      interactionController.addInteractionToContent
-    );
+    // Añadir una interacción (like/comentario) a un capítulo
+    privateRoutes.post("/chapters/:id/interactions", interactionController.addInteractionToChapter);
 
-    privateRoutes.delete(
-      "/interactions/:interactionId",
-      { schema: deleteInteractionSchema },
-      interactionController.deleteInteraction
-    );
+    // Eliminar cualquier interacción por su ID
+    privateRoutes.delete("/interactions/:interactionId", interactionController.deleteInteraction);
   });
 
-  fastify.get(
-    "/stories/:id/interactions",
-    { schema: getInteractionsSchema },
-    interactionController.getInteractions
-  );
-  fastify.get(
-    "/chapters/:id/interactions",
-    { schema: getInteractionsSchema },
-    interactionController.getInteractions
-  );
+  // Ruta para obtener las interacciones de un capítulo
+  fastify.get("/chapters/:id/interactions", interactionController.getInteractionsForChapter);
 }
 
 module.exports = interactionRoutes;

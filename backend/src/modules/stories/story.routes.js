@@ -8,6 +8,8 @@ const {
   getAuthorStoriesSchema,
   updateStorySchema,
   deleteStorySchema,
+  getStoriesByCategorySchema,
+  getStoriesByTagSchema,
 } = require("./story.schema");
 
 async function storyRoutes(fastify) {
@@ -35,6 +37,14 @@ async function storyRoutes(fastify) {
     // Eliminar una historia
     privateRoutes.delete("/:id", { schema: deleteStorySchema }, storyController.deleteStory);
   });
+
+  // Rutas públicas para obtener historias por categoría o etiqueta
+  fastify.get(
+    "/category/:categoryName",
+    { schema: getStoriesByCategorySchema },
+    storyController.getStoriesByCategory
+  );
+  fastify.get("/tag/:tagName", { schema: getStoriesByTagSchema }, storyController.getStoriesByTag);
 }
 
 module.exports = storyRoutes;

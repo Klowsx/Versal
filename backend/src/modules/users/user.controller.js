@@ -48,12 +48,11 @@ async function getUserProfileById(req, reply) {
     return reply.code(404).send({ message: "Usuario no encontrado" });
   }
 
-  //filtrar campos sensibles si no quieres que sean públicos
   const publicUser = { ...user };
-  delete publicUser.password; // No enviar la contraseña
-  delete publicUser.email; // No enviar el email
-  delete publicUser.subscription; // No enviar la suscripción
-  delete publicUser.totalCoinsReceived; // No enviar las monedas recibidas
+  delete publicUser.password;
+  delete publicUser.email;
+  delete publicUser.subscription;
+  delete publicUser.totalCoinsReceived;
 
   reply.send(publicUser);
 }
@@ -168,7 +167,6 @@ async function unblockUser(req, reply) {
 }
 
 // ADMIN
-// Obtener todos los usuarios
 async function getAllUsers(req, reply) {
   const users = await userService.getAllUsers();
   reply.send(users);

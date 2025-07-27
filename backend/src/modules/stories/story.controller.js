@@ -122,6 +122,34 @@ async function deleteStory(request, reply) {
   }
 }
 
+// Controlador para obtener historias por categoría
+async function getStoriesByCategory(request, reply) {
+  try {
+    const { categoryName } = request.params;
+    const result = await storyService.getStoriesByCategory(categoryName);
+    if (result.error) {
+      return reply.code(500).send(result);
+    }
+    reply.send(result);
+  } catch (error) {
+    reply.code(500).send({ error: "Ocurrió un error inesperado." });
+  }
+}
+
+// Controlador para obtener historias por etiqueta
+async function getStoriesByTag(request, reply) {
+  try {
+    const { tagName } = request.params;
+    const result = await storyService.getStoriesByTag(tagName);
+    if (result.error) {
+      return reply.code(500).send(result);
+    }
+    reply.send(result);
+  } catch (error) {
+    reply.code(500).send({ error: "Ocurrió un error inesperado." });
+  }
+}
+
 module.exports = {
   createStory,
   getStoryById,
@@ -129,4 +157,6 @@ module.exports = {
   getStoriesByAuthor,
   updateStory,
   deleteStory,
+  getStoriesByCategory,
+  getStoriesByTag,
 };

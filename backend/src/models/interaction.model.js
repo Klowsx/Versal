@@ -5,12 +5,7 @@ const interactionSchema = new mongoose.Schema(
     contentId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      refPath: "onModel",
-    },
-    onModel: {
-      type: String,
-      required: true,
-      enum: ["Story", "Chapter"],
+      ref: "Chapter",
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -24,7 +19,6 @@ const interactionSchema = new mongoose.Schema(
     },
     text: {
       type: String,
-
       required: function () {
         return this.interactionType === "comment";
       },
@@ -36,7 +30,7 @@ const interactionSchema = new mongoose.Schema(
 );
 
 interactionSchema.index(
-  { contentId: 1, userId: 1, interactionType: 1 },
+  { contentId: 1, userId: 1, interactionType: "like" },
   {
     unique: true,
     partialFilterExpression: { interactionType: "like" },

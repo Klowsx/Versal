@@ -22,7 +22,7 @@ const StorySchema = new mongoose.Schema(
     chapterCount: { type: Number, default: 0 },
   },
   {
-    timestamps: true, // Usamos timestamps para createdAt y updatedAt
+    timestamps: true,
   }
 );
 

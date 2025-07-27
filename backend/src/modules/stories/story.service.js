@@ -3,6 +3,7 @@ const { Story, Category, Tag } = require("../../models/story.model");
 const { Chapter } = require("../../models/chapter.model");
 const Interaction = require("../../models/interaction.model");
 const User = require("../../models/user.model");
+const Favorite = require("../../models/favorite.model");
 
 async function createStory(storyData) {
   try {
@@ -163,16 +164,20 @@ async function deleteStory(storyId) {
     const chapters = await Chapter.find({ story: storyId }).select("_id").lean();
     const chapterIds = chapters.map((chapter) => chapter._id);
 
-    await Interaction.deleteMany({
-      $or: [{ contentId: storyId }, { contentId: { $in: chapterIds } }],
-    });
+    // Elimina las interacciones asociadas a los capítulos de la historia
+    if (chapterIds.length > 0) {
+      await Interaction.deleteMany({ contentId: { $in: chapterIds } });
+    }
 
-    // Elimina todos los capítulos.
+    // Elimina todos los capítulos
     if (chapterIds.length > 0) {
       await Chapter.deleteMany({ _id: { $in: chapterIds } });
     }
 
-    // elimina la historia principal.
+    // Eliminar de favoritos
+    await Favorite.deleteMany({ storyId: storyId });
+
+    // elimina la historia principal
     const deletedStory = await Story.findByIdAndDelete(storyId);
 
     if (!deletedStory) {
@@ -186,6 +191,48 @@ async function deleteStory(storyId) {
   }
 }
 
+async function getStoriesByCategory(categoryName) {
+  try {
+    const category = await Category.findOne({ name: categoryName }).lean();
+    if (!category) {
+      return { stories: [] };
+    }
+
+    const stories = await Story.find({ category: category._id, status: "published" })
+      .sort({ updatedAt: -1 })
+      .populate("author", "username profileImage")
+      .populate("category", "name")
+      .populate("tags", "name")
+      .lean();
+
+    return { stories };
+  } catch (error) {
+    console.error("Error al obtener historias por categoría:", error);
+    return { error: "Ocurrió un error al buscar historias por categoría." };
+  }
+}
+
+async function getStoriesByTag(tagName) {
+  try {
+    const tag = await Tag.findOne({ name: tagName }).lean();
+    if (!tag) {
+      return { stories: [] };
+    }
+
+    const stories = await Story.find({ tags: tag._id, status: "published" })
+      .sort({ updatedAt: -1 })
+      .populate("author", "username profileImage")
+      .populate("category", "name")
+      .populate("tags", "name")
+      .lean();
+
+    return { stories };
+  } catch (error) {
+    console.error("Error al obtener historias por tag:", error);
+    return { error: "Ocurrió un error al buscar historias por etiqueta." };
+  }
+}
+
 module.exports = {
   createStory,
   getStoryById,
@@ -193,4 +240,6 @@ module.exports = {
   updateStory,
   deleteStory,
   getStoriesByAuthor,
+  getStoriesByCategory,
+  getStoriesByTag,
 };

@@ -29,26 +29,23 @@ async function registerUser({ email, password, username, fullName }) {
 // Login de usuario
 async function loginUser({ email, password }) {
   try {
-    // Buscar el usuario por email
     const user = await User.findOne({ email });
     if (!user) {
-      return { error: "Credenciales inválidas." }; // Usuario no encontrado
+      return { error: "Credenciales inválidas." };
     }
 
-    // Comparar la contraseña
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return { error: "Credenciales inválidas." }; // Contraseña incorrecta
+      return { error: "Credenciales inválidas." };
     }
 
-    // Si todo es correcto, devolver el usuario (sin la contraseña hasheada)
     const userObject = user.toObject();
-    delete userObject.password; // No devolver la contraseña hasheada
+    delete userObject.password;
 
-    return { user: userObject }; // ¡Importante: siempre devuelve un objeto!
+    return { user: userObject };
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
-    return { error: "Error interno del servidor al iniciar sesión." }; // ¡Importante: siempre devuelve un objeto de error!
+    return { error: "Error interno del servidor al iniciar sesión." };
   }
 }
 

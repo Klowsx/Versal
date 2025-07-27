@@ -1,38 +1,32 @@
 const interactionService = require("./interaction.service");
 
-async function addInteractionToContent(request, reply) {
-  const { id } = request.params;
-  const { onModel, interactionType, text } = request.body;
+// Añadir una interacción (like o comentario)
+async function addInteractionToChapter(request, reply) {
+  const { id: chapterId } = request.params;
   const { userId } = request.user;
+  const { interactionType, text } = request.body;
 
-  const result = await interactionService.addInteraction({
-    contentId: id,
-    onModel,
+  const result = await interactionService.addInteractionToChapter({
+    chapterId,
     userId,
     interactionType,
     text,
   });
 
-  if (result.error) {
-    return reply.code(400).send({ message: result.error });
-  }
-
+  if (result.error) return reply.code(400).send(result);
   reply.code(201).send(result);
 }
 
-async function getInteractions(request, reply) {
-  const { id } = request.params;
-  const onModel = request.raw.url.includes("/stories/") ? "Story" : "Chapter";
+// Obtener interacciones de un capítulo
+async function getInteractionsForChapter(request, reply) {
+  const { id: chapterId } = request.params;
+  const result = await interactionService.getInteractionsForChapter(chapterId);
 
-  const result = await interactionService.getInteractionsForContent({ contentId: id, onModel });
-
-  if (result.error) {
-    return reply.code(404).send({ message: result.error });
-  }
-
+  if (result.error) return reply.code(404).send(result);
   reply.send(result);
 }
 
+// Borrar una interacción
 async function deleteInteraction(request, reply) {
   const { interactionId } = request.params;
   const { userId, role } = request.user;
@@ -52,7 +46,7 @@ async function deleteInteraction(request, reply) {
 }
 
 module.exports = {
-  addInteractionToContent,
-  getInteractions,
+  getInteractionsForChapter,
+  addInteractionToChapter,
   deleteInteraction,
 };

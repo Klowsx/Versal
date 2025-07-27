@@ -1,13 +1,11 @@
 const Interaction = require("../../models/interaction.model");
 
-/**
- * Gestiona una interacción (like/unlike o comentario).
- */
-async function addInteraction({ contentId, onModel, userId, interactionType, text }) {
+// Función para añadir una interacción (like o comentario)
+async function addInteractionToChapter({ chapterId, userId, interactionType, text }) {
   try {
     if (interactionType === "like") {
       const existingLike = await Interaction.findOne({
-        contentId,
+        contentId: chapterId,
         userId,
         interactionType: "like",
       });
@@ -15,17 +13,15 @@ async function addInteraction({ contentId, onModel, userId, interactionType, tex
         await existingLike.remove();
         return { status: "unliked" };
       } else {
-        const like = await Interaction.create({ contentId, onModel, userId, interactionType });
+        const like = await Interaction.create({ contentId: chapterId, userId, interactionType });
         return { status: "liked", like };
       }
     }
 
-    // Lógica para 'comment': crea un nuevo comentario
     if (interactionType === "comment") {
-      if (!text) return { error: "Comment text is required." };
+      if (!text) return { error: "El texto del comentario es requerido." };
       const comment = await Interaction.create({
-        contentId,
-        onModel,
+        contentId: chapterId,
         userId,
         interactionType,
         text,
@@ -33,36 +29,29 @@ async function addInteraction({ contentId, onModel, userId, interactionType, tex
       return { comment };
     }
 
-    return { error: "Invalid interaction type." };
+    return { error: "Tipo de interacción inválido." };
   } catch (error) {
-    return { error: `Failed to add interaction: ${error.message}` };
+    return { error: `Error al añadir la interacción: ${error.message}` };
   }
 }
 
-/**
- * Obtiene todas las interacciones de un contenido específico.
- */
-async function getInteractionsForContent({ contentId, onModel }) {
+// Función para obtener las interacciones (likes y comentarios) de un capítulo
+async function getInteractionsForChapter(chapterId) {
   try {
-    const interactions = await Interaction.find({ contentId, onModel })
+    const interactions = await Interaction.find({ contentId: chapterId })
       .populate("userId", "username profileImage")
-      .sort({ createdAt: "desc" }); // Ordenar por fecha
-
-    const likes = interactions.filter((i) => i.interactionType === "like");
-    const comments = interactions.filter((i) => i.interactionType === "comment");
+      .sort({ createdAt: "desc" });
 
     return {
-      likesCount: likes.length,
-      comments,
+      likesCount: interactions.filter((i) => i.interactionType === "like").length,
+      comments: interactions.filter((i) => i.interactionType === "comment"),
     };
   } catch (error) {
-    return { error: `Failed to get interactions: ${error.message}` };
+    return { error: `Error al obtener las interacciones: ${error.message}` };
   }
 }
 
-/**
- * Elimina una interacción (like o comentario).
- */
+// Función para eliminar una interacción
 async function deleteInteraction({ interactionId, userId, userRole }) {
   try {
     const interaction = await Interaction.findById(interactionId);
@@ -70,7 +59,6 @@ async function deleteInteraction({ interactionId, userId, userRole }) {
       return { error: "Interaction not found." };
     }
 
-    // Solo el dueño o un admin pueden eliminar
     if (interaction.userId.toString() !== userId.toString() && userRole !== "admin") {
       return { error: "Unauthorized to delete this interaction." };
     }
@@ -83,7 +71,7 @@ async function deleteInteraction({ interactionId, userId, userRole }) {
 }
 
 module.exports = {
-  addInteraction,
-  getInteractionsForContent,
+  getInteractionsForChapter,
+  addInteractionToChapter,
   deleteInteraction,
 };

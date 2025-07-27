@@ -212,6 +212,64 @@ const deleteStorySchema = {
   },
 };
 
+const getStoriesByCategorySchema = {
+  summary: "Obtiene historias por categoría",
+  description:
+    "Devuelve una lista de todas las historias publicadas que pertenecen a una categoría específica.",
+  tags: ["Stories"],
+  params: {
+    type: "object",
+    properties: {
+      categoryName: { type: "string", description: "El nombre de la categoría a buscar" },
+    },
+    required: ["categoryName"],
+  },
+  response: {
+    200: {
+      description: "Una lista de historias publicadas para la categoría.",
+      type: "object",
+      properties: {
+        stories: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: storyProperties,
+          },
+        },
+      },
+    },
+  },
+};
+
+const getStoriesByTagSchema = {
+  summary: "Obtiene historias por etiqueta (tag)",
+  description:
+    "Devuelve una lista de todas las historias publicadas que tienen una etiqueta específica.",
+  tags: ["Stories"],
+  params: {
+    type: "object",
+    properties: {
+      tagName: { type: "string", description: "El nombre de la etiqueta a buscar" },
+    },
+    required: ["tagName"],
+  },
+  response: {
+    200: {
+      description: "Una lista de historias publicadas para la etiqueta.",
+      type: "object",
+      properties: {
+        stories: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: storyProperties,
+          },
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   createStorySchema,
   getStoryByIdSchema,
@@ -219,4 +277,6 @@ module.exports = {
   getAuthorStoriesSchema,
   updateStorySchema,
   deleteStorySchema,
+  getStoriesByCategorySchema,
+  getStoriesByTagSchema,
 };
