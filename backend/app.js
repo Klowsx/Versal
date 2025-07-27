@@ -7,11 +7,9 @@ const cors = require("@fastify/cors");
 const jwt = require("@fastify/jwt");
 const path = require("path");
 
-// --- IMPORTS CORREGIDOS ---
-// Se importa cada librería con su nombre correcto.
 const fastifyMultipart = require("@fastify/multipart");
 const fastifyStatic = require("@fastify/static");
-const fastifyRawBody = require("fastify-raw-body"); // Nuevo: Importar fastify-raw-body
+const fastifyRawBody = require("fastify-raw-body");
 
 // Tus módulos
 const connectDB = require("./src/config/db");
@@ -23,6 +21,7 @@ const interactionRoutes = require("./src/modules/interactions/interaction.routes
 const chapterRoutes = require("./src/modules/chapters/chapter.routes");
 const favoriteRoutes = require("./src/modules/favorites/favorite.routes");
 const reportRoutes = require("./src/modules/reports/report.routes");
+const donationRoutes = require("./src/modules/donations/donation.routes");
 
 // Conectar a la base de datos
 connectDB();
@@ -31,10 +30,8 @@ connectDB();
 fastify.register(jwt, { secret: process.env.JWT_SECRET });
 fastify.register(authPlugin);
 
-// 1. Registra el plugin para procesar la subida de archivos.
 fastify.register(fastifyMultipart);
 
-// 2. Registra el plugin para servir los archivos ya guardados.
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, "uploads"),
   prefix: "/uploads/",
@@ -52,8 +49,6 @@ fastify.register(cors, {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 });
-
-// --- RUTAS DE LA APLICACIÓN ---
 
 // Rutas de usuario
 fastify.register(userRoutes, { prefix: "/api/user" });
@@ -75,6 +70,9 @@ fastify.register(favoriteRoutes, { prefix: "/api" });
 
 // Rutas de reportes
 fastify.register(reportRoutes, { prefix: "/api" });
+
+// Rutas de donaciones
+fastify.register(donationRoutes, { prefix: "/api" });
 
 fastify.listen({ port: 3000 }, (err, address) => {
   if (err) {

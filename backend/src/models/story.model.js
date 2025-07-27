@@ -45,6 +45,7 @@ async function seedDefaults() {
   ];
   const defaultTags = [
     "Drama",
+    "Dragones",
     "Magia",
     "Aventura",
     "Comedia",
