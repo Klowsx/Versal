@@ -15,7 +15,7 @@ const COIN_PACKS = [
   },
   {
     id: "pack_1000_coins",
-    name: "Paquete de Mecenas",
+    name: "Paquete de Onii-chan",
     description: "1000 monedas y el agradecimiento eterno de los autores.",
     coins: 1000,
     stripePriceId: "price_1RpOtXR09FDM2B1YmqgNXXiC",
