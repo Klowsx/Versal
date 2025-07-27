@@ -7,11 +7,12 @@
 
 body {
   background: #f7f8fa;
-  color: #333;
+  color: #6b21a8;
   padding: 2rem;
 }
 
 header {
+  margin-top: 120px;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -37,26 +38,7 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-}
-
-.card-blue {
-  border-top: 5px solid #d3e4ff;
-}
-
-.card-pink {
-  border-top: 5px solid #fce3f0;
-}
-
-.card-green {
-  border-top: 5px solid #daf5e8;
-}
-
-.card-yellow {
-  border-top: 5px solid #fff2d3;
-}
-
-.card-purple {
-  border-top: 5px solid #e9dcff;
+ border-top: 12px solid #e9dcff;
 }
 
 input[type="text"], textarea, select {

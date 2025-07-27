@@ -20,7 +20,7 @@ async function storyRoutes(fastify) {
     privateRoutes.addHook("onRequest", fastify.authenticate);
 
     // Crear una nueva historia
-    privateRoutes.post("/", { schema: createStorySchema }, storyController.createStory);
+    privateRoutes.post("/", storyController.createStory);
 
     // Obtener historias del autor autenticado
     privateRoutes.get(

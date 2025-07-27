@@ -1,0 +1,215 @@
+/* Tu CSS original con ajustes y adiciones */
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #f3e8ff, #faf5ff);
+  color: #4b0082;
+  margin: 0;
+  padding-bottom: 25px;
+}
+
+header {
+  margin-top: 100px;
+}
+
+.editor-container {
+  display: flex;
+  height: calc(100vh - 80px); /* Ajustado para que no se desborde */
+  margin-top: 20px; /* Margen superior para el contenedor principal */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f5ebff;
+  padding: 20px;
+  border-right: 2px solid #d6bcfa;
+}
+
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #6b21a8;
+}
+
+.chapter-list {
+  list-style: none;
+  margin-bottom: 20px;
+  padding-left: 0;
+}
+
+.chapter {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #ede9fe;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.chapter-title-label {
+    font-style: italic;
+    color: #6b21a8;
+    margin-left: 5px;
+}
+
+.chapter.active {
+  background-color: #d8b4fe;
+  font-weight: bold;
+}
+
+.new-chapter {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  background-color: #c084fc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.stats p {
+  margin: 6px 0;
+  color: #5b21b6;
+}
+
+.stats span {
+  font-weight: bold;
+  color: #4b0082;
+}
+
+.editor {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.editor h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.chapter-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #f3e8ff;
+  border-radius: 8px;
+  width: 100%;
+  color: #4b0082;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.toolbar button,
+.toolbar select {
+  background-color: #ede9fe;
+  border: 1px solid #d8b4fe;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Estilo para los botones de formato cuando están activos */
+.toolbar button.active {
+  background-color: #a855f7;
+  color: white;
+  border-color: #6b21a8;
+}
+
+.text-area {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e9d5ff;
+  outline: none;
+  overflow-y: auto;
+  line-height: 1.6;
+  min-height: 400px;
+}
+
+.text-area img,
+.text-area iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  font-size: 0.9rem;
+  color: #6b21a8;
+}
+
+.save,
+.publish {
+  background-color: #a855f7;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* === NUEVO: Estilos para el menú emergente de capítulos === */
+.popup-menu {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    border: 1px solid #d8b4fe;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.popup-menu button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.popup-menu button:hover {
+    background-color: #f5ebff;
+}
+
+.popup-menu button[data-act="eliminar"] {
+    color: #dc2626;
+}
+
+.popup-menu button[data-act="eliminar"]:hover {
+    background-color: #fee2e2;
+}
+
+
+/* Estilo para que las imágenes y videos se ajusten al editor */
+.text-area img,
+.text-area iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="write_story.css" />
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+  <title>Editor - Versal</title>
+</head>
+<body>
+
+  <header>
+    </header>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="editor-container">
+    <aside class="sidebar">
+      <h2>Capítulos</h2>
+      <ul class="chapter-list">
+        </ul>
+      <button class="new-chapter">+ Nuevo Capítulo</button>
+
+      <div class="stats">
+        <p>Capítulos: <strong id="chapter-count">1</strong></p>
+        <p>Publicados: <strong id="published-count">0</strong></p>
+        <p>Palabras totales: <strong id="total-words">0</strong></p>
+      </div>
+    </aside>
+
+    <section class="editor">
+     <h1>Editor de Historia</h1>
+      <input id="title-input" type="text" placeholder="Título del capítulo" class="chapter-title"/>
+
+      <div class="toolbar">
+        <button data-cmd="bold"><b>B</b></button>
+        <button data-cmd="italic"><i>I</i></button>
+        <button data-cmd="underline"><u>U</u></button>
+        <button data-cmd="insertUnorderedList">• Lista</button>
+        <button data-cmd="formatBlock" data-value="blockquote">❝ Cita</button>
+        <button data-cmd="undo" title="Deshacer">↺</button>
+        <button data-cmd="redo" title="Rehacer">↻</button>
+        <button id="insert-image-btn" title="Insertar imagen">🖼️</button>
+        <button id="insert-video-btn" title="Insertar video">🎬</button>
+      </div>
+
+      <div id="editor" contenteditable="true" class="text-area" spellcheck="true">
+        Comienza a escribir tu historia aquí...
+      </div>
+
+      <div class="bottom-bar">
+        <span>Palabras: <span id="wordCount">0</span></span>
+        <span>Estado: <strong id="chapter-status">Borrador</strong></span>
+        <div class="action-buttons">
+          <button class="save">Guardar</button>
+          <button class="publish">Publicar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
+  <script src="write_story.js"></script>
+</body>
+</html>

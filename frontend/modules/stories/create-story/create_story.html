@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crear Historia</title>
   <link rel="stylesheet" href="create_story.css" />
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
 </head>
 <body>
 
+  <div id="navbar-placeholder"></div>
+
   <header>
     <h1>📘 Crear Historia</h1>
-    <p>Comparte tu creatividad con el mundo</p>
+    <p>Comparte tu creatividad con el munsdo</p>
   </header>
 
   <main class="container">
-    <form id="storyForm">
+    <form id="storyForm" enctype="multipart/form-data">
       <!-- Información Básica -->
       <section class="card card-blue">
         <h2>Información Básica</h2>
@@ -28,7 +31,7 @@
       <!-- Portada -->
       <section class="card card-pink">
         <h2>Portada de la Historia</h2>
-        <input type="text" id="coverImage" name="coverImage" placeholder="URL de la imagen de portada (PNG, JPG, WEBP)" />
+        <input type="file" id="coverImage" name="coverImage" accept="image/png, image/jpeg, image/webp" />
         <small>PNG, JPG, WEBP hasta 5MB<br>Recomendado: 400x600px</small>
       </section>
 
@@ -89,6 +92,7 @@
     </div>
   </main>
 
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="create_story.js"></script>
 </body>
 </html>

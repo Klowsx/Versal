@@ -85,7 +85,7 @@ async function userRoutes(fastify) {
     // Actualizar perfil
     privateRoutes.put(
       "/me",
-      { schema: { body: updateProfileSchema } },
+      // { schema: { body: updateProfileSchema } },
       userController.updateProfile
     );
 

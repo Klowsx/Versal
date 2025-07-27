@@ -1,61 +1,177 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("editProfileForm");
-  if (!form) {
-    console.error("No se encontró el formulario con id editProfileForm");
-    return;
-  }
+(() => {
+  const EditProfileModule = (() => {
+    // --------------------------------------------------
+    // 1. API & ELEMENTS
+    // --------------------------------------------------
+    const API_BASE_URL = "http://localhost:3000/api/user";
 
-  const fileInput = document.getElementById("upload"); // input type=file
-  const avatarImg = document.getElementById("avatar");
+    const elements = {
+      form: document.getElementById("editProfileForm"),
+      
+      // Header elements
+      avatar: document.getElementById("avatar"),
+      fullName: document.getElementById("fullName"),
+      username: document.getElementById("username"),
+      badge: document.getElementById("badge"),
+      joinDate: document.getElementById("joinDate"),
 
-  // Mostrar preview de imagen seleccionada
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files[0];
-    if (file) {
-      avatarImg.src = URL.createObjectURL(file);
-    }
-  });
+      // Form fields
+      fileInput: document.getElementById("upload"),
+      formFullName: document.getElementById("formFullName"),
+      formUsername: document.getElementById("formUsername"),
+      formEmail: document.getElementById("formEmail"),
+      formBio: document.getElementById("formBio"),
+      charCounter: document.getElementById("counter"),
+      
+      // Password fields
+      oldPassword: document.getElementById("oldPassword"),
+      newPassword: document.getElementById("newPassword"),
+      confirmPassword: document.getElementById("confirmPassword"),
 
-  // Enviar formulario para actualizar perfil
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      // Buttons
+      cancelBtn: document.querySelector(".btn.cancel"),
+    };
 
-    const formData = new FormData(form);
+    // --------------------------------------------------
+    // 2. METHODS
+    // --------------------------------------------------
+    const methods = {
+      loadAndPopulateUserData: async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            alert("Sesión no válida. Por favor, inicia sesión.");
+            window.location.href = '/login.html'; // Ajusta a tu página de login
+            return;
+          }
 
-    try {
-      const res = await fetch("http://localhost:3000/api/users/me", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          // NO pongas Content-Type si usas FormData
-        },
-        body: formData,
-      });
+          const response = await fetch(`${API_BASE_URL}/me`, {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
 
-      if (!res.ok) throw new Error("Error al actualizar perfil");
+          if (!response.ok) throw new Error("No se pudo cargar la información de tu perfil.");
 
-      alert("Perfil actualizado correctamente");
-      // Opcional: recarga o redirección
-      // window.location.href = "/perfil";
-    } catch (err) {
-      console.error(err);
-      alert("Error al actualizar perfil");
-    }
-  });
+          const user = await response.json();
+          
+          // Llenar el encabezado del perfil
+          elements.avatar.src = user.profileImage || "../../../resources/profile.png";
+          elements.fullName.textContent = user.fullName;
+          elements.username.textContent = `@${user.username}`;
+          elements.badge.textContent = user.subscription?.type === "premium" ? "💎 Premium" : "✨ Básico";
+          if (user.createdAt) {
+            const date = new Date(user.createdAt).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+            elements.joinDate.textContent = `Miembro desde ${date}`;
+          }
 
-  // Opcional: lógica para contador de caracteres en biografía
-  const bioTextarea = form.querySelector("textarea[name='biografia']");
-  const counter = document.getElementById("counter");
-  if (bioTextarea && counter) {
-    bioTextarea.addEventListener("input", () => {
-      counter.textContent = `${bioTextarea.value.length}/200`;
-    });
-  }
+          // Llenar el formulario con los datos
+          elements.formFullName.value = user.fullName;
+          elements.formUsername.value = user.username;
+          elements.formEmail.value = user.email;
+          elements.formBio.value = user.bio || "";
+          methods.updateCharCounter();
 
-  // Botón cancelar (ejemplo para limpiar o volver atrás)
-  const cancelBtn = form.querySelector(".btn.cancel");
-  cancelBtn.addEventListener("click", () => {
-    // Por ejemplo, recarga la página o redirige
-    window.location.href = "/perfil";
-  });
-});
+        } catch (error) {
+          console.error("Error al cargar el perfil:", error);
+          alert(error.message);
+        }
+      },
+
+      previewImage: () => {
+        const file = elements.fileInput.files[0];
+        if (file) {
+          elements.avatar.src = URL.createObjectURL(file);
+        }
+      },
+
+      updateCharCounter: () => {
+        if (elements.formBio && elements.charCounter) {
+          elements.charCounter.textContent = `${elements.formBio.value.length}/200`;
+        }
+      },
+
+      handleFormSubmit: async (event) => {
+        event.preventDefault();
+        const saveButton = event.target.querySelector('.btn.save');
+        saveButton.disabled = true;
+        saveButton.textContent = 'Guardando...';
+
+        try {
+          const oldPass = elements.oldPassword.value;
+          const newPass = elements.newPassword.value;
+          if (oldPass && newPass) {
+            await methods.submitPasswordChange(oldPass, newPass);
+          }
+          await methods.submitProfileUpdate();
+          alert("Perfil actualizado correctamente.");
+          window.location.reload();
+        } catch(error) {
+          // El error específico ya se muestra en la función que falla
+          console.error("Fallo el envío del formulario:", error);
+        } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = 'Guardar Cambios';
+        }
+      },
+
+      submitProfileUpdate: async () => {
+        const formData = new FormData(elements.form);
+        // No es necesario eliminar los campos de contraseña, ya que el backend no los usa
+        // para esta petición, pero es buena práctica para no enviar datos innecesarios.
+        formData.delete('oldPassword');
+        formData.delete('newPassword');
+        formData.delete('confirmPassword');
+        
+        try {
+          const response = await fetch(`${API_BASE_URL}/me`, {
+            method: "PUT",
+            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
+            body: formData,
+          });
+          if (!response.ok) throw new Error("Error al actualizar la información del perfil.");
+        } catch (error) {
+          alert(`Error de perfil: ${error.message}`);
+          throw error;
+        }
+      },
+
+      submitPasswordChange: async (oldPassword, newPassword) => {
+        if (newPassword !== elements.confirmPassword.value) {
+            throw new Error("Las nuevas contraseñas no coinciden.");
+        }
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/me/password`, {
+            method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ oldPassword, newPassword }),
+          });
+
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || "No se pudo cambiar la contraseña.");
+        } catch (error) {
+          alert(`Error de contraseña: ${error.message}`);
+          throw error;
+        }
+      },
+    };
+
+    // --------------------------------------------------
+    // 3. INIT
+    // --------------------------------------------------
+    const init = () => {
+      if (!elements.form) return;
+      document.addEventListener("DOMContentLoaded", methods.loadAndPopulateUserData);
+      elements.form.addEventListener("submit", methods.handleFormSubmit);
+      elements.fileInput.addEventListener("change", methods.previewImage);
+      elements.formBio.addEventListener("input", methods.updateCharCounter);
+      elements.cancelBtn.addEventListener("click", () => window.history.back());
+    };
+
+    return { init };
+  })();
+
+  EditProfileModule.init();
+})();

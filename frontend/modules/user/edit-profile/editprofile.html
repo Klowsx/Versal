@@ -11,56 +11,50 @@
 
   <div id="navbar-placeholder"></div>
 
-  <main class="main">
-    <section class="sidebar">
-      <div class="card perfil-card">
+  <main class="container">
+    <form id="editProfileForm" class="profile-form">
+      <header class="profile-header">
         <div class="avatar-wrapper">
-          <img id="avatar" src="../../../resources/profile.png" alt="Foto" class="avatar" />
-          <label for="upload" class="upload-btn">📷</label>
-          <input type="file" id="upload" hidden />
+          <img id="avatar" src="../../../resources/profile.png" alt="Foto de perfil" class="avatar" />
+          <label for="upload" class="upload-btn" title="Cambiar imagen">📷</label>
+          <input type="file" id="upload" name="profileImage" hidden />
         </div>
-        <h2 id="fullName">Nombre Apellido</h2>
-        <p id="username">@usuario</p>
-        <span id="badge" class="badge">✨ Básico</span>
-        <p id="fecha" class="fecha">Miembro desde enero 2024</p>
-      </div>
+        <div class="user-info">
+          <h1 id="fullName">Nombre Apellido</h1>
+          <p id="username">@usuario</p>
+          <div class="meta-info">
+            <span id="badge" class="badge">✨ Básico</span>
+            <span id="joinDate" class="join-date">Miembro desde enero 2024</span>
+          </div>
+        </div>
+      </header>
 
-      <div class="card consejos">
-        <h3>💡 Consejos</h3>
-        <ul>
-          <li>Usa una foto clara y profesional</li>
-          <li>Escribe una biografía atractiva</li>
-          <li>Manten tu información actualizada</li>
-          <li>Usa un nombre de usuario memorable</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="formulario">
-      <form id="editProfileForm" class="card">
+      <section class="form-section">
         <h2>📋 Información Personal</h2>
         <div class="form-grid">
           <div>
-            <label for="nombre">Nombre *</label>
-            <input type="text" id="nombre" name="nombre" placeholder="María" required />
+            <label for="formFullName">Nombre Completo *</label>
+            <input type="text" id="formFullName" name="fullName" placeholder="Ej: María González" required />
           </div>
           <div>
-            <label for="nombreUsuario">Nombre de Usuario *</label>
-            <input type="text" id="nombreUsuario" name="nombreUsuario" placeholder="maria_escritora" required />
+            <label for="formUsername">Nombre de Usuario *</label>
+            <input type="text" id="formUsername" name="username" placeholder="Ej: maria_escritora" required />
           </div>
-          <div>
-            <label for="correo">Correo Electrónico *</label>
-            <input type="email" id="correo" name="correo" placeholder="maria.gonzalez@email.com" required />
+          <div class="full-width">
+            <label for="formEmail">Correo Electrónico *</label>
+            <input type="email" id="formEmail" name="email" placeholder="maria.gonzalez@email.com" required />
           </div>
-          <div class="bio">
-            <label for="biografia">Biografía</label>
-            <textarea id="biografia" name="biografia" maxlength="200" placeholder="Cuéntanos sobre ti..."></textarea>
+          <div class="full-width">
+            <label for="formBio">Biografía</label>
+            <textarea id="formBio" name="bio" maxlength="200" placeholder="Cuéntanos sobre ti..."></textarea>
             <div class="counter" id="counter">0/200</div>
           </div>
         </div>
+      </section>
 
+      <section class="form-section">
         <h2>🔒 Cambiar Contraseña</h2>
-        <p class="opcional">Opcional: Solo completa estos campos si deseas cambiar tu contraseña actual.</p>
+        <p class="opcional">Completa estos campos solo si deseas cambiar tu contraseña.</p>
         <div class="form-grid">
           <div>
             <label for="oldPassword">Contraseña Actual</label>
@@ -75,23 +69,13 @@
             <input type="password" id="confirmPassword" name="confirmPassword" />
           </div>
         </div>
-
-        <div class="requisitos">
-          <ul>
-            <li>• Mínimo 8 caracteres</li>
-            <li>• Al menos una letra mayúscula</li>
-            <li>• Al menos una letra minúscula</li>
-            <li>• Al menos un número</li>
-            <li>• Al menos un carácter especial (!@#$%^&*)</li>
-          </ul>
-        </div>
-
-        <div class="buttons">
-          <button type="button" class="btn cancel full">Cancelar Cambios</button>
-          <button type="submit" class="btn save full">Guardar Cambios</button>
-        </div>
-      </form>
-    </section>
+      </section>
+      
+      <footer class="form-actions">
+        <button type="button" class="btn cancel">Cancelar</button>
+        <button type="submit" class="btn save">Guardar Cambios</button>
+      </footer>
+    </form>
   </main>
 
   <script src="/frontend/modules/main/navbar/navbar.js"></script>

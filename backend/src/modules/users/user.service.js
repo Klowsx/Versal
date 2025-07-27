@@ -62,13 +62,10 @@ async function getUserById({ userId }) {
 
 // Editar perfil
 async function updateUser({ userId, data }) {
-  const user = await User.findByIdAndUpdate(
-    userId,
-    { $set: data },
-    { new: true, runValidators: true }
-  ).select("-password");
-  if (!user) throw new Error("Usuario no encontrado");
-  return user;
+  // Si en 'data' viene el campo 'profileImage' con la URL, 
+  // Mongoose lo actualizará correctamente.
+  const updatedUser = await User.findByIdAndUpdate(userId, { $set: data }, { new: true }).select("-password");
+  return updatedUser;
 }
 
 // Cambiar contraseña

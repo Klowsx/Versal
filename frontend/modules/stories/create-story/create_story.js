@@ -82,7 +82,7 @@
       },
 
       redirectToChapterEditor: () => {
-        window.location.href = '/frontend/modules/story/write_chapter.html';
+        window.location.href = '../write-story/write_story.html';
       },
     };
 
