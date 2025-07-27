@@ -233,6 +233,26 @@ async function getStoriesByTag(tagName) {
   }
 }
 
+async function getAllCategories() {
+  try {
+    const categories = await Category.find({}).lean();
+    return { categories };
+  } catch (error) {
+    console.error("Error al obtener todas las categorías:", error);
+    return { error: "Ocurrió un error al obtener las categorías." };
+  }
+}
+
+async function getAllTags() {
+  try {
+    const tags = await Tag.find({}).lean();
+    return { tags };
+  } catch (error) {
+    console.error("Error al obtener todos los tags:", error);
+    return { error: "Ocurrió un error al obtener las etiquetas." };
+  }
+}
+
 module.exports = {
   createStory,
   getStoryById,
@@ -242,4 +262,6 @@ module.exports = {
   getStoriesByAuthor,
   getStoriesByCategory,
   getStoriesByTag,
+  getAllCategories,
+  getAllTags,
 };

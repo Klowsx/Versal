@@ -10,12 +10,18 @@ const {
   deleteStorySchema,
   getStoriesByCategorySchema,
   getStoriesByTagSchema,
+  getAllCategoriesSchema,
+  getAllTagsSchema,
 } = require("./story.schema");
 
 async function storyRoutes(fastify) {
   fastify.get("/", { schema: getAllStoriesSchema }, storyController.getAllStories);
 
   fastify.get("/:id", { schema: getStoryByIdSchema }, storyController.getStoryById);
+
+  // Obtener categorías y etiquetas
+  fastify.get("/categories", { schema: getAllCategoriesSchema }, storyController.getAllCategories);
+  fastify.get("/tags", { schema: getAllTagsSchema }, storyController.getAllTags);
 
   // --- Rutas Privadas ---
   fastify.register(async function (privateRoutes) {
@@ -38,7 +44,7 @@ async function storyRoutes(fastify) {
     privateRoutes.delete("/:id", { schema: deleteStorySchema }, storyController.deleteStory);
   });
 
-  // Rutas públicas para obtener historias por categoría o etiqueta
+  // Rutas para obtener historias por categoría o etiqueta
   fastify.get(
     "/category/:categoryName",
     { schema: getStoriesByCategorySchema },

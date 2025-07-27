@@ -270,6 +270,48 @@ const getStoriesByTagSchema = {
   },
 };
 
+const getAllCategoriesSchema = {
+  summary: "Obtiene todas las categorías disponibles",
+  description: "Devuelve una lista de todas las categorías de historias disponibles.",
+  tags: ["Stories", "Categories"],
+  response: {
+    200: {
+      description: "Una lista de todas las categorías.",
+      type: "object",
+      properties: {
+        categories: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: categoryProperties,
+          },
+        },
+      },
+    },
+  },
+};
+
+const getAllTagsSchema = {
+  summary: "Obtiene todas las etiquetas (tags) disponibles",
+  description: "Devuelve una lista de todas las etiquetas de historias disponibles.",
+  tags: ["Stories", "Tags"],
+  response: {
+    200: {
+      description: "Una lista de todas las etiquetas.",
+      type: "object",
+      properties: {
+        tags: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: tagProperties,
+          },
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   createStorySchema,
   getStoryByIdSchema,
@@ -279,4 +321,6 @@ module.exports = {
   deleteStorySchema,
   getStoriesByCategorySchema,
   getStoriesByTagSchema,
+  getAllCategoriesSchema,
+  getAllTagsSchema,
 };

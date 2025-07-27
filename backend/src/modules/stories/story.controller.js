@@ -150,6 +150,34 @@ async function getStoriesByTag(request, reply) {
   }
 }
 
+// controlador para obtener todas las categorías
+async function getAllCategories(request, reply) {
+  try {
+    const result = await storyService.getAllCategories();
+    if (result.error) {
+      return reply.code(500).send(result);
+    }
+    reply.send(result);
+  } catch (error) {
+    console.error("Error en el controlador getAllCategories:", error);
+    reply.code(500).send({ error: "Ocurrió un error inesperado al obtener las categorías." });
+  }
+}
+
+// controlador para obtener todos los tags
+async function getAllTags(request, reply) {
+  try {
+    const result = await storyService.getAllTags();
+    if (result.error) {
+      return reply.code(500).send(result);
+    }
+    reply.send(result);
+  } catch (error) {
+    console.error("Error en el controlador getAllTags:", error);
+    reply.code(500).send({ error: "Ocurrió un error inesperado al obtener las etiquetas." });
+  }
+}
+
 module.exports = {
   createStory,
   getStoryById,
@@ -159,4 +187,6 @@ module.exports = {
   deleteStory,
   getStoriesByCategory,
   getStoriesByTag,
+  getAllCategories,
+  getAllTags,
 };
