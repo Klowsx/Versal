@@ -20,6 +20,7 @@ const StorySchema = new mongoose.Schema(
     language: { type: String, default: "Español" },
     status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },
     chapterCount: { type: Number, default: 0 },
+    isAdultContent: { type: Boolean, default: false },
   },
   {
     timestamps: true,

@@ -31,6 +31,7 @@ const storyProperties = {
   },
   chapterCount: { type: "number" },
   status: { type: "string", enum: ["draft", "published", "archived"] },
+  isAdultContent: { type: "boolean" },
   createdAt: { type: "string", format: "date-time" },
   updatedAt: { type: "string", format: "date-time" },
 };
@@ -68,6 +69,7 @@ const createStorySchema = {
       category: { type: "string", description: "Nombre de la categoría" },
       tags: { type: "array", items: { type: "string" } },
       language: { type: "string" },
+      isAdultContent: { type: "boolean", default: false },
     },
   },
   response: {
@@ -185,6 +187,7 @@ const updateStorySchema = {
       category: { type: "string" },
       tags: { type: "array", items: { type: "string" } },
       status: { type: "string", enum: ["draft", "published", "archived"] },
+      isAdultContent: { type: "boolean", default: false },
     },
   },
   response: {
