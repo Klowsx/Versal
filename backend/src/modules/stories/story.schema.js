@@ -35,6 +35,16 @@ const storyProperties = {
   updatedAt: { type: "string", format: "date-time" },
 };
 
+const categoryProperties = {
+  _id: { type: "string" },
+  name: { type: "string" },
+};
+
+const tagProperties = {
+  _id: { type: "string" },
+  name: { type: "string" },
+};
+
 const headers = {
   type: "object",
   properties: {

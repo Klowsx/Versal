@@ -1,129 +1,137 @@
-// Definición de los "productos" que se pueden comprar.
-// ESTO ESTÁ HARDCODEADO EN EL CÓDIGO. NO NECESITA DB NI SEEDER.
-const PRODUCTS = {
-  subscriptions: {
-    basic: {
-      // Usar "basic" como clave, ya que es el 'type' en tu user.model.js
-      name: "Suscripción Básica",
-      price: 1000, // En centavos (ej. $10.00 USD)
-      currency: "usd",
-      duration: "monthly", // Duración para calcular endDate
-    },
-    premium: {
-      // Usar "premium" como clave
-      name: "Suscripción Premium",
-      price: 5000, // En centavos (ej. $50.00 USD)
-      currency: "usd",
-      duration: "yearly", // Duración para calcular endDate
-    },
-  },
-  coin_packages: {
-    "Pack de 100 Monedas": {
-      // Usar el nombre completo como clave para packs
-      name: "Pack de 100 Monedas",
-      coins: 100,
-      price: 500,
-      currency: "usd",
-    },
-    "Pack de 500 Monedas": {
-      name: "Pack de 500 Monedas",
-      coins: 500,
-      price: 2000,
-      currency: "usd",
-    },
-    "Pack de 1000 Monedas": {
-      name: "Pack de 1000 Monedas",
-      coins: 1000,
-      price: 3500,
-      currency: "usd",
-    },
-  },
-};
-
-// Esquema base para una transacción (para respuestas)
-const transactionBaseSchema = {
+const headersAuth = {
   type: "object",
   properties: {
-    _id: { type: "string" },
-    userId: { type: "string" },
-    purchaseType: { type: "string", enum: ["subscription", "coin_package"] },
-    description: { type: "string" },
-    amount: { type: "number" },
-    transactionDate: { type: "string", format: "date-time" },
-    paymentStatus: { type: "string", enum: ["successful", "failed"] },
-    paymentId: { type: "string", nullable: true },
+    authorization: { type: "string" },
   },
-  required: [
-    "_id",
-    "userId",
-    "purchaseType",
-    "description",
-    "amount",
-    "transactionDate",
-    "paymentStatus",
-  ],
+  required: ["authorization"],
 };
 
-// Esquema para iniciar una compra de suscripción
-const initiateSubscriptionPurchaseSchema = {
-  type: "object",
-  properties: {
-    // El enum se refiere a los 'type' de suscripción en tu modelo de usuario
-    subscriptionType: { type: "string", enum: ["basic", "premium"] },
+const transactionProperties = {
+  _id: { type: "string" },
+  userId: { type: "string" },
+  type: { type: "string", enum: ["subscription", "coin_pack_purchase", "donation"] },
+  amount: { type: "number" },
+  currency: { type: "string" },
+  status: { type: "string", enum: ["pending", "completed", "failed", "canceled"] },
+  paymentMethod: { type: "string" },
+  stripeCheckoutSessionId: { type: "string", nullable: true },
+  stripePaymentIntentId: { type: "string", nullable: true },
+  stripeSubscriptionId: { type: "string", nullable: true },
+  stripeCustomerId: { type: "string", nullable: true },
+  metadata: { type: "object", additionalProperties: true, nullable: true },
+  createdAt: { type: "string", format: "date-time" },
+  updatedAt: { type: "string", format: "date-time" },
+};
+
+const createSubscriptionCheckoutSchema = {
+  summary: "Iniciar checkout para una suscripción",
+  description: "Crea una sesión de checkout de Stripe para una nueva suscripción.",
+  tags: ["Transactions"],
+  headers: headersAuth,
+  body: {
+    type: "object",
+    required: ["planId"], // Asume que tienes IDs de planes predefinidos en Stripe
+    properties: {
+      planId: { type: "string", description: "ID del precio del plan de suscripción en Stripe" },
+    },
   },
-  required: ["subscriptionType"],
-};
-
-// Esquema para iniciar una compra de pack de monedas
-const initiateCoinPackPurchaseSchema = {
-  type: "object",
-  properties: {
-    // El enum se refiere a los 'name' de los packs de monedas hardcodeados
-    packName: { type: "string", enum: Object.keys(PRODUCTS.coin_packages) },
-  },
-  required: ["packName"],
-};
-
-// Esquema de respuesta para iniciar una compra (devuelve la URL de Stripe Checkout)
-const purchaseInitiateResponseSchema = {
-  type: "object",
-  properties: {
-    checkoutUrl: { type: "string", format: "uri" },
-    transactionId: { type: "string" },
-  },
-  required: ["checkoutUrl", "transactionId"],
-};
-
-// Esquema de respuesta para el historial de transacciones (array de transacciones)
-const transactionHistoryResponseSchema = {
-  type: "array",
-  items: transactionBaseSchema,
-};
-
-// Esquema para el webhook de Stripe (simplificado para lo esencial que Stripe envía)
-const stripeWebhookEventSchema = {
-  type: "object",
-  properties: {
-    id: { type: "string" },
-    object: { type: "string", const: "event" },
-    type: { type: "string" },
-    data: {
+  response: {
+    200: {
       type: "object",
       properties: {
-        object: { type: "object" },
+        sessionId: { type: "string", description: "ID de la sesión de checkout de Stripe" },
+        url: { type: "string", format: "uri", description: "URL de redirección a Stripe Checkout" },
       },
-      required: ["object"],
+    },
+    400: {
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+    500: {
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
     },
   },
-  required: ["id", "object", "type", "data"],
+};
+
+const createCoinPackCheckoutSchema = {
+  summary: "Iniciar checkout para un pack de monedas",
+  description: "Crea una sesión de checkout de Stripe para la compra de un pack de monedas.",
+  tags: ["Transactions"],
+  headers: headersAuth,
+  body: {
+    type: "object",
+    required: ["coinPackId"],
+    properties: {
+      coinPackId: { type: "string", description: "ID del precio del pack de monedas en Stripe" },
+    },
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        sessionId: { type: "string", description: "ID de la sesión de checkout de Stripe" },
+        url: { type: "string", format: "uri", description: "URL de redirección a Stripe Checkout" },
+      },
+    },
+    400: {
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+    500: {
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+  },
+};
+
+const stripeWebhookSchema = {
+  summary: "Webhook de Stripe",
+  description: "Endpoint para que Stripe envíe eventos de notificaciones de pago.",
+  tags: ["Webhooks"],
+};
+
+const getUserTransactionsSchema = {
+  summary: "Obtener historial de transacciones del usuario",
+  description: "Devuelve una lista de todas las transacciones asociadas al usuario autenticado.",
+  tags: ["Transactions"],
+  headers: headersAuth,
+  response: {
+    200: {
+      description: "Lista de transacciones del usuario.",
+      type: "object",
+      properties: {
+        transactions: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: transactionProperties,
+          },
+        },
+      },
+    },
+    500: {
+      description: "Error al obtener las transacciones.",
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+  },
 };
 
 module.exports = {
-  PRODUCTS,
-  transactionBaseSchema,
-  initiateSubscriptionPurchaseSchema,
-  initiateCoinPackPurchaseSchema,
-  purchaseInitiateResponseSchema,
-  transactionHistoryResponseSchema,
-  stripeWebhookEventSchema,
+  createSubscriptionCheckoutSchema,
+  createCoinPackCheckoutSchema,
+  stripeWebhookSchema,
+  transactionProperties,
+  getUserTransactionsSchema,
 };

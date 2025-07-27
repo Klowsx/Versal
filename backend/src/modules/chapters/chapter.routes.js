@@ -5,6 +5,7 @@ const {
   getChapterByIdSchema,
   updateChapterSchema,
   deleteChapterSchema,
+  uploadChapterImageSchema,
 } = require("./chapter.schema");
 
 async function chapterRoutes(fastify) {
@@ -42,6 +43,12 @@ async function chapterRoutes(fastify) {
       "/chapters/:id",
       { schema: deleteChapterSchema },
       chapterController.deleteChapter
+    );
+    // Subir imagen de capítulo
+    privateRoutes.post(
+      "/chapters/upload-image", // La URL para subir imágenes
+      { schema: uploadChapterImageSchema }, // Aplicar el esquema de respuesta
+      chapterController.uploadChapterImage
     );
   });
 }

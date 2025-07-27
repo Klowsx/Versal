@@ -1,3 +1,4 @@
+// Versal/backend/app.js
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -10,6 +11,7 @@ const path = require("path");
 // Se importa cada librería con su nombre correcto.
 const fastifyMultipart = require("@fastify/multipart");
 const fastifyStatic = require("@fastify/static");
+const fastifyRawBody = require("fastify-raw-body"); // Nuevo: Importar fastify-raw-body
 
 // Tus módulos
 const connectDB = require("./src/config/db");
@@ -25,8 +27,6 @@ const reportRoutes = require("./src/modules/reports/report.routes");
 // Conectar a la base de datos
 connectDB();
 
-// --- REGISTRO DE PLUGINS CORREGIDO ---
-
 // Plugins de Fastify
 fastify.register(jwt, { secret: process.env.JWT_SECRET });
 fastify.register(authPlugin);
@@ -40,10 +40,15 @@ fastify.register(fastifyStatic, {
   prefix: "/uploads/",
 });
 
-// 3. CORS mejorado para aceptar las peticiones de actualización.
+fastify.register(fastifyRawBody, {
+  field: "rawBody",
+  global: false,
+  encoding: "utf8",
+});
+
 fastify.register(cors, {
-  origin: "*", // En producción, cambia '*' por la URL de tu frontend.
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 });
@@ -61,6 +66,15 @@ fastify.register(interactionRoutes, { prefix: "/api/interactions" });
 
 // Rutas de transacciones
 fastify.register(transactionRoutes, { prefix: "/api/transactions" });
+
+// Rutas de capítulos
+fastify.register(chapterRoutes, { prefix: "/api" });
+
+// Rutas de favoritos
+fastify.register(favoriteRoutes, { prefix: "/api" });
+
+// Rutas de reportes
+fastify.register(reportRoutes, { prefix: "/api" });
 
 fastify.listen({ port: 3000 }, (err, address) => {
   if (err) {

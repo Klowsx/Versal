@@ -1,15 +1,18 @@
-const chapterService = require("./chapter.service");
-const { Story } = require("../../models/story.model"); // Para verificar permisos
+const fs = require("fs");
+const util = require("util");
+const path = require("path");
+const { pipeline } = require("stream");
+const pump = util.promisify(pipeline);
 
-/**
- * Controlador para crear un nuevo capítulo.
- */
+const chapterService = require("./chapter.service");
+const { Story } = require("../../models/story.model");
+
+// Controlador para crear un nuevo capítulo
 async function createChapter(request, reply) {
   try {
     const { storyId } = request.params;
-    const { userId } = request.user; // Obtenido del token
+    const { userId } = request.user;
 
-    // Verificación: Solo el autor de la historia puede añadir capítulos.
     const story = await Story.findById(storyId);
     if (!story) {
       return reply.code(404).send({ error: "Historia no encontrada." });
@@ -33,9 +36,7 @@ async function createChapter(request, reply) {
   }
 }
 
-/**
- * Controlador para obtener los capítulos de una historia.
- */
+// Controlador para obtener los capítulos de una historia
 async function getChaptersByStory(request, reply) {
   try {
     const { storyId } = request.params;
@@ -50,9 +51,7 @@ async function getChaptersByStory(request, reply) {
   }
 }
 
-/**
- * Controlador para obtener un capítulo por su ID.
- */
+// Controlador para obtener un capítulo por ID
 async function getChapterById(request, reply) {
   try {
     const { id } = request.params;
@@ -67,9 +66,7 @@ async function getChapterById(request, reply) {
   }
 }
 
-/**
- * Controlador para actualizar un capítulo.
- */
+// Controlador para actualizar un capítulo
 async function updateChapter(request, reply) {
   try {
     const { id } = request.params;
@@ -123,10 +120,36 @@ async function deleteChapter(request, reply) {
   }
 }
 
+async function uploadChapterImage(request, reply) {
+  try {
+    const { userId } = request.user; // Obtener el ID del usuario autenticado
+    // Nota: Aquí podrías añadir una verificación si quieres que solo autores específicos
+    // o aquellos con historias puedan subir imágenes, pero por ahora solo se requiere autenticación.
+
+    const part = await request.file(); // Obtener la primera parte del archivo multipart
+
+    if (!part) {
+      return reply.code(400).send({ error: "No se encontró ningún archivo en la petición." });
+    }
+
+    const result = await chapterService.uploadChapterImage(part, request);
+
+    if (result.error) {
+      return reply.code(500).send({ error: result.error });
+    }
+
+    reply.code(200).send(result); // Devuelve la URL pública de la imagen
+  } catch (error) {
+    console.error("Error en el controlador uploadChapterImage:", error);
+    reply.code(500).send({ error: "Ocurrió un error inesperado al subir la imagen del capítulo." });
+  }
+}
+
 module.exports = {
   createChapter,
   getChaptersByStory,
   getChapterById,
   updateChapter,
+  uploadChapterImage,
   deleteChapter,
 };

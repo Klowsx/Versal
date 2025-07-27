@@ -160,10 +160,45 @@ const deleteChapterSchema = {
   },
 };
 
+const uploadChapterImageSchema = {
+  summary: "Sube una imagen para un capítulo",
+  description:
+    "Sube un archivo de imagen y devuelve su URL pública. Utilizado por el editor WYSIWYG.",
+  tags: ["Chapters"],
+  headers, // Requiere autenticación
+  // El 'body' para Fastify Multipart no se define directamente en el schema de esta forma,
+  // Fastify lo maneja internamente con `request.file()` o `request.parts()`.
+  // Este schema es principalmente para la respuesta.
+  response: {
+    200: {
+      description: "Imagen subida exitosamente.",
+      type: "object",
+      properties: {
+        url: { type: "string", format: "uri", description: "URL pública de la imagen subida" },
+      },
+    },
+    400: {
+      description: "Error en la petición (ej. no se envió archivo).",
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+    500: {
+      description: "Error interno del servidor al subir la imagen.",
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+  },
+};
+
 module.exports = {
   createChapterSchema,
   getChaptersByStorySchema,
   getChapterByIdSchema,
   updateChapterSchema,
   deleteChapterSchema,
+  uploadChapterImageSchema,
 };

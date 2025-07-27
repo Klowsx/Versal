@@ -19,6 +19,7 @@
     "dotenv": "^17.2.0",
     "fastify": "^5.4.0",
     "fastify-plugin": "^5.0.1",
+    "fastify-raw-body": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.3",
     "stripe": "^18.3.0"

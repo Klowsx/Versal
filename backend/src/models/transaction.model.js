@@ -1,13 +1,62 @@
+// Versal/backend/src/models/transaction.model.js
 const mongoose = require("mongoose");
 
-const transactionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  purchaseType: { type: String, enum: ["subscription", "coin_package"], required: true },
-  description: { type: String },
-  amount: { type: Number, required: true },
-  transactionDate: { type: Date, default: Date.now },
-  paymentStatus: { type: String, enum: ["successful", "failed"], required: true },
-  paymentId: { type: String },
-});
+const transactionSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ["subscription", "coin_pack_purchase", "donation"],
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    currency: {
+      type: String,
+      required: true,
+      default: "usd",
+    },
+    status: {
+      type: String,
+      enum: ["pending", "completed", "failed", "canceled"],
+      default: "pending",
+    },
+    paymentMethod: {
+      type: String,
+      default: "Stripe",
+    },
+    stripeCheckoutSessionId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    stripePaymentIntentId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    stripeSubscriptionId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    stripeCustomerId: {
+      type: String,
+      sparse: true,
+    },
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+module.exports = Transaction;
