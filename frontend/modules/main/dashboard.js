@@ -1,6 +1,6 @@
 (() => {
   const App = (() => {
-    const API_URL = "http://localhost:3000/api/stories";
+    const API_URL = "http://localhost:3000/api/stories"; // Asume que este endpoint devuelve todas las historias publicadas
 
     const htmlElements = {
       featuredContainer: document.getElementById("featured-stories"),
@@ -13,33 +13,47 @@
           const response = await fetch(url, options);
           if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || "Error desconocido");
+            throw new Error(error.message || "Error desconocido en la API");
           }
           return await response.json();
         } catch (err) {
           console.error("Error en fetchAPI:", err);
-          return [];
+          return { stories: [] }; // Devuelve un objeto con una propiedad 'stories' para consistencia
         }
       },
 
       createFeaturedCard(story) {
-        const card = document.createElement("div");
+        const card = document.createElement("a"); // Usamos 'a' para que sea clickeable
+        card.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
         card.className = "card";
+        // Añadimos la imagen de portada
         card.innerHTML = `
-          <h3>${story.title}</h3>
-          <p>por ${story.autor || "Autor desconocido"}</p>
-          <span>${story.reads || "0"} lecturas · ⭐ ${story.rating || "5.0"}</span>
+          <div class="card-image-container">
+            <img src="${story.coverImage || '/images/default-cover.jpg'}" alt="${story.title}" class="card-image">
+          </div>
+          <div class="card-content">
+            <h3>${story.title}</h3>
+            <p>por ${story.author?.username || "Autor desconocido"}</p>
+            <span>Capítulos: ${story.chapterCount || "0"} · Estado: ${story.status || "Desconocido"}</span>
+            </div>
         `;
         return card;
       },
 
       createRecommendedCard(story) {
-        const card = document.createElement("div");
+        const card = document.createElement("a"); // Usamos 'a' para que sea clickeable
+        card.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
         card.className = "card small";
+        // Incluimos la imagen para la tarjeta pequeña si es necesario
         card.innerHTML = `
-          <h4>${story.title}</h4>
-          <p>${story.autor || "Autor desconocido"}</p>
-          <span>${story.reads || "0"} · ❤️ ${story.votes || "0"}</span>
+          <div class="card-image-container">
+            <img src="${story.coverImage || '/images/default-cover.jpg'}" alt="${story.title}" class="card-image-small">
+          </div>
+          <div class="card-content">
+            <h4>${story.title}</h4>
+            <p>${story.author?.username || "Autor desconocido"}</p>
+            <span>Idioma: ${story.language || "N/A"}</span>
+            </div>
         `;
         return card;
       },
@@ -47,21 +61,30 @@
 
     const handlers = {
       async loadStories() {
-        const stories = await methods.fetchAPI(API_URL);
-        if (!stories.length) return;
+        const response = await methods.fetchAPI(API_URL);
+        const stories = response.stories || []; // Accede a la propiedad 'stories'
+
+        if (!stories.length) {
+            console.log("No se encontraron historias para mostrar.");
+            return;
+        }
 
         // Historias destacadas (primeras 3)
         const featured = stories.slice(0, 3);
         featured.forEach((story) => {
           const el = methods.createFeaturedCard(story);
-          htmlElements.featuredContainer.appendChild(el);
+          if (htmlElements.featuredContainer) {
+            htmlElements.featuredContainer.appendChild(el);
+          }
         });
 
         // Recomendadas (siguientes 6)
         const recommended = stories.slice(3, 9);
         recommended.forEach((story) => {
           const el = methods.createRecommendedCard(story);
-          htmlElements.recommendedContainer.appendChild(el);
+          if (htmlElements.recommendedContainer) {
+            htmlElements.recommendedContainer.appendChild(el);
+          }
         });
       },
     };

@@ -65,25 +65,17 @@ async function updateProfile(req, reply) {
   const parts = req.parts();
   for await (const part of parts) {
     if (part.file) {
-      // --- Es un archivo ---
-      // 1. Crear un nombre único para el archivo
       const uniqueFilename = `${Date.now()}-${part.filename}`;
       const uploadPath = path.join(__dirname, `../../../uploads/avatars`, uniqueFilename);
-
-      // 2. Guardar el archivo en el servidor
       await pump(part.file, fs.createWriteStream(uploadPath));
 
-      // 3. Crear la URL pública para la base de datos
       const imageUrl = `${req.protocol}://${req.headers.host}/uploads/avatars/${uniqueFilename}`;
-      data.profileImage = imageUrl; // Añadimos la URL a los datos a guardar
-
+      data.profileImage = imageUrl
     } else {
-      // --- Es un campo de texto (fullName, username, etc.) ---
       data[part.fieldname] = part.value;
     }
   }
 
-  // Enviar todos los datos (texto y la URL de la imagen) al servicio para ser actualizados
   const updatedUser = await userService.updateUser({
     userId: req.user.userId,
     data: data,

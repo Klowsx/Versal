@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalle de Historia</title>
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+  <link rel="stylesheet" href="preview.css" />
+</head>
+
+<body class="background">
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="container main">
+    <div class="grid">
+      <div class="card cover-card">
+        <div class="cover-image">
+          <img src="" alt="Portada Historia" id="story-cover" />
+        </div>
+        <div class="cover-actions">
+          <button class="btn btn-primary" id="read-now">Leer Ahora</button>
+          <button class="btn btn-primary" title="Donar Monedas" id="donate">Donar ⍟</button>
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="tags" id="story-tags">
+          </div>
+        <h1 id="story-title"></h1>
+
+        <div class="author-section">
+          <div class="avatar" id="author-avatar" style="background-size: cover; background-position: center;"></div>
+          <div>
+            <p class="author-name" id="story-author"></p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <span id="story-likes">Me gusta</span>
+        </div>
+
+        <div class="card">
+          <h3>Sinopsis</h3>
+          <p id="synopsis-1"></p>
+
+          <div style="margin-top: 2rem;"> <h3>Información de la Historia</h3>
+            <div class="story-info">
+              <div>
+                <p><strong>Estado:</strong> <span id="story-status"></span></p>
+                <p><strong>Capítulos:</strong> <span id="story-chapters"></span></p>
+                <p><strong>Idioma:</strong> <span id="story-language"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+  </main>
+
+  <div id="donationModal" class="modal">
+    <div class="modal-content">
+      <h3>Donar Monedas</h3>
+      <p class="current-coins">Monedas disponibles: <span id="availableCoins">0</span> ⍟</p>
+      <label for="donationAmount">Cantidad a donar:</label>
+      <input type="number" id="donationAmount" min="1" value="10" />
+      <p id="modalMessage" class="modal-message"></p>
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="cancelDonation">Cancelar</button>
+        <button class="btn-donate" id="confirmDonation">Donar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>

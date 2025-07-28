@@ -106,8 +106,7 @@
 
           alert("Perfil actualizado correctamente.");
 
-          // ✅ Redirección luego de guardar
-          window.location.href = "/profile.html"; // Ajusta a tu página de perfil
+          window.location.href = "/profile.html";
         } catch (error) {
           console.error("Fallo el envío del formulario:", error);
         } finally {
