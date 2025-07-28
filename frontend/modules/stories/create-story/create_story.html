@@ -1,93 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crear Historia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Nueva Historia - Versal</title>
   <link rel="stylesheet" href="create_story.css" />
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
 </head>
+
 <body>
-
   <div id="navbar-placeholder"></div>
-  <a href="/frontend/modules/main/dashboard.html" class="btn-back">
-    🡰
-  </a>
-  <header>
-    <h1>📘 Crear Historia</h1>
-    <p>Comparte tu creatividad con el mundo</p>
-  </header>
 
-  <main class="container">
-    <form id="storyForm" enctype="multipart/form-data">
-      <section class="card card-blue">
-        <h2>Información Básica</h2>
-        <label for="title">Título de la Historia *</label>
-        <input type="text" id="title" name="title" placeholder="Ingresa el título de tu historia..." />
-        <span id="titleError" class="error-message"></span>
+  <main class="create-story-container">
+    <header class="create-header">
+      <h1>Crea tu Próxima Gran Historia</h1>
+      <p>
+        Da vida a tus ideas. Rellena los detalles a continuación para empezar.
+      </p>
+    </header>
 
-        <label for="description">Descripción *</label>
-        <textarea id="description" name="description" placeholder="Describe tu historia..."></textarea>
-        <small>Describe tu historia para atraer lectores</small>
-        <span id="descriptionError" class="error-message"></span>
-      </section>
+    <form id="create-story-form" class="story-form">
+      <label for="title">Título de la Historia</label>
+      <input type="text" id="title" name="title" required placeholder="Ej: El Último Dragón" />
 
-      <section class="card card-pink">
-        <h2>Portada de la Historia *</h2>
-        <input type="file" id="coverImage" name="coverImage" accept="image/png, image/jpeg, image/webp" />
-        <small>PNG, JPG, WEBP hasta 5MB<br>Recomendado: 400x600px</small>
-        <span id="coverImageError" class="error-message"></span>
-      </section>
+      <label for="description">Descripción / Sinopsis</label>
+      <textarea id="description" name="description" rows="4" required
+        placeholder="Describe brevemente de qué trata tu historia..."></textarea>
 
-      <section class="card card-green">
-        <h2>Personajes Principales *</h2>
-        <div id="charactersContainer">
-  <div class="character-input-wrapper">
-    <input type="text" name="mainCharacters[]" placeholder="Nombre del personaje 1" />
-    <button type="button" class="delete-character-btn" title="Eliminar personaje">×</button>
-  </div>
-</div>
+      <label for="coverImage">Imagen de Portada</label>
+      <input type="file" id="coverImage" name="coverImage" accept="image/*" required />
 
-        <button type="button" id="addCharacterBtn" class="btn-outline">+ Agregar Personaje</button>
-        <span id="charactersError" class="error-message"></span>
-      </section>
+      <label for="category">Categoría</label>
+      <select id="category" name="category" required>
+        <option value="" disabled selected>Selecciona una categoría</option>
+      </select>
 
-      <section class="card card-yellow">
-        <h2>Categorización *</h2>
-        <div class="row">
-          <select id="category" name="category">
-          <option selected value="">Cargando categorías...</option>
-          </select>
+      <label for="tags">Etiquetas (elige hasta 5)</label>
+      <div id="tags-container" class="tags-container">
+        <p>Cargando etiquetas...</p>
+      </div>
+
+      <label for="language">Idioma</label>
+      <select id="language" name="language">
+        <option value="es" selected>Español</option>
+        <option value="en">Inglés</option>
+      </select>
+
+      <fieldset class="characters-fieldset">
+        <legend>Personajes</legend>
+        <div id="characters-list">
         </div>
-        <span id="categoryError" class="error-message"></span>
+        <button type="button" id="add-character-btn" class="add-btn">
+          + Añadir Personaje
+        </button>
+      </fieldset>
 
-        <label for="tags">Etiquetas *</label>
-        <input type="text" id="tags" name="tags" placeholder="Etiquetas separadas por coma" />
-        <span id="tagsError" class="error-message"></span>
-      </section>
+      <div class="checkbox-container">
+        <input type="checkbox" id="isAdultContent" name="isAdultContent" />
+        <label for="isAdultContent">Esta historia contiene material para adultos.</label>
+        <small>Marca esta opción si tu historia incluye violencia explícita, contenido sexual o lenguaje fuerte.</small>
+      </div>
 
-      <section class="card card-purple">
-        <h2>Configuración Adicional</h2>
-        <div class="row">
-          <label for="language">Idioma</label>
-          <input type="text" id="language" name="language" placeholder="Idioma" value="Español" />
-        </div>
-        <div class="alert">
-          <label>
-            <input type="checkbox" id="adultContent" name="adultContent" />
-            ⚠️ Esta historia contiene contenido para adultos (+18)
-          </label>
-        </div>
-      </section>
+      <button type="submit" class="submit-btn">Crear Historia</button>
     </form>
-
-    <div class="center">
-      <p>¿Ya tienes tu historia lista? ¡Comienza a escribir!</p>
-      <button class="btn-success" id="startWritingBtn"> Crear historia </button>
-    </div>
   </main>
 
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="create_story.js"></script>
 </body>
+
 </html>

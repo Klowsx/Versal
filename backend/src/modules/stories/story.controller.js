@@ -1,10 +1,47 @@
 const storyService = require("./story.service");
+const fs = require("fs");
+const util = require("util");
+const path = require("path");
+const { pipeline } = require("stream");
+const pump = util.promisify(pipeline);
 
 // Controlador para crear una nueva historia
 async function createStory(request, reply) {
   try {
     const { userId } = request.user;
-    const result = await storyService.createStory({ ...request.body, authorId: userId });
+    const data = { authorId: userId };
+    let coverImageUrl = null;
+
+    const parts = request.parts();
+    for await (const part of parts) {
+      if (part.file) {
+        if (part.fieldname === "coverImage") {
+          const uploadDir = path.join(__dirname, `../../../uploads/covers`);
+          if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+          }
+          const uniqueFilename = `${Date.now()}-${part.filename}`;
+          const uploadPath = path.join(uploadDir, uniqueFilename);
+
+          await pump(part.file, fs.createWriteStream(uploadPath));
+
+          coverImageUrl = `${request.protocol}://${request.headers.host}/uploads/covers/${uniqueFilename}`;
+          data.coverImage = coverImageUrl;
+        }
+      } else {
+        if (part.fieldname === "characters" || part.fieldname === "tags") {
+          data[part.fieldname] = JSON.parse(part.value);
+        } else {
+          data[part.fieldname] = part.value;
+        }
+      }
+    }
+
+    if (!data.coverImage) {
+      return reply.code(400).send({ error: "La imagen de portada es requerida." });
+    }
+
+    const result = await storyService.createStory(data);
 
     if (result.error) {
       return reply.code(400).send({ error: result.error });
