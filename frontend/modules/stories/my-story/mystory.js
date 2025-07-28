@@ -25,6 +25,7 @@
       editTagsContainer: null,
       editIsAdultContent: null,
       editStoryId: null,
+      editStatus: null,
     };
 
     let allStories = [];
@@ -149,10 +150,18 @@
               <p class="descripcion">${story.description}</p>
               <div class="tags">${tagsHtml}</div>
               <div class="acciones">
-                <a href="/frontend/modules/stories/preview-story/preview.html?id=${story._id}" class="btn-outline">Ver</a>
-                <button class="btn-solid edit-story-btn" data-story-id="${story._id}">Editar historia</button>
-                <a href="/frontend/modules/stories/write-story/write_story.html?storyId=${story._id}" class="btn-outline">Editar capítulos</a>
-                <button class="btn-outline delete-story-btn" data-story-id="${story._id}">Eliminar</button>
+                <a href="/frontend/modules/stories/preview-story/preview.html?id=${
+                  story._id
+                }" class="btn-outline">Ver</a>
+                <button class="btn-solid edit-story-btn" data-story-id="${
+                  story._id
+                }">Editar historia</button>
+                <a href="/frontend/modules/stories/write-story/write_story.html?storyId=${
+                  story._id
+                }" class="btn-outline">Editar capítulos</a>
+                <button class="btn-outline delete-story-btn" data-story-id="${
+                  story._id
+                }">Eliminar</button>
               </div>
 
             </div>
@@ -192,7 +201,11 @@
                 <label>Etiquetas (Max 5)</label>
                 <div id="edit-tags-container" class="tags-container-modal"></div>
 
-
+                <label for="edit-status">Estado</label>
+                <select id="edit-status" name="status">
+                  <option value="draft">Borrador</option>
+                  <option value="published">Publicada</option>
+                </select>
 
                 <div class="checkbox-container">
                   <input type="checkbox" id="edit-isAdultContent" name="isAdultContent" />
@@ -211,6 +224,7 @@
         htmlElements.editDescription = document.getElementById("edit-description");
         htmlElements.editCategory = document.getElementById("edit-category");
         htmlElements.editTagsContainer = document.getElementById("edit-tags-container");
+        htmlElements.editStatus = document.getElementById("edit-status");
         htmlElements.editIsAdultContent = document.getElementById("edit-isAdultContent");
         htmlElements.editStoryId = document.getElementById("edit-story-id");
 
@@ -231,6 +245,7 @@
         htmlElements.editTitle.value = story.title;
         htmlElements.editDescription.value = story.description;
         htmlElements.editCategory.value = story.category ? story.category.name : "";
+        htmlElements.editStatus.value = story.status;
         htmlElements.editIsAdultContent.checked = story.isAdultContent;
 
         methods.renderTagsInModal(story.tags.map((tag) => tag.name));
@@ -355,6 +370,7 @@
           title: htmlElements.editTitle.value,
           description: htmlElements.editDescription.value,
           category: htmlElements.editCategory.value,
+          status: htmlElements.editStatus.value,
           isAdultContent: htmlElements.editIsAdultContent.checked,
         };
 

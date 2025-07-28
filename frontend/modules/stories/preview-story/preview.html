@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detalle de Historia</title>
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
   <link rel="stylesheet" href="preview.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEbMoFJKWg6stj5TLh5U3lXb5FA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="background">
@@ -25,13 +29,12 @@
             <span id="save-icon" class="icon"></span> <span id="save-text">Guardar Historia</span>
           </button>
           <button class="btn btn-secondary" id="report-story">Reportar Historia</button>
-          <button class="btn btn-secondary" id="block-author">Bloquear Autor</button>
         </div>
       </div>
 
       <div class="details">
         <div class="tags" id="story-tags">
-          </div>
+        </div>
         <h1 id="story-title"></h1>
 
         <div class="author-section">
@@ -42,14 +45,15 @@
         </div>
 
         <div class="stats">
-          <span id="story-likes">Me gusta</span>
+          <span id="story-likes">0 me gusta</span>
         </div>
 
         <div class="card">
           <h3>Sinopsis</h3>
           <p id="synopsis-1"></p>
 
-          <div style="margin-top: 2rem;"> <h3>Información de la Historia</h3>
+          <div style="margin-top: 2rem;">
+            <h3>Información de la Historia</h3>
             <div class="story-info">
               <div>
                 <p><strong>Estado:</strong> <span id="story-status"></span></p>
@@ -59,7 +63,7 @@
             </div>
           </div>
         </div>
-        </div>
+      </div>
     </div>
   </main>
 
@@ -116,4 +120,5 @@
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="preview.js"></script>
 </body>
+
 </html>

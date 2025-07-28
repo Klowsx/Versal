@@ -6,6 +6,7 @@ const {
   updateChapterSchema,
   deleteChapterSchema,
   uploadChapterImageSchema,
+  getPublishedChapterCountSchema,
 } = require("./chapter.schema");
 
 async function chapterRoutes(fastify) {
@@ -19,6 +20,13 @@ async function chapterRoutes(fastify) {
 
   // Obtener un capítulo por ID
   fastify.get("/chapters/:id", { schema: getChapterByIdSchema }, chapterController.getChapterById);
+
+  // Obtener cantidad de capítulos publicados
+  fastify.get(
+    "/stories/:storyId/published-chapters-count", // Nuevo endpoint
+    { schema: getPublishedChapterCountSchema },
+    chapterController.getPublishedChapterCount
+  );
 
   // --- Rutas Privadas ---
   fastify.register(async function (privateRoutes) {

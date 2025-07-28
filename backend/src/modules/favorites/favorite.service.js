@@ -1,4 +1,5 @@
 const Favorite = require("../../models/favorite.model");
+const { Story } = require("../../models/story.model");
 
 async function toggleFavorite(userId, storyId) {
   try {
@@ -14,6 +15,26 @@ async function toggleFavorite(userId, storyId) {
   } catch (error) {
     console.error("Error en toggleFavorite:", error);
     return { error: "Ocurrió un error al gestionar los favoritos." };
+  }
+}
+
+async function checkIsFavorite(userId, storyId) {
+  try {
+    const storyExists = await Story.findById(storyId);
+    if (!storyExists) {
+      return { error: "Historia no encontrada." };
+    }
+
+    const favorite = await Favorite.findOne({ userId, storyId });
+    const isFavorite = !!favorite;
+
+    return { isFavorite };
+  } catch (error) {
+    console.error(
+      `Error al verificar si la historia es favorita para userId: ${userId}, storyId: ${storyId}:`,
+      error
+    );
+    return { error: "Ocurrió un error al verificar el estado de favorito." };
   }
 }
 
@@ -43,4 +64,5 @@ async function getFavoriteStoriesByUser(userId) {
 module.exports = {
   toggleFavorite,
   getFavoriteStoriesByUser,
+  checkIsFavorite,
 };

@@ -1,5 +1,4 @@
 const favoriteController = require("./favorite.controller");
-// Aquí irían los esquemas si los creas.
 
 async function favoriteRoutes(fastify) {
   fastify.register(async function (privateRoutes) {
@@ -10,6 +9,9 @@ async function favoriteRoutes(fastify) {
 
     // Ruta para añadir/quitar una historia de favoritos
     privateRoutes.post("/stories/:storyId/favorite", favoriteController.toggleFavorite);
+
+    // Obtener si una historia es favorita para el usuario actual
+    privateRoutes.get("/stories/:storyId/isFavorite", favoriteController.getIsFavorite);
   });
 }
 

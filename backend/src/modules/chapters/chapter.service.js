@@ -7,7 +7,7 @@ const path = require("path");
 const { pipeline } = require("stream");
 const pump = util.promisify(pipeline);
 
-// Servicio para crear un nuevo capítulo
+// Crear un nuevo capítulo
 async function createChapter(fullChapterData) {
   const newChapter = await Chapter.create(fullChapterData);
   if (!newChapter) {
@@ -21,7 +21,7 @@ async function createChapter(fullChapterData) {
   return newChapter;
 }
 
-// Obtenemos todos los capítulos de una historia
+// Obtener todos los capítulos de una historia
 async function getChaptersByStory(storyId) {
   try {
     const chapters = await Chapter.find({ story: storyId }).sort({ chapterNumber: "asc" }).lean();
@@ -32,7 +32,7 @@ async function getChaptersByStory(storyId) {
   }
 }
 
-// Obtenemos un capítulo por su ID
+// Obtener un capítulo por su ID
 async function getChapterById(chapterId) {
   try {
     const chapter = await Chapter.findById(chapterId).populate("story", "title author").lean();
@@ -46,7 +46,7 @@ async function getChapterById(chapterId) {
   }
 }
 
-// Actualizamos un capítulo por su ID
+// Actualizar un capítulo por su ID
 async function updateChapter(chapterId, updateData) {
   try {
     const updatedChapter = await Chapter.findByIdAndUpdate(chapterId, updateData, {
@@ -69,14 +69,13 @@ async function updateChapter(chapterId, updateData) {
   }
 }
 
-// Eliminamos un capítulo por su ID
+// Eliminar un capítulo por su ID
 async function deleteChapter(chapterId) {
   const chapter = await Chapter.findById(chapterId);
   if (!chapter) {
     throw new Error("Capítulo no encontrado");
   }
 
-  // Luego, lo eliminamos
   await Chapter.findByIdAndDelete(chapterId);
 
   await Story.findByIdAndUpdate(chapter.story, {
@@ -108,11 +107,26 @@ async function uploadChapterImage(file, req) {
   }
 }
 
+//Obtiene la cantidad de capítulos publicados para una historia
+async function getPublishedChapterCount(storyId) {
+  try {
+    const count = await Chapter.countDocuments({ story: storyId, status: "published" });
+    return { publishedChapterCount: count };
+  } catch (error) {
+    console.error(
+      `Error al obtener el conteo de capítulos publicados para la historia ${storyId}:`,
+      error
+    );
+    return { error: "Ocurrió un error al obtener la cantidad de capítulos publicados." };
+  }
+}
+
 module.exports = {
   createChapter,
   getChaptersByStory,
   getChapterById,
   updateChapter,
   deleteChapter,
-  uploadChapterImage, // Exportar la nueva función
+  uploadChapterImage,
+  getPublishedChapterCount,
 };

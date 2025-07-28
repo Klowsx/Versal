@@ -88,15 +88,12 @@ async function updateChapter(request, reply) {
   }
 }
 
-/**
- * Controlador para eliminar un capítulo.
- */
+// eliminar un capítulo
 async function deleteChapter(request, reply) {
   try {
     const { id } = request.params;
     const { userId } = request.user;
 
-    // Verificación de permisos (similar a update)
     const { chapter } = await chapterService.getChapterById(id);
     if (!chapter) {
       return reply.code(404).send({ error: "Capítulo no encontrado." });
@@ -133,6 +130,23 @@ async function uploadChapterImage(request, reply) {
   }
 }
 
+async function getPublishedChapterCount(request, reply) {
+  try {
+    const { storyId } = request.params;
+    const result = await chapterService.getPublishedChapterCount(storyId);
+
+    if (result.error) {
+      return reply.code(500).send(result);
+    }
+    reply.send(result);
+  } catch (error) {
+    console.error("Error en getPublishedChapterCount controller:", error);
+    reply
+      .code(500)
+      .send({ error: "Ocurrió un error inesperado al obtener la cantidad de capítulos." });
+  }
+}
+
 module.exports = {
   createChapter,
   getChaptersByStory,
@@ -140,4 +154,5 @@ module.exports = {
   updateChapter,
   uploadChapterImage,
   deleteChapter,
+  getPublishedChapterCount,
 };

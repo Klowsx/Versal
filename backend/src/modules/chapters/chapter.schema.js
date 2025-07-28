@@ -191,6 +191,36 @@ const uploadChapterImageSchema = {
   },
 };
 
+const getPublishedChapterCountSchema = {
+  summary: "Obtiene la cantidad de capítulos publicados de una historia",
+  description:
+    "Devuelve el número total de capítulos con estado 'published' para una historia específica.",
+  tags: ["Chapters"],
+  params: {
+    type: "object",
+    properties: {
+      storyId: { type: "string", description: "ID de la historia" },
+    },
+    required: ["storyId"],
+  },
+  response: {
+    200: {
+      description: "Cantidad de capítulos publicados.",
+      type: "object",
+      properties: {
+        publishedChapterCount: { type: "number" },
+      },
+    },
+    500: {
+      description: "Error interno del servidor.",
+      type: "object",
+      properties: {
+        error: { type: "string" },
+      },
+    },
+  },
+};
+
 module.exports = {
   createChapterSchema,
   getChaptersByStorySchema,
@@ -198,4 +228,5 @@ module.exports = {
   updateChapterSchema,
   deleteChapterSchema,
   uploadChapterImageSchema,
+  getPublishedChapterCountSchema,
 };
