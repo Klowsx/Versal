@@ -149,16 +149,12 @@
               <p class="descripcion">${story.description}</p>
               <div class="tags">${tagsHtml}</div>
               <div class="acciones">
-                <a href="/frontend/modules/stories/read-story/read_story.html?storyId=${
-                  story._id
-                }" class="btn-outline">Ver</a>
-                <button class="btn-solid edit-story-btn" data-story-id="${
-                  story._id
-                }">Editar</button>
-                <button class="btn-outline delete-story-btn" data-story-id="${
-                  story._id
-                }">Eliminar</button>
+                <a href="/frontend/modules/stories/preview-story/preview.html?id=${story._id}" class="btn-outline">Ver</a>
+                <button class="btn-solid edit-story-btn" data-story-id="${story._id}">Editar historia</button>
+                <a href="/frontend/modules/stories/write-story/write_story.html?storyId=${story._id}" class="btn-outline">Editar capítulos</a>
+                <button class="btn-outline delete-story-btn" data-story-id="${story._id}">Eliminar</button>
               </div>
+
             </div>
           `;
           htmlElements.historiasContainer.appendChild(card);

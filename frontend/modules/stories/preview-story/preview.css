@@ -94,6 +94,16 @@ body.background {
   background: linear-gradient(to right, #6b21a8, #581c87);
 }
 
+.btn-secondary { /* Nuevo estilo para botones secundarios */
+  background-color: #e9d5ff; /* Color de fondo más claro */
+  color: #7e22ce; /* Texto púrpura */
+  box-shadow: 0 2px 8px rgba(128, 0, 255, 0.1);
+}
+
+.btn-secondary:hover {
+  background-color: #d8b4fe; /* Un poco más oscuro al pasar el ratón */
+}
+
 .btn-premium {
   background: linear-gradient(to right, #fbbf24, #f59e0b);
   color: white;
@@ -228,7 +238,7 @@ body.background {
   margin: 0.5rem 0;
 }
 
-/* Estilos para el modal de donación */
+/* Estilos para los modales */
 .modal {
   display: none;
   position: fixed;
@@ -268,7 +278,9 @@ body.background {
   font-weight: 600;
 }
 
-.modal-content input[type="number"] {
+.modal-content input[type="number"],
+.modal-content .modal-select, /* Estilo para el select en modales */
+.modal-content .modal-textarea { /* Estilo para el textarea en modales */
   width: calc(100% - 20px);
   padding: 10px;
   margin-bottom: 20px;
@@ -298,7 +310,9 @@ body.background {
   color: #333;
 }
 
-.modal-content .modal-buttons .btn-donate {
+.modal-content .modal-buttons .btn-donate,
+.modal-content .modal-buttons .btn-report,
+.modal-content .modal-buttons .btn-block { /* Estilos unificados para botones de acción en modales */
   background-color: #7c3aed;
   color: white;
 }
@@ -307,13 +321,15 @@ body.background {
   background-color: #bbb;
 }
 
-.modal-content .modal-buttons .btn-donate:hover {
+.modal-content .modal-buttons .btn-donate:hover,
+.modal-content .modal-buttons .btn-report:hover,
+.modal-content .modal-buttons .btn-block:hover {
   background-color: #6d28d9;
 }
 
 .modal-message {
     margin-top: 15px;
-    color: #e53e3e; /* Red for errors */
+    color: #e53e3e; /* Rojo para errores */
     font-weight: bold;
 }
 
@@ -321,4 +337,9 @@ body.background {
     font-size: 0.9em;
     color: #7e22ce;
     margin-bottom: 15px;
+}
+
+/* Iconos para el botón de guardar historia */
+.icon {
+  margin-right: 5px;
 }

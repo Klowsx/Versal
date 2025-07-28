@@ -21,6 +21,11 @@
         <div class="cover-actions">
           <button class="btn btn-primary" id="read-now">Leer Ahora</button>
           <button class="btn btn-primary" title="Donar Monedas" id="donate">Donar ⍟</button>
+          <button class="btn btn-secondary" id="save-story">
+            <span id="save-icon" class="icon"></span> <span id="save-text">Guardar Historia</span>
+          </button>
+          <button class="btn btn-secondary" id="report-story">Reportar Historia</button>
+          <button class="btn btn-secondary" id="block-author">Bloquear Autor</button>
         </div>
       </div>
 
@@ -68,6 +73,42 @@
       <div class="modal-buttons">
         <button class="btn-cancel" id="cancelDonation">Cancelar</button>
         <button class="btn-donate" id="confirmDonation">Donar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <h3>Reportar Historia</h3>
+      <label for="reportReason">Razón del reporte:</label>
+      <select id="reportReason" class="modal-select">
+        <option value="">Selecciona una razón</option>
+        <option value="Spam">Spam</option>
+        <option value="Contenido de odio">Contenido de odio</option>
+        <option value="Acoso">Acoso</option>
+        <option value="Información falsa">Información falsa</option>
+        <option value="Contenido explícito">Contenido explícito</option>
+        <option value="Violencia">Violencia</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <label for="reportDetails" style="margin-top: 15px;">Detalles (opcional):</label>
+      <textarea id="reportDetails" class="modal-textarea" rows="4"></textarea>
+      <p id="reportModalMessage" class="modal-message"></p>
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="cancelReport">Cancelar</button>
+        <button class="btn-donate" id="confirmReport">Reportar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="blockModal" class="modal">
+    <div class="modal-content">
+      <h3>Bloquear Autor</h3>
+      <p>¿Estás seguro de que deseas bloquear a este autor? No verás sus historias ni sus interacciones.</p>
+      <p id="blockModalMessage" class="modal-message"></p>
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="cancelBlock">Cancelar</button>
+        <button class="btn-donate" id="confirmBlock">Bloquear</button>
       </div>
     </div>
   </div>

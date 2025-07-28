@@ -12,54 +12,82 @@
   <div id="navbar-placeholder"></div>
 
   <div class="lectura-container">
-    <!-- Info del autor e historia -->
     <div class="historia-header">
-      <img src="avatar.jpg" alt="Avatar" class="avatar" />
+      <img src="" alt="Avatar" class="avatar" id="author-avatar" />
       <div class="info-autor">
-        <h3>Isabella Martínez <span class="verificado">✔</span></h3>
-        <p class="username">@isabella_writer</p>
+        <h3 id="story-author-name"></h3>
+        <p class="username" id="story-author-username"></p>
       </div>
-      <span class="categoria">Romance Fantástico</span>
+      <span class="categoria" id="story-category"></span>
+      <div class="menu-puntos">...</div>
     </div>
 
-    <h1 class="titulo-historia">El Jardín de los Secretos Perdidos</h1>
+    <h1 class="titulo-historia" id="story-title"></h1>
     <div class="meta-info">
-      <span>245,847 lecturas</span>
-      <span>18,234 me gusta</span>
-      <span class="estado">En curso</span>
+      <span id="story-reads">0 lecturas</span>
+      <span id="story-likes-count">0 me gusta</span>
+      <span class="estado" id="story-status"></span>
     </div>
 
-    <!-- Contenido del capítulo -->
-    <div class="capitulo">
-      <h2>Capítulo 1: El Despertar</h2>
-      <p class="fecha">Publicado: 14/1/2024 - 12,450 lecturas</p>
+    <div class="chapter-navigation">
+      <button id="prev-chapter-btn" class="btn-nav">Capítulo Anterior</button>
+      <select id="chapter-select" class="modal-select"></select>
+      <button id="next-chapter-btn" class="btn-nav">Siguiente Capítulo</button>
+    </div>
 
-      <div class="contenido">
-        <p>El sol se filtraba a través de las cortinas de seda púrpura...</p>
-        <p>Pero algo era diferente.</p>
-        <p>Un extraño zumbido llenaba el aire...</p>
-        <!-- Más contenido aquí -->
-      </div>
-
-      <!-- Controles al final -->
-      <div class="acciones-final">
-        <button class="btn-icon">
-          ❤️ <span>892</span>
-        </button>
-        <button class="btn-icon">
-          💬 <span>156</span>
-        </button>
-        <div class="menu-puntos">
-          ⋯
-          <ul class="menu-dropdown">
-            <li><a href="#">Reportar contenido</a></li>
-          </ul>
+    <div class="capitulo" id="chapter-details-container">
+      <h2 id="chapter-title"></h2>
+      <p class="fecha" id="chapter-publish-date"></p>
+      <div class="contenido" id="chapter-content">
         </div>
+
+      <div class="acciones-final">
+        <button class="btn-icon" id="like-chapter-btn">
+          <span id="like-icon">❤️</span> <span id="like-count">0</span>
+        </button>
+        <button class="btn-icon" id="show-comments-btn">
+          💬 <span id="comment-count">0</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="comentarios-seccion" style="display: none;">
+      <h3>Comentarios (<span id="total-comments-count">0</span>)</h3>
+      <div class="agregar-comentario">
+        <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
+        <button class="btn btn-primary" id="post-comment-btn">Comentar</button>
+        <p id="comment-message" class="modal-message"></p>
+      </div>
+      <div class="lista-comentarios" id="comments-list">
+        </div>
+    </div>
+  </div>
+
+  <div id="reportCommentModal" class="modal">
+    <div class="modal-content">
+      <h3>Reportar Comentario</h3>
+      <label for="reportCommentReason">Razón del reporte:</label>
+      <select id="reportCommentReason" class="modal-select">
+        <option value="">Selecciona una razón</option>
+        <option value="Spam">Spam</option>
+        <option value="Contenido de odio">Contenido de odio</option>
+        <option value="Acoso">Acoso</option>
+        <option value="Información falsa">Información falsa</option>
+        <option value="Contenido explícito">Contenido explícito</option>
+        <option value="Violencia">Violencia</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <label for="reportCommentDetails" style="margin-top: 15px;">Detalles (opcional):</label>
+      <textarea id="reportCommentDetails" class="modal-textarea" rows="4"></textarea>
+      <p id="reportCommentModalMessage" class="modal-message"></p>
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="cancelReportComment">Cancelar</button>
+        <button class="btn-donate" id="confirmReportComment">Reportar</button>
       </div>
     </div>
   </div>
 
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
-
+  <script src="read_story.js"></script>
 </body>
 </html>
