@@ -1,40 +1,24 @@
-// Versal/backend/src/modules/chapters/chapter.service.js
 const Chapter = require("../../models/chapter.model");
 const { Story } = require("../../models/story.model");
 const Interaction = require("../../models/interaction.model");
-const fs = require("fs"); // Importar fs para operaciones de archivo
-const util = require("util"); // Importar util
-const path = require("path"); // Importar path
-const { pipeline } = require("stream"); // Importar pipeline
-const pump = util.promisify(pipeline); // Promisificar pipeline para usar async/await
+const fs = require("fs");
+const util = require("util");
+const path = require("path");
+const { pipeline } = require("stream");
+const pump = util.promisify(pipeline);
 
-// Función para crear un nuevo capítulo
-async function createChapter(storyId, chapterData) {
-  try {
-    const story = await Story.findById(storyId);
-    if (!story) {
-      return { error: "La historia a la que intentas añadir el capítulo no existe." };
-    }
-
-    const lastChapter = await Chapter.findOne({ story: storyId }).sort({ chapterNumber: -1 });
-    const newChapterNumber = lastChapter ? lastChapter.chapterNumber + 1 : 1;
-
-    const newChapter = new Chapter({
-      ...chapterData,
-      story: storyId,
-      chapterNumber: newChapterNumber,
-    });
-
-    await newChapter.save();
-
-    story.chapterCount = await Chapter.countDocuments({ story: storyId });
-    await story.save();
-
-    return { chapter: newChapter };
-  } catch (error) {
-    console.error("Error al crear el capítulo:", error);
-    return { error: "Ocurrió un error al crear el capítulo." };
+// Servicio para crear un nuevo capítulo
+async function createChapter(fullChapterData) {
+  const newChapter = await Chapter.create(fullChapterData);
+  if (!newChapter) {
+    throw new Error("La creación del capítulo falló.");
   }
+
+  await Story.findByIdAndUpdate(fullChapterData.story, {
+    $push: { chapters: newChapter._id },
+  });
+
+  return newChapter;
 }
 
 // Obtenemos todos los capítulos de una historia
@@ -87,28 +71,19 @@ async function updateChapter(chapterId, updateData) {
 
 // Eliminamos un capítulo por su ID
 async function deleteChapter(chapterId) {
-  try {
-    const chapter = await Chapter.findById(chapterId);
-    if (!chapter) {
-      return { error: "Capítulo no encontrado." };
-    }
-    const storyId = chapter.story;
-
-    await Interaction.deleteMany({ contentId: chapterId });
-
-    await Chapter.findByIdAndDelete(chapterId);
-
-    const story = await Story.findById(storyId);
-    if (story) {
-      story.chapterCount = await Chapter.countDocuments({ story: storyId });
-      await story.save();
-    }
-
-    return { message: "Capítulo eliminado exitosamente." };
-  } catch (error) {
-    console.error("Error al eliminar el capítulo:", error);
-    return { error: "Ocurrió un error al eliminar el capítulo." };
+  const chapter = await Chapter.findById(chapterId);
+  if (!chapter) {
+    throw new Error("Capítulo no encontrado");
   }
+
+  // Luego, lo eliminamos
+  await Chapter.findByIdAndDelete(chapterId);
+
+  await Story.findByIdAndUpdate(chapter.story, {
+    $pull: { chapters: chapterId },
+  });
+
+  return chapter;
 }
 
 // Función para subir una imagen de capítulo

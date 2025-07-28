@@ -165,10 +165,7 @@ const uploadChapterImageSchema = {
   description:
     "Sube un archivo de imagen y devuelve su URL pública. Utilizado por el editor WYSIWYG.",
   tags: ["Chapters"],
-  headers, // Requiere autenticación
-  // El 'body' para Fastify Multipart no se define directamente en el schema de esta forma,
-  // Fastify lo maneja internamente con `request.file()` o `request.parts()`.
-  // Este schema es principalmente para la respuesta.
+  headers,
   response: {
     200: {
       description: "Imagen subida exitosamente.",

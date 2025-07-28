@@ -11,34 +11,30 @@ const { Story } = require("../../models/story.model");
 async function createChapter(request, reply) {
   try {
     const { storyId } = request.params;
-    const { userId } = request.user;
+    const chapterData = request.body;
 
-    const story = await Story.findById(storyId);
-    if (!story) {
-      return reply.code(404).send({ error: "Historia no encontrada." });
-    }
-    if (story.author.toString() !== userId) {
-      return reply
-        .code(403)
-        .send({ error: "No tienes permiso para añadir capítulos a esta historia." });
-    }
+    const authorId = request.user._id;
 
-    const result = await chapterService.createChapter(storyId, request.body);
+    const result = await chapterService.createChapter({
+      ...chapterData,
+      story: storyId,
+      author: authorId,
+    });
 
-    if (result.error) {
-      return reply.code(400).send(result);
-    }
-
-    reply.code(201).send(result);
+    return reply.code(201).send({
+      message: "Capítulo creado exitosamente",
+      chapter: result,
+    });
   } catch (error) {
-    console.error("Error en el controlador createChapter:", error);
-    reply.code(500).send({ error: "Ocurrió un error inesperado al crear el capítulo." });
+    console.error("Error en createChapter controller:", error);
+    return reply.code(500).send({ message: error.message });
   }
 }
 
-// Controlador para obtener los capítulos de una historia
+// Controlador para obtener capítulos por historia
 async function getChaptersByStory(request, reply) {
   try {
+    console.log("Obteniendo capítulos para la historia:", request.params.storyId);
     const { storyId } = request.params;
     const result = await chapterService.getChaptersByStory(storyId);
 
@@ -121,24 +117,16 @@ async function deleteChapter(request, reply) {
 }
 
 async function uploadChapterImage(request, reply) {
+  const file = await request.file();
+  const storedFileName = `${Date.now()}-${file.filename}`;
+  const filePath = path.join(__dirname, "..", "..", "..", "uploads", "chapters", storedFileName);
+
   try {
-    const { userId } = request.user; // Obtener el ID del usuario autenticado
-    // Nota: Aquí podrías añadir una verificación si quieres que solo autores específicos
-    // o aquellos con historias puedan subir imágenes, pero por ahora solo se requiere autenticación.
+    await pump(file.file, fs.createWriteStream(filePath));
 
-    const part = await request.file(); // Obtener la primera parte del archivo multipart
-
-    if (!part) {
-      return reply.code(400).send({ error: "No se encontró ningún archivo en la petición." });
-    }
-
-    const result = await chapterService.uploadChapterImage(part, request);
-
-    if (result.error) {
-      return reply.code(500).send({ error: result.error });
-    }
-
-    reply.code(200).send(result); // Devuelve la URL pública de la imagen
+    // Lo más importante: construye y devuelve la URL pública
+    const url = `http://localhost:3000/uploads/chapters/${storedFileName}`;
+    return { url };
   } catch (error) {
     console.error("Error en el controlador uploadChapterImage:", error);
     reply.code(500).send({ error: "Ocurrió un error inesperado al subir la imagen del capítulo." });

@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="write_story.css" />
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
   <title>Editor - Versal</title>
 </head>
-<body>
-  <a href="/frontend/modules/stories/create-story/create_story.html" class="btn-back">
-    🡰
-  </a>
 
+<body>
   <header>
   </header>
 
@@ -21,7 +19,7 @@
     <aside class="sidebar">
       <h2>Capítulos</h2>
       <ul class="chapter-list">
-        </ul>
+      </ul>
       <button class="new-chapter">+ Nuevo Capítulo</button>
 
       <div class="stats">
@@ -32,15 +30,14 @@
     </aside>
 
     <section class="editor">
-     <h1>Editor de Historia</h1>
-      <input id="title-input" type="text" placeholder="Título del capítulo" class="chapter-title"/>
+      <h1>Editor de Historia</h1>
+      <input id="title-input" type="text" placeholder="Título del capítulo" class="chapter-title" />
 
       <div class="toolbar">
         <button data-cmd="bold"><b>B</b></button>
         <button data-cmd="italic"><i>I</i></button>
         <button data-cmd="underline"><u>U</u></button>
         <button data-cmd="insertUnorderedList">• Lista</button>
-        <button data-cmd="formatBlock" data-value="blockquote">❝ Cita</button>
         <button data-cmd="undo" title="Deshacer">↺</button>
         <button data-cmd="redo" title="Rehacer">↻</button>
         <button id="insert-image-btn" title="Insertar imagen">🖼️</button>
@@ -65,4 +62,5 @@
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="write_story.js"></script>
 </body>
+
 </html>

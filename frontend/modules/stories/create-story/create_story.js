@@ -153,8 +153,8 @@
         });
 
         if (result && result.story) {
-          alert("¡Historia creada exitosamente!");
-          window.location.href = "/frontend/modules/main/dashboard.html";
+          const storyId = result.story._id; // Obtén el ID de la historia creada
+          window.location.href = `/frontend/modules/stories/write-story/write_story.html?storyId=${storyId}`;
         } else {
           alert(`Error al crear la historia: ${result ? result.error : "Error desconocido"}`);
         }

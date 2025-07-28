@@ -6,6 +6,7 @@ const fastify = require("fastify")();
 const cors = require("@fastify/cors");
 const jwt = require("@fastify/jwt");
 const path = require("path");
+const staticFiles = require("@fastify/static");
 
 const fastifyMultipart = require("@fastify/multipart");
 const fastifyStatic = require("@fastify/static");
