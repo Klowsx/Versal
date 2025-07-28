@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,9 +8,10 @@
   <link rel="stylesheet" href="mystory.css" />
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
 </head>
+
 <body>
 
-    <div id="navbar-placeholder"></div>
+  <div id="navbar-placeholder"></div>
 
   <div class="wrapper">
     <header class="header">
@@ -25,7 +27,6 @@
     </header>
 
     <main class="container">
-      <!-- Estadísticas generales (dinámicas) -->
       <section class="estadisticas">
         <div class="stat-card">
           <div class="stat-value" id="totalHistorias">0</div>
@@ -45,7 +46,7 @@
         </div>
       </section>
 
-      <!-- Historias individuales (iterables desde backend) -->
+
       <section class="historias-grid" id="historiasContainer">
         <div class="historia-card">
           <div class="portada">
@@ -55,7 +56,8 @@
           <div class="contenido">
             <span class="categoria">Romance Fantástico</span>
             <h3 class="titulo">El Jardín de los Secretos Perdidos</h3>
-            <p class="descripcion">Una historia épica de fantasía romántica llena de magia, aventuras y romance prohibido...</p>
+            <p class="descripcion">Una historia épica de fantasía romántica llena de magia, aventuras y romance
+              prohibido...</p>
 
             <div class="tags">
               <span>#fantasía</span>
@@ -70,11 +72,14 @@
             </div>
           </div>
         </div>
-        <!-- Aquí el backend debería inyectar más .historia-card -->
+
       </section>
     </main>
   </div>
 
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
+  <script src="mystory.js"></script>
 </body>
+</body>
+
 </html>

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Story, Category, Tag } = require("../../models/story.model");
-const { Chapter } = require("../../models/chapter.model");
+const Chapter = require("../../models/chapter.model");
 const Interaction = require("../../models/interaction.model");
 const User = require("../../models/user.model");
 const Favorite = require("../../models/favorite.model");
@@ -160,33 +160,49 @@ async function updateStory(storyId, updateData) {
 }
 
 async function deleteStory(storyId) {
+  console.log(` Iniciando eliminación para storyId: ${storyId}`);
   try {
+    console.log(`Buscando capítulos para storyId: ${storyId}`);
     const chapters = await Chapter.find({ story: storyId }).select("_id").lean();
     const chapterIds = chapters.map((chapter) => chapter._id);
+    console.log(`Capítulos encontrados: ${chapterIds.length} (IDs: ${chapterIds.join(", ")})`);
 
-    // Elimina las interacciones asociadas a los capítulos de la historia
     if (chapterIds.length > 0) {
-      await Interaction.deleteMany({ contentId: { $in: chapterIds } });
+      console.log(` Eliminando interacciones para ${chapterIds.length} capítulos.`);
+      const interactionsDeleteResult = await Interaction.deleteMany({
+        contentId: { $in: chapterIds },
+      });
+      console.log(` Interacciones eliminadas: ${interactionsDeleteResult.deletedCount}`);
+    } else {
+      console.log(" No hay capítulos, saltando eliminación de interacciones.");
     }
 
-    // Elimina todos los capítulos
     if (chapterIds.length > 0) {
-      await Chapter.deleteMany({ _id: { $in: chapterIds } });
+      console.log(` Eliminando ${chapterIds.length} capítulos.`);
+      const chaptersDeleteResult = await Chapter.deleteMany({ _id: { $in: chapterIds } });
+      console.log(`Capítulos eliminados: ${chaptersDeleteResult.deletedCount}`);
+    } else {
+      console.log(" No hay capítulos que eliminar.");
     }
 
-    // Eliminar de favoritos
-    await Favorite.deleteMany({ storyId: storyId });
+    console.log(`Eliminando favoritos para storyId: ${storyId}`);
+    const favoritesDeleteResult = await Favorite.deleteMany({ storyId: storyId });
+    console.log(`Favoritos eliminados: ${favoritesDeleteResult.deletedCount}`);
 
-    // elimina la historia principal
+    console.log(`Eliminando la historia principal con ID: ${storyId}`);
     const deletedStory = await Story.findByIdAndDelete(storyId);
 
     if (!deletedStory) {
+      console.warn(`Historia no encontrada para eliminar con ID: ${storyId}`);
       return { error: "Historia no encontrada." };
     }
 
+    console.log(
+      `Historia "${deletedStory.title}" y todos sus datos asociados eliminados exitosamente.`
+    );
     return { message: "Historia y todos sus datos asociados fueron eliminados exitosamente." };
   } catch (error) {
-    console.error(`Error en la limpieza completa de la historia ${storyId}:`, error);
+    console.error(`ERROR al realizar la eliminación completa de la historia ${storyId}:`, error);
     return { error: "Ocurrió un error al realizar la eliminación completa de la historia." };
   }
 }

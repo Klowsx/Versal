@@ -310,7 +310,7 @@
         elements.saveBtn.addEventListener("click", () => {
           methods.saveOrUpdateChapter({
             showNotification: true,
-            redirectTo: `../create-story/mystory.html`,
+            redirectTo: `../my-story/mystory.html`,
           });
         });
 

@@ -1,6 +1,5 @@
-/* styles.css */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   margin: 0;
   background: linear-gradient(to bottom right, #f3e8ff, #ffffff, #ede9fe);
   color: #4b0082;
@@ -8,6 +7,7 @@ body {
 
 .wrapper {
   min-height: 100vh;
+  margin-top: 15px;
 }
 
 .container {
@@ -67,7 +67,7 @@ body {
   border-radius: 9999px;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background 0.3s;
 }
 
@@ -106,12 +106,12 @@ body {
 }
 
 .stat-card {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(4px);
   padding: 1.5rem;
   text-align: center;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .stat-value {
@@ -140,17 +140,17 @@ body {
 }
 
 .historia-card {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .historia-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .portada {
@@ -266,4 +266,198 @@ body {
 
 .btn-solid:hover {
   background: #6b21a8;
+}
+
+/* ... (tu CSS existente) ... */
+
+/* Estilos para la notificación (si no los tienes aún) */
+.editor-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50; /* Verde para éxito */
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.editor-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.editor-notification.error {
+  background-color: #f44336; /* Rojo para error */
+}
+
+/* --- Estilos del Modal --- */
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed; /* Posición fija para cubrir toda la pantalla */
+  z-index: 1001; /* Z-index alto para que esté por encima de todo */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Habilitar scroll si el contenido es muy largo */
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal.show-modal {
+  display: flex; /* Mostrar el modal */
+  opacity: 1;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto; /* Centrar en la pantalla */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%; /* Ancho responsivo */
+  max-width: 600px; /* Ancho máximo */
+  position: relative;
+  transform: translateY(-50px); /* Para la animación de entrada */
+  transition: transform 0.3s ease-in-out;
+}
+
+.modal.show-modal .modal-content {
+  transform: translateY(0);
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.modal-content h2 {
+  color: #6b21a8;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.form-grid label {
+  font-weight: 600;
+  color: #7e22ce;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-grid input[type="text"],
+.form-grid textarea,
+.form-grid select {
+  width: calc(100% - 20px); /* Ajusta el padding */
+  padding: 10px;
+  border: 1px solid #ddd6fe;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Incluir padding en el ancho */
+}
+
+.form-grid textarea {
+  resize: vertical; /* Permitir redimensionar verticalmente */
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: auto; /* Resetear ancho para checkbox */
+}
+
+.tags-container-modal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid #ddd6fe;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #faf5ff;
+}
+
+.tag-btn-modal {
+  background: #ede9fe;
+  color: #6b21a8;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  border: 1px solid #c4b5fd;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.tag-btn-modal:hover {
+  background: #e9d5ff;
+}
+
+.tag-btn-modal.selected {
+  background: #9333ea;
+  color: white;
+  border-color: #9333ea;
+}
+
+.modal-save-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  background: linear-gradient(to right, #9333ea, #7e22ce);
+  color: white;
+  border: none;
+  border-radius: 9999px; /* Botón redondeado */
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.modal-save-btn:hover {
+  background: linear-gradient(to right, #7e22ce, #6b21a8);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.no-stories-message {
+  text-align: center;
+  color: #7e22ce;
+  font-size: 1.2rem;
+  margin-top: 50px;
+}
+
+/* Estilo para el badge de contenido adulto */
+.badge.adult-content {
+  background-color: #dc2626; /* Rojo */
+  right: 0.75rem; /* Posición a la derecha */
+  left: auto; /* Anula el 'left' de otros badges */
 }
