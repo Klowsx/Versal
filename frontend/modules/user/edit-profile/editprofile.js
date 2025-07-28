@@ -106,7 +106,7 @@
 
           alert("Perfil actualizado correctamente.");
 
-          window.location.href = "/profile.html";
+          window.location.href = "/frontend/modules/user/profile/profile.html";
         } catch (error) {
           console.error("Fallo el envío del formulario:", error);
         } finally {
