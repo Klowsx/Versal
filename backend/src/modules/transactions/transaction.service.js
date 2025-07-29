@@ -10,6 +10,16 @@ const {
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:8080";
 
+async function getStripeBalance() {
+  try {
+    const balance = await stripe.balance.retrieve();
+    return { balance };
+  } catch (error) {
+    console.error("Error al obtener el balance de Stripe:", error);
+    return { error: "No se pudo obtener el balance de Stripe." };
+  }
+}
+
 async function createStripeCheckoutSessionForSubscription(userId, planId) {
   try {
     const user = await User.findById(userId);
@@ -338,4 +348,5 @@ module.exports = {
   getUserTransactions,
   getSubscriptionPlans,
   getCoinPacks,
+  getStripeBalance,
 };

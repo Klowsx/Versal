@@ -164,7 +164,12 @@ async function userRoutes(fastify) {
       }
     });
     adminRoutes.get("/all", userController.getAllUsers);
-    adminRoutes.delete("/:userId", userController.deleteUser);
+
+    adminRoutes.delete(
+      "/:id",
+      { schema: { params: userIdParamSchema } },
+      userController.deleteUser
+    );
     adminRoutes.put("/:userId/role", userController.updateUserRole);
   });
 }

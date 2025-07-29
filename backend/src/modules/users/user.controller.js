@@ -171,8 +171,14 @@ async function getAllUsers(req, reply) {
 
 // Borrar usuario
 async function deleteUser(req, reply) {
-  const { userId } = req.params;
-  const result = await userService.deleteUser({ userId });
+  const { id } = req.params;
+
+  const result = await userService.deleteUser({ userId: id });
+
+  if (result.error) {
+    return reply.code(404).send(result);
+  }
+
   reply.send(result);
 }
 

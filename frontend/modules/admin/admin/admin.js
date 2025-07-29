@@ -1,463 +1,326 @@
-// Versal/frontend/modules/admin/admin.js
-
 (() => {
   const AdminApp = (() => {
     const htmlElements = {
-      adminNavLinks: null, // Se inicializa después de cargar el navbar
-      reportsCountBadge: null, // Se inicializa después de cargar el navbar
       contentSections: document.querySelectorAll(".content-section"),
       adminNavbarPlaceholder: document.getElementById("admin-navbar-placeholder"),
       totalUsers: document.getElementById("total-users"),
       totalStories: document.getElementById("total-stories"),
       totalReports: document.getElementById("total-reports"),
-      totalAssets: document.getElementById("total-assets"),
+      totalRevenue: document.getElementById("total-revenue"),
       usersDataContainer: document.getElementById("users-data-container"),
       storiesDataContainer: document.getElementById("stories-data-container"),
       reportsDataContainer: document.getElementById("reports-data-container"),
+      reportModal: document.getElementById("report-details-modal"),
+      reportModalContent: document.getElementById("report-details-content"),
+      reportModalCloseBtn: document.querySelector("#report-details-modal .close-button"),
+      reportFilters: document.getElementById("report-filters"),
     };
 
     const API_BASE_URL = "http://localhost:3000/api";
+    let reportsCache = [];
 
     const methods = {
-      /**
-       * Realiza una petición fetch a la API del backend, incluyendo el token de autorización.
-       * @param {string} url - La URL del endpoint de la API.
-       * @param {object} options - Opciones para la petición fetch (método, headers, body, etc.).
-       * @returns {Promise<object|null>} - La respuesta JSON de la API o null en caso de error.
-       */
-      async fetchAPI(url, options = {}) {
+      showNotification: (message, isError = false) => {
+        const notification = document.createElement("div");
+        notification.className = `editor-notification ${isError ? "error" : ""}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.classList.add("show"), 10);
+        setTimeout(() => {
+          notification.classList.remove("show");
+          setTimeout(
+            () => document.body.contains(notification) && document.body.removeChild(notification),
+            500
+          );
+        }, 3000);
+      },
+
+      fetchAPI: async (url, options = {}) => {
         const token = localStorage.getItem("token");
         if (!token) {
-          alert("Debes iniciar sesión como administrador para acceder a esta página.");
           window.location.replace("/frontend/modules/auth/login/login.html");
           return null;
         }
-
-        options.headers = {
-          ...options.headers,
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-
+        const headers = { ...options.headers, Authorization: `Bearer ${token}` };
+        if (options.body) {
+          headers["Content-Type"] = "application/json";
+        }
         try {
-          const response = await fetch(url, options);
+          const response = await fetch(url, { ...options, headers });
+          if (response.status === 204 || response.statusText === "No Content")
+            return { success: true };
+          const data = await response.json();
           if (!response.ok) {
-            if (response.status === 403) {
-              alert("Acceso denegado. No tienes permisos de administrador.");
-              window.location.replace("/frontend/modules/main/dashboard.html");
-              return null;
-            }
-            const error = await response.json();
-            throw new Error(error.message || `Error en la petición: ${response.statusText}`);
+            throw new Error(data.message || data.error || `Error: ${response.status}`);
           }
-          return await response.json();
+          return data;
         } catch (err) {
           console.error(`Error en fetchAPI para ${url}:`, err);
-          alert(`Error: ${err.message}`);
+          methods.showNotification(err.message, true);
           return null;
         }
       },
 
-      /**
-       * Verifica el rol del usuario para asegurar que sea un administrador.
-       * @returns {boolean} - True si el usuario es administrador, false en caso contrario.
-       */
-      async checkAdminRole() {
-        const userRole = localStorage.getItem("userRole");
-        if (userRole !== "admin") {
-          alert("Acceso denegado. Solo los administradores pueden ver esta página.");
-          window.location.replace("/frontend/modules/main/dashboard.html");
-          return false;
-        }
-        return true;
+      mapStoryStatus: (status) => {
+        const statuses = {
+          published: "Publicada",
+          draft: "Borrador",
+          archived: "Archivada",
+        };
+        return statuses[status] || status;
       },
 
-      /**
-       * Muestra la sección de contenido especificada y oculta las demás.
-       * @param {string} sectionId - El ID de la sección a mostrar (ej. "dashboard-section").
-       */
       showSection: (sectionId) => {
-        htmlElements.contentSections.forEach((section) => {
-          section.classList.add("hidden");
-        });
+        htmlElements.contentSections.forEach((s) => s.classList.add("hidden"));
         document.getElementById(sectionId).classList.remove("hidden");
       },
 
-      /**
-       * Establece el enlace de navegación activo en el navbar.
-       * @param {HTMLElement} clickedLink - El enlace del navbar que fue clickeado.
-       */
       setActiveLink: (clickedLink) => {
-        if (htmlElements.adminNavLinks) {
-            htmlElements.adminNavLinks.forEach((link) => {
-              link.classList.remove("active");
-            });
-            clickedLink.classList.add("active");
-        }
+        document.querySelectorAll(".admin-nav a").forEach((l) => l.classList.remove("active"));
+        clickedLink.classList.add("active");
       },
 
-      /**
-       * Carga y calcula las estadísticas generales del dashboard directamente en el frontend.
-       * Realiza llamadas a las funciones de obtención de datos de usuarios, historias y reportes.
-       */
       async loadDashboardStats() {
-        try {
-          // Obtener datos de usuarios y contar
-          const users = await methods.fetchUsersData();
-          const totalUsers = users ? users.length : 0;
-          htmlElements.totalUsers.textContent = (totalUsers / 1000).toFixed(1) + 'K';
-
-          // Obtener datos de historias y contar
-          const storiesData = await methods.fetchStoriesData();
-          const stories = storiesData ? storiesData.stories : [];
-          const totalStories = stories ? stories.length : 0;
-          htmlElements.totalStories.textContent = (totalStories / 1000).toFixed(1) + 'K';
-
-          // Obtener datos de reportes y contar los pendientes
-          const reportsData = await methods.fetchReportsData();
-          const reports = reportsData ? reportsData.reports : [];
-          const pendingReports = reports.filter(r => r.status === 'pending').length;
-          htmlElements.totalReports.textContent = pendingReports;
-          if (htmlElements.reportsCountBadge) {
-            htmlElements.reportsCountBadge.textContent = pendingReports;
-          }
-
-          // Para 'Activos', si no hay un endpoint de backend, mantén un placeholder o calcula si es posible
-          htmlElements.totalAssets.textContent = '0K'; // Asume 0 si no hay fuente de datos
-
-        } catch (error) {
-          console.error("Error al calcular estadísticas del dashboard:", error);
+        const [users, stories, reports, balance] = await Promise.all([
+          methods.fetchAPI(`${API_BASE_URL}/user/all`),
+          methods.fetchAPI(`${API_BASE_URL}/stories`),
+          methods.fetchAPI(`${API_BASE_URL}/admin/reports`),
+          methods.fetchAPI(`${API_BASE_URL}/transactions/balance`),
+        ]);
+        htmlElements.totalUsers.textContent = users?.length || 0;
+        htmlElements.totalStories.textContent = stories?.stories?.length || 0;
+        const pendingReports = reports?.reports?.filter((r) => r.status === "pending").length || 0;
+        htmlElements.totalReports.textContent = pendingReports;
+        document.querySelector(".reports-count").textContent = pendingReports;
+        if (balance?.balance?.available[0]) {
+          const amount = balance.balance.available[0].amount / 100;
+          htmlElements.totalRevenue.textContent = `$${amount.toFixed(2)}`;
         }
       },
 
-      // --- Funciones para Usuarios ---
-      async fetchUsersData() {
-        try {
-          const users = await methods.fetchAPI(`${API_BASE_URL}/user/all`);
-          return users;
-        } catch (error) {
-          console.error("Error al obtener datos de usuarios:", error);
-          return null;
+      renderUsersTable(users) {
+        if (!users || users.length === 0) {
+          htmlElements.usersDataContainer.innerHTML = "<p>No se encontraron usuarios.</p>";
+          return;
         }
+        let tableHTML = `<table class="data-table"><thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Rol</th><th>Acciones</th></tr></thead><tbody>`;
+        users.forEach((user) => {
+          tableHTML += `<tr data-row-id="${user._id}">
+              <td>${user._id}</td>
+              <td>${user.username}</td>
+              <td>${user.email}</td>
+              <td>${user.role}</td>
+              <td class="action-buttons">
+                  <button class="delete-btn" data-id="${user._id}" data-username="${user.username}" data-action="delete-user">🗑️ Eliminar</button>
+              </td>
+            </tr>`;
+        });
+        tableHTML += `</tbody></table>`;
+        htmlElements.usersDataContainer.innerHTML = tableHTML;
+        document
+          .querySelectorAll('[data-action="delete-user"]')
+          .forEach((btn) => btn.addEventListener("click", handlers.handleUserAction));
       },
 
-      async renderUsersTable(users, containerElement) {
-        if (users && users.length > 0) {
-          let usersHtml = `
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre de Usuario</th>
-                  <th>Email</th>
-                  <th>Rol</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-          `;
-          users.forEach(user => {
-            usersHtml += `
-              <tr>
-                <td>${user._id}</td>
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td>${user.role}</td>
-                <td class="action-buttons">
-                  <button data-id="${user._id}" data-action="edit-user">✏️ Editar</button>
-                  <button class="delete-btn" data-id="${user._id}" data-action="delete-user">🗑️ Eliminar</button>
-                </td>
-              </tr>
-            `;
-          });
-          usersHtml += `
-              </tbody>
-            </table>
-          `;
-          containerElement.innerHTML = usersHtml;
-
-          document.querySelectorAll('[data-action="delete-user"]').forEach(button => {
-              button.addEventListener('click', handlers.handleUserAction);
-          });
-          document.querySelectorAll('[data-action="edit-user"]').forEach(button => {
-              button.addEventListener('click', handlers.handleUserAction);
-          });
-
-        } else {
-          containerElement.innerHTML = '<p>No se encontraron usuarios.</p>';
+      renderStoriesTable(stories) {
+        if (!stories || stories.length === 0) {
+          htmlElements.storiesDataContainer.innerHTML = "<p>No se encontraron historias.</p>";
+          return;
         }
+        let tableHTML = `<table class="data-table"><thead><tr><th>ID</th><th>Título</th><th>Autor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>`;
+        stories.forEach((story) => {
+          tableHTML += `<tr data-row-id="${story._id}">
+              <td>${story._id}</td>
+              <td>${story.title}</td>
+              <td>${story.author?.username || "N/A"}</td>
+              <td>${methods.mapStoryStatus(story.status)}</td>
+              <td class="action-buttons">
+                  <button class="delete-btn" data-id="${story._id}" data-title="${
+            story.title
+          }" data-action="delete-story">🗑️ Eliminar</button>
+              </td>
+            </tr>`;
+        });
+        tableHTML += `</tbody></table>`;
+        htmlElements.storiesDataContainer.innerHTML = tableHTML;
+        document
+          .querySelectorAll('[data-action="delete-story"]')
+          .forEach((btn) => btn.addEventListener("click", handlers.handleStoryAction));
       },
 
-      // --- Funciones para Historias ---
-      async fetchStoriesData() {
-        try {
-          const result = await methods.fetchAPI(`${API_BASE_URL}/stories`);
-          return result;
-        } catch (error) {
-          console.error("Error al obtener datos de historias:", error);
-          return null;
+      renderReportsTable(reports) {
+        reportsCache = reports || [];
+        if (reportsCache.length === 0) {
+          htmlElements.reportsDataContainer.innerHTML = "<p>No hay reportes para este filtro.</p>";
+          return;
         }
-      },
-
-      async renderStoriesTable(stories, containerElement) {
-        if (stories && stories.length > 0) {
-          let storiesHtml = `
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Título</th>
-                  <th>Autor</th>
-                  <th>Estado</th>
-                  <th>Vistas</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-          `;
-          stories.forEach(story => {
-            storiesHtml += `
-              <tr>
-                <td>${story._id}</td>
-                <td>${story.title}</td>
-                <td>${story.author ? story.author.username : 'Desconocido'}</td>
-                <td>${story.status}</td>
-                <td>${story.views}</td>
-                <td class="action-buttons">
-                  <button data-id="${story._id}" data-action="edit-story">✏️ Editar</button>
-                  <button class="delete-btn" data-id="${story._id}" data-action="delete-story">🗑️ Eliminar</button>
-                </td>
-              </tr>
-            `;
-          });
-          storiesHtml += `
-              </tbody>
-            </table>
-          `;
-          containerElement.innerHTML = storiesHtml;
-
-          document.querySelectorAll('[data-action="delete-story"]').forEach(button => {
-              button.addEventListener('click', handlers.handleStoryAction);
-          });
-          document.querySelectorAll('[data-action="edit-story"]').forEach(button => {
-              button.addEventListener('click', handlers.handleStoryAction);
-          });
-
-        } else {
-          containerElement.innerHTML = '<p>No se encontraron historias.</p>';
-        }
-      },
-
-      // --- Funciones para Reportes ---
-      async fetchReportsData() {
-        try {
-          const result = await methods.fetchAPI(`${API_BASE_URL}/admin/reports`);
-          return result;
-        } catch (error) {
-          console.error("Error al obtener datos de reportes:", error);
-          return null;
-        }
-      },
-
-      async renderReportsTable(reports, containerElement) {
-        if (reports && reports.length > 0) {
-          let reportsHtml = `
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Tipo</th>
-                  <th>Contenido Reportado</th>
-                  <th>Reportado Por</th>
-                  <th>Estado</th>
-                  <th>Fecha</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-          `;
-          reports.forEach(report => {
-            reportsHtml += `
-              <tr>
-                <td>${report._id}</td>
-                <td>${report.type}</td>
-                <td>${report.targetId} (${report.targetType})</td>
-                <td>${report.reporterId ? report.reporterId.username : 'Desconocido'}</td>
-                <td>${report.status}</td>
-                <td>${new Date(report.createdAt).toLocaleDateString()}</td>
-                <td class="action-buttons">
+        let tableHTML = `<table class="data-table"><thead><tr><th>ID</th><th>Motivo</th><th>Estado</th><th>Reportado por</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>`;
+        reportsCache.forEach((report) => {
+          tableHTML += `<tr data-row-id="${report._id}">
+              <td>${report._id}</td>
+              <td>${report.reason}</td>
+              <td><span class="status-badge ${report.status}">${report.status}</span></td>
+              <td>${report.userId?.username || "N/A"}</td>
+              <td>${new Date(report.createdAt).toLocaleDateString()}</td>
+              <td class="action-buttons">
                   <button data-id="${report._id}" data-action="view-report">🔍 Ver</button>
-                  <button data-id="${report._id}" data-action="resolve-report">✅ Resolver</button>
-                </td>
-              </tr>
-            `;
-          });
-          reportsHtml += `
-              </tbody>
-            </table>
-          `;
-          containerElement.innerHTML = reportsHtml;
-
-          document.querySelectorAll('[data-action="view-report"]').forEach(button => {
-              button.addEventListener('click', handlers.handleReportAction);
-          });
-          document.querySelectorAll('[data-action="resolve-report"]').forEach(button => {
-              button.addEventListener('click', handlers.handleReportAction);
-          });
-
-        } else {
-          containerElement.innerHTML = '<p>No se encontraron reportes.</p>';
-        }
-      },
-
-      // --- Funciones de Refresh (Callbacks) ---
-      async refreshUsersList() {
-        htmlElements.usersDataContainer.innerHTML = '<p>Cargando usuarios...</p>';
-        const users = await methods.fetchUsersData();
-        await methods.renderUsersTable(users, htmlElements.usersDataContainer);
-      },
-
-      async refreshStoriesList() {
-        htmlElements.storiesDataContainer.innerHTML = '<p>Cargando historias...</p>';
-        const storiesData = await methods.fetchStoriesData();
-        await methods.renderStoriesTable(storiesData ? storiesData.stories : [], htmlElements.storiesDataContainer);
-      },
-
-      async refreshReportsList() {
-        htmlElements.reportsDataContainer.innerHTML = '<p>Cargando reportes...</p>';
-        const reportsData = await methods.fetchReportsData();
-        await methods.renderReportsTable(reportsData ? reportsData.reports : [], htmlElements.reportsDataContainer);
+                  ${
+                    report.status === "pending"
+                      ? `<button data-id="${report._id}" data-action="resolve-report">✅ Resolver</button>`
+                      : ""
+                  }
+              </td>
+            </tr>`;
+        });
+        tableHTML += `</tbody></table>`;
+        htmlElements.reportsDataContainer.innerHTML = tableHTML;
+        document
+          .querySelectorAll('[data-action="view-report"], [data-action="resolve-report"]')
+          .forEach((btn) => btn.addEventListener("click", handlers.handleReportAction));
       },
     };
 
     const handlers = {
-      handleNavLinkClick: async (event) => {
-        event.preventDefault();
-        const sectionType = event.target.dataset.section;
-        const sectionToShow = sectionType + "-section";
-        methods.showSection(sectionToShow);
-        methods.setActiveLink(event.target);
+      async handleUserAction(event) {
+        const { id, username } = event.currentTarget.dataset;
+        if (confirm(`¿Seguro que quieres eliminar al usuario "${username}" (${id})?`)) {
+          const row = document.querySelector(`tr[data-row-id='${id}']`);
+          const originalDisplay = row.style.display;
+          row.style.display = "none";
 
-        if (sectionType === "users") {
-          await methods.refreshUsersList();
-        } else if (sectionType === "stories") {
-          await methods.refreshStoriesList();
-        } else if (sectionType === "reports") {
-          await methods.refreshReportsList();
-        } else if (sectionType === "dashboard") {
-          await methods.loadDashboardStats();
-        }
-      },
-
-      handleUserAction: async (event) => {
-        const userId = event.target.dataset.id;
-        const action = event.target.dataset.action;
-
-        if (action === "delete-user") {
-          if (confirm(`¿Estás seguro de que quieres eliminar al usuario ${userId}?`)) {
-            try {
-              const response = await methods.fetchAPI(`${API_BASE_URL}/user/${userId}`, {
-                method: 'DELETE',
-              });
-              if (response) {
-                alert("Usuario eliminado correctamente.");
-                await methods.refreshUsersList();
-                await methods.loadDashboardStats();
-              }
-            } catch (error) {
-              console.error("Error al eliminar usuario:", error);
-              alert("Error al eliminar usuario.");
-            }
+          const result = await methods.fetchAPI(`${API_BASE_URL}/user/${id}`, { method: "DELETE" });
+          if (result) {
+            methods.showNotification("Usuario eliminado.");
+            await methods.loadDashboardStats();
+          } else {
+            row.style.display = originalDisplay;
+            methods.showNotification("Error al eliminar el usuario.", true);
           }
-        } else if (action === "edit-user") {
-          alert(`Funcionalidad de edición para el usuario ${userId} (por implementar).`);
         }
       },
 
-      handleStoryAction: async (event) => {
-        const storyId = event.target.dataset.id;
-        const action = event.target.dataset.action;
+      async handleStoryAction(event) {
+        const { id, title } = event.currentTarget.dataset;
+        if (confirm(`¿Seguro que quieres eliminar la historia "${title}" (${id})?`)) {
+          const row = document.querySelector(`tr[data-row-id='${id}']`);
+          const originalDisplay = row.style.display;
+          row.style.display = "none";
 
-        if (action === "delete-story") {
-          if (confirm(`¿Estás seguro de que quieres eliminar la historia ${storyId}?`)) {
-            try {
-              const response = await methods.fetchAPI(`${API_BASE_URL}/stories/${storyId}`, {
-                method: 'DELETE',
-              });
-              if (response) {
-                alert("Historia eliminada correctamente.");
-                await methods.refreshStoriesList();
-                await methods.loadDashboardStats();
-              }
-            } catch (error) {
-              console.error("Error al eliminar historia:", error);
-              alert("Error al eliminar historia.");
-            }
+          const result = await methods.fetchAPI(`${API_BASE_URL}/stories/${id}`, {
+            method: "DELETE",
+          });
+          if (result) {
+            methods.showNotification("Historia eliminada.");
+            await methods.loadDashboardStats();
+          } else {
+            row.style.display = originalDisplay;
+            methods.showNotification("Error al eliminar la historia.", true);
           }
-        } else if (action === "edit-story") {
-          alert(`Funcionalidad de edición para la historia ${storyId} (por implementar).`);
         }
       },
 
-      handleReportAction: async (event) => {
-        const reportId = event.target.dataset.id;
-        const action = event.target.dataset.action;
+      async handleReportAction(event) {
+        const { id, action } = event.currentTarget.dataset;
+        const report = reportsCache.find((r) => r._id === id);
 
-        if (action === "view-report") {
-          alert(`Ver detalles del reporte ${reportId} (por implementar).`);
+        if (action === "view-report" && report) {
+          htmlElements.reportModalContent.innerHTML = `
+              <p><strong>ID Reporte:</strong> ${report._id}</p>
+              <p><strong>Reportado por:</strong> ${
+                report.userId?.username || "Usuario eliminado"
+              }</p>
+              <p><strong>Fecha:</strong> ${new Date(report.createdAt).toLocaleString()}</p>
+              <p><strong>Motivo:</strong> ${report.reason}</p>
+              <p><strong>Detalles:</strong> ${report.details || "No proporcionados"}</p>
+              <p><strong>Contenido:</strong> <a href="/frontend/modules/stories/preview-story/preview.html?id=${
+                report.contentId?._id
+              }" target="_blank">${report.contentId?.title || "Contenido eliminado"}</a></p>`;
+          htmlElements.reportModal.style.display = "flex";
         } else if (action === "resolve-report") {
-          if (confirm(`¿Marcar el reporte ${reportId} como resuelto?`)) {
-            try {
-              const response = await methods.fetchAPI(`${API_BASE_URL}/admin/reports/${reportId}`, {
-                method: 'PATCH',
-                body: JSON.stringify({ status: 'resolved' })
-              });
-              if (response) {
-                alert("Reporte marcado como resuelto.");
-                await methods.refreshReportsList();
-                await methods.loadDashboardStats();
-              }
-            } catch (error) {
-              console.error("Error al resolver reporte:", error);
-              alert("Error al resolver reporte.");
+          if (confirm(`¿Marcar el reporte ${id} como resuelto?`)) {
+            const result = await methods.fetchAPI(`${API_BASE_URL}/admin/reports/${id}`, {
+              method: "PATCH",
+              body: JSON.stringify({ status: "resolved" }),
+            });
+            if (result) {
+              methods.showNotification("Reporte resuelto.");
+              await methods.loadDashboardStats();
+              const currentFilter = document.querySelector("#report-filters .filter-btn.active")
+                .dataset.status;
+              const url =
+                currentFilter === "all"
+                  ? `${API_BASE_URL}/admin/reports`
+                  : `${API_BASE_URL}/admin/reports?status=${currentFilter}`;
+              const reportsData = await methods.fetchAPI(url);
+              methods.renderReportsTable(reportsData?.reports);
             }
           }
         }
+      },
+
+      async handleReportFilterClick(event) {
+        const button = event.currentTarget;
+        const status = button.dataset.status;
+        htmlElements.reportFilters
+          .querySelectorAll(".filter-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        const url =
+          status === "all"
+            ? `${API_BASE_URL}/admin/reports`
+            : `${API_BASE_URL}/admin/reports?status=${status}`;
+        htmlElements.reportsDataContainer.innerHTML = "<p>Cargando reportes...</p>";
+        const reportsData = await methods.fetchAPI(url);
+        methods.renderReportsTable(reportsData?.reports);
+      },
+
+      async handleNavLinkClick(event) {
+        event.preventDefault();
+        const sectionType = event.currentTarget.dataset.section;
+        methods.showSection(sectionType + "-section");
+        methods.setActiveLink(event.currentTarget);
+        if (sectionType === "users") {
+          const data = await methods.fetchAPI(`${API_BASE_URL}/user/all`);
+          methods.renderUsersTable(data);
+        } else if (sectionType === "stories") {
+          const data = await methods.fetchAPI(`${API_BASE_URL}/stories`);
+          methods.renderStoriesTable(data?.stories);
+        } else if (sectionType === "reports") {
+          document.querySelector('#report-filters .filter-btn[data-status="all"]').click();
+        }
+      },
+
+      closeReportModal() {
+        htmlElements.reportModal.style.display = "none";
       },
 
       async initializeAdminPage() {
-        const isAdmin = await methods.checkAdminRole();
-        if (!isAdmin) return;
-
         try {
           const response = await fetch("/frontend/modules/admin/navbar/navbar.html");
-          if (!response.ok) throw new Error("Failed to load admin navbar.");
-          const navbarHtml = await response.text();
-          htmlElements.adminNavbarPlaceholder.innerHTML = navbarHtml;
-
-          htmlElements.adminNavLinks = document.querySelectorAll(".admin-nav a");
-          htmlElements.reportsCountBadge = document.querySelector(".reports-count");
-
-          htmlElements.adminNavLinks.forEach((link) => {
-            link.addEventListener("click", handlers.handleNavLinkClick);
+          htmlElements.adminNavbarPlaceholder.innerHTML = await response.text();
+          document
+            .querySelectorAll(".admin-nav a")
+            .forEach((l) => l.addEventListener("click", handlers.handleNavLinkClick));
+          htmlElements.reportModalCloseBtn.addEventListener("click", handlers.closeReportModal);
+          htmlElements.reportFilters
+            .querySelectorAll(".filter-btn")
+            .forEach((btn) => btn.addEventListener("click", handlers.handleReportFilterClick));
+          window.addEventListener("click", (e) => {
+            if (e.target === htmlElements.reportModal) handlers.closeReportModal();
           });
-
-          methods.showSection("dashboard-section");
           await methods.loadDashboardStats();
-
         } catch (error) {
-          console.error("Error loading admin navbar:", error);
-          alert("Error al cargar la barra de navegación del administrador.");
+          console.error("Error al inicializar:", error);
         }
       },
     };
 
-    const init = () => {
-      handlers.initializeAdminPage();
+    return {
+      init: () => {
+        document.addEventListener("DOMContentLoaded", handlers.initializeAdminPage);
+      },
     };
-
-    return { init };
   })();
 
-  document.addEventListener("DOMContentLoaded", AdminApp.init);
+  AdminApp.init();
 })();

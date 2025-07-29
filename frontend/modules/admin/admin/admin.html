@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel de Administración - Versal</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
+
 <body>
 
   <div id="admin-navbar-placeholder"></div>
@@ -28,8 +30,8 @@
             <div class="stat-label">Reportes Pendientes</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" id="total-assets">0</div>
-            <div class="stat-label">Activos</div>
+            <div class="stat-value" id="total-revenue">$0</div>
+            <div class="stat-label">Ingresos (Stripe)</div>
           </div>
         </div>
       </section>
@@ -49,7 +51,14 @@
       </section>
 
       <section id="reports-section" class="content-section hidden">
-        <h2>Gestión de Reportes</h2>
+        <div class="section-header">
+          <h2>Gestión de Reportes</h2>
+          <div class="filter-buttons" id="report-filters">
+            <button class="filter-btn active" data-status="all">Todos</button>
+            <button class="filter-btn" data-status="pending">Pendientes</button>
+            <button class="filter-btn" data-status="resolved">Resueltos</button>
+          </div>
+        </div>
         <div id="reports-data-container">
           <p>Cargando reportes...</p>
         </div>
@@ -57,6 +66,15 @@
     </main>
   </div>
 
+  <div id="report-details-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Detalles del Reporte</h2>
+      <div id="report-details-content"></div>
+    </div>
+  </div>
+
   <script src="admin.js"></script>
 </body>
+
 </html>

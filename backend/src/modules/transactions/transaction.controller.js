@@ -1,6 +1,14 @@
 const transactionService = require("./transaction.service");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+async function getStripeBalance(request, reply) {
+  const result = await transactionService.getStripeBalance();
+  if (result.error) {
+    return reply.code(500).send(result);
+  }
+  reply.send(result);
+}
+
 async function createSubscriptionCheckout(request, reply) {
   try {
     const { userId } = request.user;
@@ -100,4 +108,5 @@ module.exports = {
   getUserTransactions,
   getSubscriptionPlans,
   getCoinPacks,
+  getStripeBalance,
 };

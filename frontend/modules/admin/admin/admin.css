@@ -1,30 +1,27 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: linear-gradient(135deg, #f3eaff 0%, #e9ddff 100%);
   color: #4c1d95;
   margin: 0;
-  /* El padding-top debe ser suficiente para la altura de tu navbar fijo */
-  padding-top: 130px; /* Ajusta según la altura total de tu admin_navbar.html */
+  padding-top: 130px;
 }
 
-/* Estilos para el placeholder que contendrá la navbar fija */
 #admin-navbar-placeholder {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #f9f5ff; /* Color de fondo de la navbar */
-  z-index: 1000; /* Asegura que esté por encima de otros contenidos */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra para destacarla */
+  background-color: #f9f5ff;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-/* El admin-header y admin-nav ahora son hijos de #admin-navbar-placeholder */
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background-color: #f9f5ff; /* Asegura el fondo, aunque ya lo tiene el placeholder */
+  background-color: #f9f5ff;
   border-bottom: 1px solid #e9d5ff;
 }
 
@@ -119,7 +116,7 @@ body {
 }
 
 .reports-count {
-  background-color: #ef4444; /* Rojo */
+  background-color: #ef4444;
   color: white;
   font-size: 0.75rem;
   padding: 0.2rem 0.5rem;
@@ -134,7 +131,7 @@ body {
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding-bottom: 2rem; /* Añade padding inferior para que el contenido no se pegue al fondo */
+  padding-bottom: 2rem;
 }
 
 .admin-content {
@@ -169,7 +166,7 @@ body {
 }
 
 .stat-value-red {
-  color: #ef4444; /* Rojo para reportes */
+  color: #ef4444;
 }
 
 .stat-label {
@@ -181,15 +178,14 @@ body {
   display: none;
 }
 
-/* Estilos para tablas de datos dinámicos */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1.5rem;
   background-color: #fff;
   border-radius: 8px;
-  overflow: hidden; /* Para que los bordes redondeados se apliquen a los thead/tbody */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .data-table th,
@@ -234,4 +230,136 @@ body {
 }
 .data-table .action-buttons .delete-btn:hover {
   color: #dc2626;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#report-details-content p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+#report-details-content strong {
+  color: #5b21b6;
+}
+
+#report-details-content a {
+  color: #7c3aed;
+  text-decoration: none;
+}
+#report-details-content a:hover {
+  text-decoration: underline;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  background-color: #ede9fe;
+  color: #5b21b6;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background-color: #dcd1ff;
+}
+
+.filter-btn.active {
+  background-color: #7c3aed;
+  color: white;
+}
+
+.editor-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background-color: #22c55e;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1002;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  font-weight: 600;
+}
+
+.editor-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.editor-notification.error {
+  background-color: #ef4444;
+}
+
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #f59e0b;
+}
+
+.status-badge.resolved {
+  background-color: #22c55e;
+}
+
+.status-badge.dismissed {
+  background-color: #6b7280;
+}
+
+.status-badge.in_review {
+  background-color: #3b82f6;
 }

@@ -55,6 +55,9 @@ async function transactionRoutes(fastify) {
       { schema: getUserTransactionsSchema },
       transactionController.getUserTransactions
     );
+
+    //Obtener balance de stripe
+    privateRoutes.get("/transactions/balance", transactionController.getStripeBalance);
   });
 }
 

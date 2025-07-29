@@ -155,17 +155,20 @@ async function updateStory(request, reply) {
 async function deleteStory(request, reply) {
   try {
     const { id } = request.params;
-    const { userId } = request.user;
+    const { userId, role } = request.user;
 
     const { story: existingStory } = await storyService.getStoryById(id);
     if (!existingStory) {
       return reply.code(404).send({ error: "Historia no encontrada." });
     }
-    if (existingStory.author._id.toString() !== userId.toString()) {
+
+    const isAuthor = existingStory.author?._id.toString() === userId.toString();
+
+    if (!isAuthor && role !== "admin") {
       return reply.code(403).send({ error: "No tienes permiso para eliminar esta historia." });
     }
+
     const result = await storyService.deleteStory(id);
-    console.log("Result:", result);
 
     if (result.error) {
       return reply.code(500).send({ error: result.error });
