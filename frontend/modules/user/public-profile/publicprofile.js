@@ -1,227 +1,281 @@
 (() => {
   const PublicProfileApp = (() => {
     const htmlElements = {
-      profileContent: document.getElementById("profile-content"), // Contenedor principal de la información del perfil
+      profileContent: document.getElementById("profile-content"),
       bio: document.getElementById("bio"),
-      storyTitle: document.getElementById("story-title"), // Título "Historias"
-      storyCount: document.getElementById("story-count"), // Badge de conteo de historias
-      storiesGrid: document.getElementById("stories-grid"), // Grid para las historias
+      storyCount: document.getElementById("story-count"),
+      storiesGrid: document.getElementById("stories-grid"),
+      storyTitle: document.getElementById("story-title"),
+      navbarPlaceholder: document.getElementById("navbar-placeholder"),
     };
 
-    const API_BASE_URL = "http://localhost:3000/api/user/me";
+    const API_USER_BASE_URL = "http://localhost:3000/api/user";
+    const API_STORY_BASE_URL = "http://localhost:3000/api/stories";
 
-    const profileUserId = new URLSearchParams(window.location.search).get("id"); 
+    const profileUserId = new URLSearchParams(window.location.search).get("id");
 
-    let currentLoggedInUserId = null; // ID del usuario actualmente logueado
+    let isFollowing = false;
+    let isBlocked = false;
 
-    // --- Métodos de Ayuda ---
     const methods = {
-      // Función genérica para hacer peticiones a la API
-      async fetchAPI(url, options = {}) {
+      showNotification: (message, isError = false) => {
+        const notification = document.createElement("div");
+        notification.className = `editor-notification ${isError ? "error" : ""}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.classList.add("show"), 10);
+        setTimeout(() => {
+          notification.classList.remove("show");
+          setTimeout(
+            () => document.body.contains(notification) && document.body.removeChild(notification),
+            500
+          );
+        }, 3000);
+      },
+
+      fetchAPI: async (url, options = {}) => {
         const token = localStorage.getItem("token");
-        const headers = {
-          "Content-Type": "application/json",
-          ...options.headers, // Permite añadir headers adicionales
-        };
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`; // Incluye el token si existe
+        const headers = { ...options.headers };
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+        if (
+          !(options.body instanceof FormData) &&
+          options.body !== undefined &&
+          !headers["Content-Type"]
+        ) {
+          headers["Content-Type"] = "application/json";
+          options.body = JSON.stringify(options.body);
         }
         try {
           const response = await fetch(url, { ...options, headers });
-          if (response.status === 401) { // No autorizado, redirige al login
-            alert("Debes iniciar sesión para acceder a esta función.");
-            window.location.href = "/frontend/modules/auth/login/login.html";
-            return null;
-          }
           if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || `Error en la API: ${response.status}`);
+            if (response.status === 401 || response.status === 403) {
+              methods.showNotification("Sesión expirada.", true);
+              localStorage.removeItem("token");
+              setTimeout(
+                () => (window.location.href = "/frontend/modules/auth/login/login.html"),
+                1500
+              );
+              return null;
+            }
+            const error = await response
+              .json()
+              .catch(() => ({ message: `Error ${response.status}` }));
+            throw new Error(error.message || "Error desconocido");
+          }
+          if (response.status === 204 || response.headers.get("Content-Length") === "0") {
+            return { success: true };
           }
           return await response.json();
         } catch (err) {
-          console.error(`Error en fetchAPI para ${url}:`, err);
-          alert(err.message || "Ocurrió un error al conectar con el servidor.");
+          console.error(`Error en fetchAPI para ${url}:`, err.message);
+          methods.showNotification(err.message, true);
           return null;
         }
       },
 
-      // Renderiza la sección del hero del perfil
-      renderProfileHero(user, isMyProfile, isFollowing) {
-        // Limpia el contenido previo del hero
-        htmlElements.profileContent.innerHTML = ''; 
-
-        const heroContentHtml = `
+      renderProfileHero(user, isMyProfile) {
+        const actionButtonsHtml = isMyProfile
+          ? ""
+          : `
+          <div class="follow-section">
+            <button class="btn-primary" id="follow-unfollow-btn">Seguir</button>
+            <button class="btn-outline" id="block-unblock-btn">Bloquear</button>
+          </div>
+        `;
+        htmlElements.profileContent.innerHTML = `
           <div class="avatar-container">
-            <img src="${user.profileImage || '/frontend/resources/profile.png'}" alt="Avatar" class="avatar" id="profile-avatar" />
-            ${user.isVerified ? '<span class="verificado">✓</span>' : ''}
+            <img src="${
+              user.profileImage || "/frontend/resources/profile.png"
+            }" alt="Avatar" class="avatar" />
+            ${user.isVerified ? '<span class="verificado">✓</span>' : ""}
           </div>
           <div class="name-username">
-            <h1 id="profile-username">${user.username || 'Usuario Desconocido'}</h1>
-            <p>@${user.username ? user.username.toLowerCase() : 'desconocido'}</p> 
+            <h1>${user.username || "Usuario"}</h1>
+            <p>@${user.username?.toLowerCase() || "desconocido"}</p>
           </div>
-          <div class="follow-section">
-            ${!isMyProfile ? `<button class="btn-follow" id="follow-unfollow-btn">${isFollowing ? 'Dejar de seguir' : 'Seguir'}</button>` : ''}
-          </div>
+          ${actionButtonsHtml}
           <div class="stats">
             <div>
-              <span class="stat-number" id="followers-count">${user.followersCount || 0}</span>
+              <span class="stat-number" id="followers-count">${user.followers?.length || 0}</span>
               <span class="stat-label">Seguidores</span>
             </div>
             <div>
-              <span class="stat-number" id="following-count">${user.followingCount || 0}</span>
+              <span class="stat-number" id="following-count">${user.following?.length || 0}</span>
               <span class="stat-label">Seguidos</span>
             </div>
           </div>
-          ${user.isPremium ? '<span class="badge premium">⭐ Premium</span>' : ''}
+          ${user.isPremium ? '<span class="badge premium">⭐ Premium</span>' : ""}
         `;
-        htmlElements.profileContent.innerHTML = heroContentHtml;
-
-        // Adjunta el event listener al botón de seguir/dejar de seguir
         if (!isMyProfile) {
-          const followBtn = document.getElementById('follow-unfollow-btn');
-          if (followBtn) {
-            followBtn.addEventListener('click', handlers.handleFollowToggle);
-          }
+          document
+            .getElementById("follow-unfollow-btn")
+            .addEventListener("click", handlers.handleFollowToggle);
+          document
+            .getElementById("block-unblock-btn")
+            .addEventListener("click", handlers.handleBlockToggle);
         }
       },
 
-      // Renderiza una tarjeta de historia individual
+      updateFollowButtonUI() {
+        const btn = document.getElementById("follow-unfollow-btn");
+        if (!btn) return;
+        btn.textContent = isFollowing ? "Dejar de seguir" : "Seguir";
+        btn.className = isFollowing ? "btn-primary btn-unfollow" : "btn-primary btn-follow";
+      },
+
+      updateBlockButtonUI() {
+        const btn = document.getElementById("block-unblock-btn");
+        if (!btn) return;
+        btn.textContent = isBlocked ? "Desbloquear" : "Bloquear";
+        btn.className = isBlocked ? "btn-outline btn-unblock" : "btn-outline btn-block";
+      },
+
       renderStoryCard(story) {
         const storyCard = document.createElement("a");
         storyCard.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
         storyCard.className = "story-card";
         storyCard.innerHTML = `
-          <img src="${story.coverImage || '/images/default-cover.jpg'}" alt="${story.title}" class="story-cover" />
+          <img src="${story.coverImage || "/frontend/resources/default-cover.png"}" alt="${
+          story.title
+        }" class="story-cover" />
           <div class="story-info">
             <h3>${story.title}</h3>
             <div class="story-stats">Capítulos: ${story.chapterCount || 0}</div>
-            <p>${story.description ? story.description.substring(0, 70) + '...' : 'Sin descripción'}</p>
+            <p>${
+              story.description ? story.description.substring(0, 70) + "..." : "Sin descripción"
+            }</p>
             <div class="badges">
-              ${story.category ? `<span class="badge categoria">${story.category.name}</span>` : ''}
-              ${story.status ? `<span class="badge estado ${story.status === 'published' ? 'completada' : story.status === 'draft' ? 'en-curso' : 'pausada'}">${methods.mapStatus(story.status)}</span>` : ''}
+              ${story.category ? `<span class="badge categoria">${story.category.name}</span>` : ""}
+              ${
+                story.status
+                  ? `<span class="badge estado ${
+                      story.status === "published"
+                        ? "completada"
+                        : story.status === "draft"
+                        ? "en-curso"
+                        : "pausada"
+                    }">${methods.mapStatus(story.status)}</span>`
+                  : ""
+              }
             </div>
           </div>
         `;
         return storyCard;
       },
 
-      // Mapea el estado de la historia a un texto legible
       mapStatus(status) {
         switch (status) {
-          case "draft": return "Borrador";
-          case "published": return "Publicada";
-          case "archived": return "Archivada";
-          default: return "Desconocido";
+          case "draft":
+            return "Borrador";
+          case "published":
+            return "Publicada";
+          case "archived":
+            return "Archivada";
+          default:
+            return "Desconocido";
         }
       },
     };
-
-    // --- Manejadores de Eventos ---
     const handlers = {
       async loadProfileAndStories() {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("Debes iniciar sesión para ver perfiles.");
+        fetch("/frontend/modules/main/navbar/navbar.html")
+          .then((res) => res.text())
+          .then((html) => (htmlElements.navbarPlaceholder.innerHTML = html));
+
+        if (!localStorage.getItem("token") || !profileUserId) {
           window.location.href = "/frontend/modules/auth/login/login.html";
           return;
         }
 
-        // 1. Obtener el ID del usuario actualmente logueado
-        const currentUserResponse = await methods.fetchAPI(`${API_BASE_URL}`);
-        if (!currentUserResponse) return;
-        currentLoggedInUserId = currentUserResponse._id;
+        const [currentUserData, profileData] = await Promise.all([
+          methods.fetchAPI(`${API_USER_BASE_URL}/me`),
+          methods.fetchAPI(`${API_USER_BASE_URL}/${profileUserId}`),
+        ]);
 
-        let profileToLoadId = profileUserId;
-        let isMyProfile = false;
-
-        // Si no hay ID en la URL o el ID es el del usuario logueado, carga el perfil propio
-        if (!profileToLoadId || profileToLoadId === currentLoggedInUserId) {
-          profileToLoadId = currentLoggedInUserId;
-          isMyProfile = true;
-        }
-
-        // 2. Obtener los datos del perfil (propio o ajeno)
-        const profileData = await methods.fetchAPI(`${API_BASE_URL}/user/${profileToLoadId}`);
-        if (!profileData) return;
-        const userProfile = profileData; // Asumiendo que la API devuelve el objeto de usuario directamente
-
-        // 3. Verificar si el usuario logueado sigue a este perfil (solo si no es su propio perfil)
-        let isFollowing = false;
-        if (!isMyProfile) {
-          const followingList = await methods.fetchAPI(`${API_BASE_URL}/user/me/following`);
-          if (followingList && followingList.following) {
-            isFollowing = followingList.following.some(f => f._id === userProfile._id);
-          }
-        }
-        
-        // 4. Renderizar la sección hero del perfil
-        methods.renderProfileHero(userProfile, isMyProfile, isFollowing);
-
-        // 5. Renderizar la biografía
-        htmlElements.bio.textContent = userProfile.bio || "No hay biografía.";
-
-        // 6. Obtener las historias del usuario del perfil
-        // Asumiendo que esta ruta devuelve las historias del autor especificado
-        const userStoriesResponse = await methods.fetchAPI(`${API_BASE_URL}/stories/author/${userProfile._id}`);
-        if (!userStoriesResponse || !userStoriesResponse.stories) {
-          htmlElements.storiesGrid.innerHTML = '<p>No se encontraron historias.</p>';
-          htmlElements.storyCount.textContent = '0';
+        if (!profileData) {
+          document.querySelector(
+            "main"
+          ).innerHTML = `<div class="card" style="text-align: center;"><h1>Usuario no encontrado</h1><p>El perfil que buscas no existe o fue eliminado.</p></div>`;
           return;
         }
-        const userStories = userStoriesResponse.stories;
 
-        // 7. Renderizar las historias
+        if (!currentUserData) return;
+
+        const isMyProfile = profileUserId === currentUserData._id;
+
+        methods.renderProfileHero(profileData, isMyProfile);
+
+        if (!isMyProfile) {
+          isFollowing = currentUserData.following.includes(profileData._id);
+          isBlocked = currentUserData.blockedUsers.includes(profileData._id);
+          methods.updateFollowButtonUI();
+          methods.updateBlockButtonUI();
+        }
+
+        htmlElements.bio.textContent = profileData.bio || "No hay biografía disponible.";
+        const storiesData = await methods.fetchAPI(`${API_STORY_BASE_URL}/author/${profileUserId}`);
+        const userStories = storiesData?.stories || [];
         htmlElements.storyCount.textContent = userStories.length;
-        htmlElements.storiesGrid.innerHTML = ''; // Limpiar contenido previo
-        if (userStories.length > 0) {
-          userStories.forEach(story => {
-            htmlElements.storiesGrid.appendChild(methods.renderStoryCard(story));
+        htmlElements.storiesGrid.innerHTML = "";
+
+        if (isBlocked) {
+          htmlElements.bio.parentElement.style.display = "none";
+          htmlElements.storiesGrid.parentElement.style.display = "none";
+        } else if (userStories.length > 0) {
+          userStories.forEach((story) => {
+            const storyCard = methods.renderStoryCard(story);
+            htmlElements.storiesGrid.appendChild(storyCard);
           });
         } else {
-          htmlElements.storiesGrid.innerHTML = '<p>No hay historias publicadas por este usuario.</p>';
+          htmlElements.storiesGrid.innerHTML = "<p>Este usuario aún no ha publicado historias.</p>";
         }
       },
 
-      // Maneja la acción de seguir/dejar de seguir
-      async handleFollowToggle(event) {
-        const btn = event.target;
-        const userIdToFollow = profileUserId; // El ID del perfil que se está viendo
-
-        if (!userIdToFollow) return; 
-
-        const currentText = btn.textContent;
-        let apiEndpoint = '';
-        let successMessage = '';
-        let errorMessage = '';
-
-        if (currentText === 'Seguir') {
-          apiEndpoint = `${API_BASE_URL}/user/${userIdToFollow}/follow`;
-          successMessage = '¡Usuario seguido con éxito!';
-          errorMessage = 'Error al seguir al usuario.';
-        } else { // 'Dejar de seguir'
-          apiEndpoint = `${API_BASE_URL}/user/${userIdToFollow}/unfollow`;
-          successMessage = 'Usuario dejado de seguir.';
-          errorMessage = 'Error al dejar de seguir al usuario.';
+      async handleFollowToggle() {
+        const btn = document.getElementById("follow-unfollow-btn");
+        btn.disabled = true;
+        const apiEndpoint = isFollowing ? `/unfollow` : `/follow`;
+        const result = await methods.fetchAPI(
+          `${API_USER_BASE_URL}/${profileUserId}${apiEndpoint}`,
+          { method: "POST" }
+        );
+        if (result?.success) {
+          const followersCountEl = document.getElementById("followers-count");
+          const count = parseInt(followersCountEl.textContent, 10);
+          isFollowing = !isFollowing;
+          followersCountEl.textContent = isFollowing ? count + 1 : count - 1;
+          methods.updateFollowButtonUI();
+          methods.showNotification(
+            isFollowing ? "¡Ahora sigues a este usuario!" : "Has dejado de seguir al usuario."
+          );
         }
+        btn.disabled = false;
+      },
 
-        const result = await methods.fetchAPI(apiEndpoint, { method: 'POST' });
-
-        if (result && !result.error) {
-          alert(successMessage);
-          // Recargar los datos del perfil para actualizar contadores y estado del botón
-          handlers.loadProfileAndStories(); 
-        } else {
-          alert(errorMessage + (result ? ` ${result.message}` : ''));
+      async handleBlockToggle() {
+        const btn = document.getElementById("block-unblock-btn");
+        btn.disabled = true;
+        const apiEndpoint = isBlocked ? `/unblock` : `/block`;
+        const result = await methods.fetchAPI(
+          `${API_USER_BASE_URL}/${profileUserId}${apiEndpoint}`,
+          { method: "POST" }
+        );
+        if (result?.success) {
+          isBlocked = !isBlocked;
+          methods.updateBlockButtonUI();
+          methods.showNotification(isBlocked ? "Usuario bloqueado." : "Usuario desbloqueado.");
+          const bioSection = htmlElements.bio.parentElement;
+          const storiesSection = htmlElements.storiesGrid.parentElement;
+          bioSection.style.display = isBlocked ? "none" : "block";
+          storiesSection.style.display = isBlocked ? "none" : "block";
         }
+        btn.disabled = false;
       },
     };
 
-    // --- Inicialización ---
-    const init = () => {
-      handlers.loadProfileAndStories();
+    return {
+      init: () => document.addEventListener("DOMContentLoaded", handlers.loadProfileAndStories),
     };
-
-    return { init };
   })();
 
   PublicProfileApp.init();

@@ -51,7 +51,12 @@ async function loginUser({ email, password }) {
 
 // Obtener perfil
 async function getUserById({ userId }) {
-  const user = await User.findById(userId).select("-password");
+  const user = await User.findById(userId)
+    .select("-password")
+    .select(
+      "fullName username email profileImage role bio subscription following followers blockedUsers coins"
+    )
+    .lean();
   if (!user) throw new Error("Usuario no encontrado");
   console.log("Usuario encontrado:", user);
   return user;
@@ -59,9 +64,9 @@ async function getUserById({ userId }) {
 
 // Editar perfil
 async function updateUser({ userId, data }) {
-  // Si en 'data' viene el campo 'profileImage' con la URL, 
-  // Mongoose lo actualizará correctamente.
-  const updatedUser = await User.findByIdAndUpdate(userId, { $set: data }, { new: true }).select("-password");
+  const updatedUser = await User.findByIdAndUpdate(userId, { $set: data }, { new: true }).select(
+    "-password"
+  );
   return updatedUser;
 }
 
@@ -118,7 +123,7 @@ async function followUser({ currentUserId, targetUserId }) {
 
   await Promise.all([currentUser.save(), targetUser.save()]);
 
-  return { message: "Usuario seguido correctamente" };
+  return { success: true, message: "Usuario seguido correctamente" };
 }
 
 // Dejar de seguir
@@ -146,7 +151,7 @@ async function unfollowUser({ currentUserId, targetUserId }) {
 
   await Promise.all([currentUser.save(), targetUser.save()]);
 
-  return { message: "Dejaste de seguir al usuario correctamente" };
+  return { success: true, message: "Dejaste de seguir al usuario correctamente" };
 }
 
 // Bloquear usuario
@@ -168,7 +173,7 @@ async function blockUser({ currentUserId, targetUserId }) {
   currentUser.blockedUsers.push(targetUserId);
   await currentUser.save();
 
-  return { message: "Usuario bloqueado correctamente" };
+  return { success: true, message: "Usuario bloqueado correctamente" };
 }
 
 // Desbloquear usuario
@@ -192,7 +197,7 @@ async function unblockUser({ currentUserId, targetUserId }) {
   );
   await currentUser.save();
 
-  return { message: "Usuario desbloqueado correctamente" };
+  return { success: true, message: "Usuario desbloqueado correctamente" };
 }
 
 // Obtener bloqueados

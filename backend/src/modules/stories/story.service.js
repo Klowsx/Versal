@@ -119,6 +119,21 @@ async function getStoriesByAuthor(authorId) {
   }
 }
 
+async function getPublicStoriesByAuthor(authorId) {
+  try {
+    const stories = await Story.find({ author: authorId, status: "published" })
+      .sort({ updatedAt: -1 })
+      .populate("category", "name")
+      .populate("tags", "name")
+      .lean();
+
+    return { stories };
+  } catch (error) {
+    console.error(`Error obteniendo historias para el autor ${authorId}:`, error);
+    return { error: "Failed to retrieve user's stories." };
+  }
+}
+
 async function updateStory(storyId, updateData) {
   try {
     const { category: categoryName, tags: tagNames, ...rest } = updateData;
@@ -280,4 +295,5 @@ module.exports = {
   getStoriesByTag,
   getAllCategories,
   getAllTags,
+  getPublicStoriesByAuthor,
 };

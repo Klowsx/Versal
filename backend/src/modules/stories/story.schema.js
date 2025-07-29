@@ -325,7 +325,16 @@ const getAllTagsSchema = {
   },
 };
 
+const authorIdParamSchema = {
+  type: "object",
+  properties: {
+    authorId: { type: "string", description: "ID del autor cuyas historias se desean obtener" },
+  },
+  required: ["authorId"],
+};
+
 module.exports = {
+  authorIdParamSchema,
   createStorySchema,
   getStoryByIdSchema,
   getAllStoriesSchema,

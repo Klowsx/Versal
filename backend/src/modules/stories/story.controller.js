@@ -105,6 +105,25 @@ async function getStoriesByAuthor(request, reply) {
   }
 }
 
+// obtener las historias de autor por ID para perfil publico
+async function getStoriesByAuthorPublic(request, reply) {
+  try {
+    const { authorId } = request.params;
+    const result = await storyService.getPublicStoriesByAuthor(authorId);
+
+    if (result.error) {
+      return reply.code(500).send({ error: result.error });
+    }
+
+    reply.send(result);
+  } catch (error) {
+    console.error("Error en el controlador getStoriesByAuthorPublic:", error);
+    reply
+      .code(500)
+      .send({ error: "Ocurrió un error inesperado al obtener las historias del autor." });
+  }
+}
+
 // Controlador para actualizar una historia
 async function updateStory(request, reply) {
   try {
@@ -226,4 +245,5 @@ module.exports = {
   getStoriesByTag,
   getAllCategories,
   getAllTags,
+  getStoriesByAuthorPublic,
 };

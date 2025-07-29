@@ -12,6 +12,7 @@ const {
   getStoriesByTagSchema,
   getAllCategoriesSchema,
   getAllTagsSchema,
+  authorIdParamSchema,
 } = require("./story.schema");
 
 async function storyRoutes(fastify) {
@@ -22,6 +23,17 @@ async function storyRoutes(fastify) {
   // Obtener categorías y etiquetas
   fastify.get("/categories", { schema: getAllCategoriesSchema }, storyController.getAllCategories);
   fastify.get("/tags", { schema: getAllTagsSchema }, storyController.getAllTags);
+
+  fastify.get(
+    "/author/:authorId",
+    {
+      schema: {
+        params: authorIdParamSchema,
+        response: getAuthorStoriesSchema.response,
+      },
+    },
+    storyController.getStoriesByAuthorPublic
+  );
 
   // --- Rutas Privadas ---
   fastify.register(async function (privateRoutes) {

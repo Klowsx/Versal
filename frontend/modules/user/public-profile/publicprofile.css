@@ -32,10 +32,12 @@ a {
 }
 
 /* Asegura que el perfil no se oculte detrás del navbar */
-.profile-content {
-  padding-top: 120px;
+.main {
+  padding-top: 90px; /* Ajuste para el navbar fijo, si tiene altura similar a 90px */
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
-
 
 .header-actions {
   display: flex;
@@ -49,16 +51,14 @@ a {
   padding: 0.4rem 1rem;
   border-radius: 999px;
   cursor: pointer;
+  transition: all 0.2s; /* Añadido para transiciones suaves */
+}
+.btn-outline:hover {
+  background: rgba(233, 213, 255, 0.8); /* Un ligero cambio de fondo al pasar el ratón */
 }
 
 .icon-only {
   padding: 0.5rem;
-}
-
-.main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
 }
 
 .profile-hero {
@@ -148,13 +148,52 @@ a {
   font-weight: bold;
 }
 
-.btn-follow {
+/* Botones de acción para seguir/bloquear */
+.btn-follow,
+.btn-block,
+.btn-unfollow,
+.btn-unblock {
   background: white;
   color: #7e22ce;
   padding: 0.5rem 2rem;
   border-radius: 999px;
   font-weight: bold;
   cursor: pointer;
+  border: 1px solid #7e22ce; /* Borde para consistencia */
+  transition: all 0.2s;
+}
+
+.btn-follow:hover,
+.btn-block:hover {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border-color: #6b21a8;
+}
+
+/* Estilo para el botón "Dejar de seguir" */
+.btn-unfollow {
+  background: #ffeded; /* Un tono rojizo claro */
+  color: #dc2626; /* Texto rojo */
+  border-color: #dc2626; /* Borde rojo */
+}
+
+.btn-unfollow:hover {
+  background: #ffdddd;
+  color: #c00000;
+  border-color: #c00000;
+}
+
+/* Estilo para el botón "Desbloquear" */
+.btn-unblock {
+  background: #e0f2fe; /* Un tono azul claro */
+  color: #2563eb; /* Texto azul */
+  border-color: #2563eb; /* Borde azul */
+}
+
+.btn-unblock:hover {
+  background: #d0ebff;
+  color: #1a4cd4;
+  border-color: #1a4cd4;
 }
 
 .stats {
@@ -167,11 +206,12 @@ a {
 .stat-number {
   font-size: 1.5rem;
   font-weight: bold;
+  color: white; /* Asegurarse de que los números sean blancos sobre el hero-bg */
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #ddd6fe;
+  color: #e9d5ff; /* Color más claro para las etiquetas */
 }
 
 .card {
@@ -180,7 +220,7 @@ a {
   border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .bio {
@@ -244,6 +284,17 @@ a {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .categoria {
@@ -251,22 +302,46 @@ a {
   color: #7e22ce;
 }
 
+.estado.completada {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
 .estado.en-curso {
   background: #d1fae5;
   color: #065f46;
 }
-
 .estado.pausada {
   background: #fef3c7;
   color: #92400e;
 }
 
-.estado.completada {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
 .stories-count {
   background: #ede9fe;
   color: #6b21a8;
+}
+
+.editor-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  pointer-events: none;
+  text-align: center;
+}
+
+.editor-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.editor-notification.error {
+  background-color: #f44336;
 }

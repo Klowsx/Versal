@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,30 +8,27 @@
   <link rel="stylesheet" href="publicprofile.css" />
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
 </head>
+
 <body>
 
   <div id="navbar-placeholder"></div>
 
   <main class="main">
-    <!-- Hero Profile (contenido dinámico) -->
     <section class="profile-hero">
       <div class="hero-bg"></div>
       <div id="profile-content" class="profile-content"></div>
     </section>
 
-    <!-- Biografía -->
     <section class="card">
       <p id="bio" class="bio"></p>
     </section>
 
-    <!-- Historias -->
     <section class="card">
       <div class="card-header">
         <h2 id="story-title">Historias</h2>
         <span id="story-count" class="badge stories-count"></span>
       </div>
       <div id="stories-grid" class="stories-grid">
-        <!-- Historias se cargan por JS -->
       </div>
     </section>
   </main>
@@ -38,4 +36,5 @@
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="publicprofile.js"></script>
 </body>
+
 </html>
