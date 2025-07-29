@@ -13,7 +13,7 @@ async function interactionRoutes(fastify) {
     privateRoutes.post("/chapters/:id/interactions", interactionController.addInteractionToChapter);
 
     // Eliminar cualquier interacción por su ID
-    privateRoutes.delete("/interactions/:interactionId", interactionController.deleteInteraction);
+    privateRoutes.delete("/:interactionId", interactionController.deleteInteraction);
   });
 
   // Ruta para obtener las interacciones de un capítulo

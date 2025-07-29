@@ -1,54 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Leer Historia</title>
   <link rel="stylesheet" href="read_story.css" />
   <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
 
   <div id="navbar-placeholder"></div>
 
   <div class="lectura-container">
     <div class="historia-header">
-      <img src="" alt="Avatar" class="avatar" id="author-avatar" />
-      <div class="info-autor">
-        <h3 id="story-author-name"></h3>
-        <p class="username" id="story-author-username"></p>
+      <div class="author-info-clickable" id="author-profile-link">
+        <img src="" alt="Avatar" class="avatar" id="author-avatar" />
+        <div class="info-autor">
+          <h3 id="story-author-name"></h3>
+          <p class="username" id="story-author-username"></p>
+        </div>
       </div>
       <span class="categoria" id="story-category"></span>
-      <div class="menu-puntos">...</div>
     </div>
 
     <h1 class="titulo-historia" id="story-title"></h1>
     <div class="meta-info">
-      <span id="story-reads">0 lecturas</span>
       <span id="story-likes-count">0 me gusta</span>
       <span class="estado" id="story-status"></span>
     </div>
 
-    <div class="chapter-navigation">
-      <button id="prev-chapter-btn" class="btn-nav">Capítulo Anterior</button>
-      <select id="chapter-select" class="modal-select"></select>
-      <button id="next-chapter-btn" class="btn-nav">Siguiente Capítulo</button>
-    </div>
+    <div id="chapter-section-content">
+      <div class="chapter-navigation">
+        <button id="prev-chapter-btn" class="btn-nav">Capítulo Anterior</button>
+        <select id="chapter-select" class="modal-select"></select>
+        <button id="next-chapter-btn" class="btn-nav">Siguiente Capítulo</button>
+      </div>
 
-    <div class="capitulo" id="chapter-details-container">
-      <h2 id="chapter-title"></h2>
-      <p class="fecha" id="chapter-publish-date"></p>
-      <div class="contenido" id="chapter-content">
+      <div class="capitulo" id="chapter-details-container">
+        <h2 id="chapter-title"></h2>
+        <p class="fecha" id="chapter-publish-date"></p>
+        <div class="contenido" id="chapter-content">
         </div>
 
-      <div class="acciones-final">
-        <button class="btn-icon" id="like-chapter-btn">
-          <span id="like-icon">❤️</span> <span id="like-count">0</span>
-        </button>
-        <button class="btn-icon" id="show-comments-btn">
-          💬 <span id="comment-count">0</span>
-        </button>
+        <div class="acciones-final">
+          <button class="btn-icon" id="like-chapter-btn">
+            <span id="like-icon" class="far fa-heart"></span> <span id="like-count">0</span>
+          </button>
+          <button class="btn-icon" id="show-comments-btn">
+            <span class="fas fa-comment"></span> <span id="comment-count">0</span>
+          </button>
+        </div>
       </div>
+    </div>
+
+    <div id="no-chapters-message" style="display: none; text-align: center; margin-top: 50px;">
+      <p>Lo sentimos, esta historia aún no tiene capítulos publicados.</p>
+      <button id="back-to-preview-btn" class="btn-nav">Volver a la Vista Previa</button>
     </div>
 
     <div class="comentarios-seccion" style="display: none;">
@@ -56,15 +68,15 @@
       <div class="agregar-comentario">
         <textarea id="comment-input" placeholder="Escribe tu comentario..."></textarea>
         <button class="btn btn-primary" id="post-comment-btn">Comentar</button>
-        <p id="comment-message" class="modal-message"></p>
       </div>
       <div class="lista-comentarios" id="comments-list">
-        </div>
+      </div>
     </div>
   </div>
 
   <div id="reportCommentModal" class="modal">
     <div class="modal-content">
+      <span class="close-button" id="close-report-comment-modal">&times;</span>
       <h3>Reportar Comentario</h3>
       <label for="reportCommentReason">Razón del reporte:</label>
       <select id="reportCommentReason" class="modal-select">
@@ -79,7 +91,6 @@
       </select>
       <label for="reportCommentDetails" style="margin-top: 15px;">Detalles (opcional):</label>
       <textarea id="reportCommentDetails" class="modal-textarea" rows="4"></textarea>
-      <p id="reportCommentModalMessage" class="modal-message"></p>
       <div class="modal-buttons">
         <button class="btn-cancel" id="cancelReportComment">Cancelar</button>
         <button class="btn-donate" id="confirmReportComment">Reportar</button>
@@ -90,4 +101,5 @@
   <script src="/frontend/modules/main/navbar/navbar.js"></script>
   <script src="read_story.js"></script>
 </body>
+
 </html>

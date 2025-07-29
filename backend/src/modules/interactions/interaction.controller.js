@@ -1,10 +1,27 @@
 const interactionService = require("./interaction.service");
 
-// Añadir una interacción (like o comentario)
 async function addInteractionToChapter(request, reply) {
   const { id: chapterId } = request.params;
   const { userId } = request.user;
-  const { interactionType, text } = request.body;
+
+  let requestBody = request.body;
+
+  // Verifica si el cuerpo de la petición es una cadena y pársalo como JSON
+  // Esto es un workaround si Fastify no lo parsea automáticamente
+  if (typeof requestBody === "string") {
+    try {
+      requestBody = JSON.parse(requestBody);
+    } catch (e) {
+      // Si el parsing falla, no es un JSON válido
+      return reply.code(400).send({ message: "Invalid JSON body received." });
+    }
+  }
+
+  // Ahora, desestructura desde el requestBody ya parseado
+  const { interactionType, text } = requestBody;
+
+  console.log("Request Body recibido (final):", requestBody);
+  console.log("interactionType recibido (final):", interactionType);
 
   const result = await interactionService.addInteractionToChapter({
     chapterId,
@@ -13,7 +30,9 @@ async function addInteractionToChapter(request, reply) {
     text,
   });
 
-  if (result.error) return reply.code(400).send(result);
+  if (result.error) {
+    return reply.code(400).send(result);
+  }
   reply.code(201).send(result);
 }
 

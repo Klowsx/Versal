@@ -4,7 +4,6 @@ body {
   font-family: "Segoe UI", sans-serif;
   background: linear-gradient(to bottom right, #f4ecff, #ffffff);
   color: #4a2a7c;
-  
 }
 
 .lectura-container {
@@ -14,6 +13,19 @@ body {
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(138, 43, 226, 0.1);
+}
+
+
+.author-info-clickable {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.author-info-clickable:hover {
+  opacity: 0.8;
 }
 
 .historia-header {
@@ -119,6 +131,14 @@ body {
   align-items: center;
   gap: 4px;
 }
+.btn-icon #like-icon {
+  font-size: 1.5rem; 
+  transition: color 0.2s;
+}
+
+.btn-icon #like-icon.liked {
+  color: #ff0000;
+}
 
 .menu-puntos {
   position: relative;
@@ -141,7 +161,7 @@ body {
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   padding: 8px 0;
   display: none;
   min-width: 150px;
@@ -169,7 +189,7 @@ body {
   background-color: #f3ebff;
 }
 
-/* New styles for chapter navigation */
+/* Styles for chapter navigation */
 .chapter-navigation {
   display: flex;
   justify-content: space-between;
@@ -194,7 +214,12 @@ body {
   background-color: #6a0dad;
 }
 
-.modal-select { /* Reusing existing modal-select style */
+.btn-nav:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.modal-select {
   flex-grow: 1;
   padding: 8px;
   border: 1px solid #d3bfff;
@@ -204,7 +229,6 @@ body {
   color: #4a2a7c;
 }
 
-/* Styles for comments section */
 .comentarios-seccion {
   margin-top: 30px;
   padding-top: 20px;
@@ -257,7 +281,7 @@ body {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   position: relative;
 }
 
@@ -271,6 +295,7 @@ body {
 .comentario-item .info-usuario .avatar {
   width: 35px;
   height: 35px;
+  border-radius: 100%; 
 }
 
 .comentario-item .info-usuario .username {
@@ -283,7 +308,7 @@ body {
   line-height: 1.6;
   color: #333;
   margin-bottom: 10px;
-  white-space: pre-wrap; /* Preserve whitespace and line breaks */
+  white-space: pre-wrap;/
 }
 
 .comentario-item .meta-comentario {
@@ -308,10 +333,162 @@ body {
   color: #6a0dad;
 }
 
-/* Estilos para el modal de reportar comentario, reusando .modal, .modal-content de preview.css */
-/* Specific overrides if needed */
-#reportCommentModal .modal-select,
-#reportCommentModal .modal-textarea {
-  width: calc(100% - 20px); /* Adjust width to fit modal-content padding */
-  box-sizing: border-box; /* Include padding in the width calculation */
+/* Estilos para el modal de reportar comentario */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal.show-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: #4c1d95;
+  position: relative;
+  transform: translateY(-50px);
+  transition: transform 0.3s ease-in-out;
+}
+
+.modal.show-modal .modal-content {
+  transform: translateY(0);
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #6b21a8;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.modal-content input[type="number"],
+.modal-content .modal-select,
+.modal-content .modal-textarea {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #e9d5ff;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #f9f5ff;
+  box-sizing: border-box;
+}
+
+.modal-content .modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.modal-content .modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  flex: 1;
+}
+
+.modal-content .modal-buttons .btn-cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+.modal-content .modal-buttons .btn-cancel:hover {
+  background-color: #bbb;
+}
+
+.modal-content .modal-buttons .btn-donate,
+.modal-content .modal-buttons .btn-report,
+.modal-content .modal-buttons .btn-block {
+  background-color: #7c3aed;
+  color: white;
+}
+
+.modal-content .modal-buttons .btn-donate:hover,
+.modal-content .modal-buttons .btn-report:hover,
+.modal-content .modal-buttons .btn-block:hover {
+  background-color: #6d28d9;
+}
+
+.modal-message {
+  margin-top: 15px;
+  color: #e53e3e;
+  font-weight: bold;
+}
+
+.current-coins {
+  font-size: 0.9em;
+  color: #7e22ce;
+  margin-bottom: 15px;
+}
+
+.editor-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  pointer-events: none;
+  text-align: center;
+}
+
+.editor-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.editor-notification.error {
+  background-color: #f44336; 
 }

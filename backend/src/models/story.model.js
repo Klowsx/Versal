@@ -21,6 +21,7 @@ const StorySchema = new mongoose.Schema(
     status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },
     chapterCount: { type: Number, default: 0 },
     isAdultContent: { type: Boolean, default: false },
+    totalLikes: { type: Number, default: 0 },
   },
   {
     timestamps: true,

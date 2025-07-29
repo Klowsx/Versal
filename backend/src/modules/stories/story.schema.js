@@ -32,6 +32,7 @@ const storyProperties = {
   chapterCount: { type: "number" },
   status: { type: "string", enum: ["draft", "published", "archived"] },
   isAdultContent: { type: "boolean" },
+  totalLikes: { type: "number" },
   createdAt: { type: "string", format: "date-time" },
   updatedAt: { type: "string", format: "date-time" },
 };
