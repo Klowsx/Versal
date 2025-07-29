@@ -304,23 +304,48 @@
         htmlElements.reportModal.style.display = "none";
       },
 
+      handleLogout() {
+        localStorage.clear();
+
+        alert("a");
+        setTimeout(() => {
+          window.location.replace("/frontend/modules/auth/login/login.html");
+        }, 1500);
+      },
+
       async initializeAdminPage() {
         try {
           const response = await fetch("/frontend/modules/admin/navbar/navbar.html");
-          htmlElements.adminNavbarPlaceholder.innerHTML = await response.text();
-          document
-            .querySelectorAll(".admin-nav a")
-            .forEach((l) => l.addEventListener("click", handlers.handleNavLinkClick));
+          const navbarHtml = await response.text();
+          htmlElements.adminNavbarPlaceholder.innerHTML = navbarHtml;
+
+          document.querySelectorAll(".admin-nav a").forEach((link) => {
+            link.addEventListener("click", handlers.handleNavLinkClick);
+          });
+
+          const logoutBtn = document.getElementById("admin-logout-btn");
+          if (logoutBtn) {
+            logoutBtn.addEventListener("click", (e) => {
+              e.preventDefault();
+              handlers.handleLogout();
+            });
+          }
+
+          // Asignar listeners del modal
           htmlElements.reportModalCloseBtn.addEventListener("click", handlers.closeReportModal);
+          window.addEventListener("click", (event) => {
+            if (event.target === htmlElements.reportModal) {
+              handlers.closeReportModal();
+            }
+          });
+
+          // Cargar filtros y estadísticas
           htmlElements.reportFilters
             .querySelectorAll(".filter-btn")
             .forEach((btn) => btn.addEventListener("click", handlers.handleReportFilterClick));
-          window.addEventListener("click", (e) => {
-            if (e.target === htmlElements.reportModal) handlers.closeReportModal();
-          });
           await methods.loadDashboardStats();
         } catch (error) {
-          console.error("Error al inicializar:", error);
+          console.error("Error al inicializar el panel de admin:", error);
         }
       },
     };
