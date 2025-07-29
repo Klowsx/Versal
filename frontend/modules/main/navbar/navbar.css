@@ -5,10 +5,11 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .navbar-placeholder {
@@ -176,7 +177,6 @@ html, body {
   color: #6b21a8; /* Color para el texto en negrita */
 }
 
-
 /* Responsive */
 @media (max-width: 768px) {
   .versal-navbar .navbar-container {
@@ -199,4 +199,8 @@ html, body {
     max-width: 100%;
     margin-top: 0.5rem;
   }
+}
+
+#nav-coins-link {
+  color: #e2c94c;
 }

@@ -7,6 +7,11 @@
       storiesGrid: document.getElementById("stories-grid"),
       storyTitle: document.getElementById("story-title"),
       navbarPlaceholder: document.getElementById("navbar-placeholder"),
+
+      userListModal: document.getElementById("user-list-modal"),
+      modalTitle: document.getElementById("modal-title"),
+      modalUserList: document.getElementById("modal-user-list"),
+      closeModalBtn: document.querySelector("#user-list-modal .close-button"),
     };
 
     const API_USER_BASE_URL = "http://localhost:3000/api/user";
@@ -74,38 +79,46 @@
       },
 
       renderProfileHero(user, isMyProfile) {
-        const actionButtonsHtml = isMyProfile
-          ? ""
-          : `
-          <div class="follow-section">
-            <button class="btn-primary" id="follow-unfollow-btn">Seguir</button>
-            <button class="btn-outline" id="block-unblock-btn">Bloquear</button>
-          </div>
-        `;
         htmlElements.profileContent.innerHTML = `
           <div class="avatar-container">
             <img src="${
               user.profileImage || "/frontend/resources/profile.png"
             }" alt="Avatar" class="avatar" />
-            ${user.isVerified ? '<span class="verificado">✓</span>' : ""}
           </div>
           <div class="name-username">
             <h1>${user.username || "Usuario"}</h1>
             <p>@${user.username?.toLowerCase() || "desconocido"}</p>
           </div>
-          ${actionButtonsHtml}
-          <div class="stats">
-            <div>
-              <span class="stat-number" id="followers-count">${user.followers?.length || 0}</span>
-              <span class="stat-label">Seguidores</span>
+          ${
+            isMyProfile
+              ? ""
+              : `
+            <div class="follow-section">
+              <button class="btn-primary" id="follow-unfollow-btn">Seguir</button>
+              <button class="btn-outline" id="block-unblock-btn">Bloquear</button>
             </div>
-            <div>
-              <span class="stat-number" id="following-count">${user.following?.length || 0}</span>
-              <span class="stat-label">Seguidos</span>
+          `
+          }
+          <div class="stats">
+            <div id="show-followers-btn">
+            
+              <span class="stat-label">Seguidores:</span>
+              <span class="stat-number">${user.followers?.length || 0}</span>
+            </div>
+            <div id="show-following-btn">
+              <span class="stat-label">Seguidos:</span>
+              <span class="stat-number">${user.following?.length || 0}</span>
             </div>
           </div>
-          ${user.isPremium ? '<span class="badge premium">⭐ Premium</span>' : ""}
         `;
+
+        document
+          .getElementById("show-followers-btn")
+          .addEventListener("click", handlers.handleShowFollowers);
+        document
+          .getElementById("show-following-btn")
+          .addEventListener("click", handlers.handleShowFollowing);
+
         if (!isMyProfile) {
           document
             .getElementById("follow-unfollow-btn")
@@ -231,6 +244,46 @@
         }
       },
 
+      handleShowFollowers() {
+        handlers.openUserListModal("Seguidores", `${API_USER_BASE_URL}/${profileUserId}/followers`);
+      },
+
+      handleShowFollowing() {
+        handlers.openUserListModal("Siguiendo", `${API_USER_BASE_URL}/${profileUserId}/following`);
+      },
+
+      async openUserListModal(title, apiUrl) {
+        htmlElements.modalTitle.textContent = title;
+        htmlElements.modalUserList.innerHTML = "<p>Cargando...</p>";
+        htmlElements.userListModal.style.display = "flex";
+
+        const users = await methods.fetchAPI(apiUrl);
+        htmlElements.modalUserList.innerHTML = "";
+
+        if (users && users.length > 0) {
+          users.forEach((user) => {
+            const userItem = document.createElement("a");
+            userItem.className = "user-list-item";
+            userItem.href = `/frontend/modules/user/public-profile/publicprofile.html?id=${user._id}`;
+            userItem.innerHTML = `
+              <img src="${user.profileImage || "/frontend/resources/profile.png"}" alt="${
+              user.username
+            }" />
+              <span>${user.username}</span>
+            `;
+            htmlElements.modalUserList.appendChild(userItem);
+          });
+        } else {
+          htmlElements.modalUserList.innerHTML = `<p>No se encontraron usuarios.</p>`;
+        }
+      },
+
+      closeModal() {
+        if (htmlElements.userListModal) {
+          htmlElements.userListModal.style.display = "none";
+        }
+      },
+
       async handleFollowToggle() {
         const btn = document.getElementById("follow-unfollow-btn");
         btn.disabled = true;
@@ -274,7 +327,16 @@
     };
 
     return {
-      init: () => document.addEventListener("DOMContentLoaded", handlers.loadProfileAndStories),
+      init: () => {
+        document.addEventListener("DOMContentLoaded", handlers.loadProfileAndStories);
+
+        htmlElements.closeModalBtn.addEventListener("click", handlers.closeModal);
+        window.addEventListener("click", (event) => {
+          if (event.target === htmlElements.userListModal) {
+            handlers.closeModal();
+          }
+        });
+      },
     };
   })();
 

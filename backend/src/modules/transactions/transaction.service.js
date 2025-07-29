@@ -40,8 +40,8 @@ async function createStripeCheckoutSessionForSubscription(userId, planId) {
           quantity: 1,
         },
       ],
-      success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/payment-canceled`,
+      success_url: `${FRONTEND_URL}/frontend/modules/payment/payment-success.html`,
+      cancel_url: `${FRONTEND_URL}/frontend/modules/payment/payment-canceled.html`,
       metadata: {
         userId: userId.toString(),
         type: "subscription",
@@ -105,8 +105,8 @@ async function createStripeCheckoutSessionForCoinPack(userId, coinPackId) {
           quantity: 1,
         },
       ],
-      success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/payment-canceled`,
+      success_url: `${FRONTEND_URL}/frontend/modules/payment/payment-success.html`,
+      cancel_url: `${FRONTEND_URL}/frontend/modules/payment/payment-canceled.html`,
       metadata: {
         userId: userId.toString(),
         type: "coin_pack_purchase",

@@ -75,6 +75,20 @@ async function userRoutes(fastify) {
     }
   );
 
+  //Seguidores
+  fastify.get(
+    "/:id/followers",
+    { schema: { params: userIdParamSchema } },
+    userController.getFollowers
+  );
+
+  //Seguidos
+  fastify.get(
+    "/:id/following",
+    { schema: { params: userIdParamSchema } },
+    userController.getFollowing
+  );
+
   // Rutas protegidas
   fastify.register(async function (privateRoutes) {
     privateRoutes.addHook("onRequest", fastify.authenticate);
@@ -109,10 +123,6 @@ async function userRoutes(fastify) {
       { schema: { body: changePasswordSchema } },
       userController.changePassword
     );
-
-    // Seguidores / Seguidos
-    privateRoutes.get("/me/followers", userController.getFollowers);
-    privateRoutes.get("/me/following", userController.getFollowing);
 
     // Bloqueados
     privateRoutes.get("/me/blocked", userController.getBlockedUsers);

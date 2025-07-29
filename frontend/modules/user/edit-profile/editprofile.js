@@ -1,75 +1,66 @@
 (() => {
   const EditProfileModule = (() => {
-    // --------------------------------------------------
-    // 1. API & ELEMENTS
-    // --------------------------------------------------
     const API_BASE_URL = "http://localhost:3000/api/user";
 
     const elements = {
       form: document.getElementById("editProfileForm"),
-      
-      // Header elements
+
       avatar: document.getElementById("avatar"),
       fullName: document.getElementById("fullName"),
       username: document.getElementById("username"),
       badge: document.getElementById("badge"),
       joinDate: document.getElementById("joinDate"),
 
-      // Form fields
       fileInput: document.getElementById("upload"),
       formFullName: document.getElementById("formFullName"),
       formUsername: document.getElementById("formUsername"),
       formEmail: document.getElementById("formEmail"),
       formBio: document.getElementById("formBio"),
       charCounter: document.getElementById("counter"),
-      
-      // Password fields
+
       oldPassword: document.getElementById("oldPassword"),
       newPassword: document.getElementById("newPassword"),
       confirmPassword: document.getElementById("confirmPassword"),
 
-      // Buttons
       cancelBtn: document.querySelector(".btn.cancel"),
     };
 
-    // --------------------------------------------------
-    // 2. METHODS
-    // --------------------------------------------------
     const methods = {
       loadAndPopulateUserData: async () => {
         try {
           const token = localStorage.getItem("token");
           if (!token) {
             alert("Sesión no válida. Por favor, inicia sesión.");
-            window.location.href = '/login.html'; // Ajusta a tu página de login
+            window.location.href = "/login.html";
             return;
           }
 
           const response = await fetch(`${API_BASE_URL}/me`, {
-            headers: { "Authorization": `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           });
 
           if (!response.ok) throw new Error("No se pudo cargar la información de tu perfil.");
 
           const user = await response.json();
-          
-          // Llenar el encabezado del perfil
+
           elements.avatar.src = user.profileImage || "../../../resources/profile.png";
           elements.fullName.textContent = user.fullName;
           elements.username.textContent = `@${user.username}`;
-          elements.badge.textContent = user.subscription?.type === "premium" ? "💎 Premium" : "✨ Básico";
+          elements.badge.textContent =
+            user.subscription?.type === "premium" ? "💎 Premium" : "✨ Básico";
           if (user.createdAt) {
-            const date = new Date(user.createdAt).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+            const date = new Date(user.createdAt).toLocaleDateString("es-ES", {
+              month: "long",
+              year: "numeric",
+            });
             elements.joinDate.textContent = `Miembro desde ${date}`;
           }
 
-          // Llenar el formulario con los datos
           elements.formFullName.value = user.fullName;
           elements.formUsername.value = user.username;
           elements.formEmail.value = user.email;
           elements.formBio.value = user.bio || "";
           methods.updateCharCounter();
-
         } catch (error) {
           console.error("Error al cargar el perfil:", error);
           alert(error.message);
@@ -91,9 +82,9 @@
 
       handleFormSubmit: async (event) => {
         event.preventDefault();
-        const saveButton = event.target.querySelector('.btn.save');
+        const saveButton = event.target.querySelector(".btn.save");
         saveButton.disabled = true;
-        saveButton.textContent = 'Guardando...';
+        saveButton.textContent = "Guardando...";
 
         try {
           const oldPass = elements.oldPassword.value;
@@ -102,6 +93,7 @@
             await methods.submitPasswordChange(oldPass, newPass);
           }
 
+          console.log("Intentando actualizar perfil");
           await methods.submitProfileUpdate();
 
           alert("Perfil actualizado correctamente.");
@@ -111,11 +103,11 @@
           console.error("Fallo el envío del formulario:", error);
         } finally {
           saveButton.disabled = false;
-          saveButton.textContent = 'Guardar Cambios';
+          saveButton.textContent = "Guardar Cambios";
         }
       },
 
-          submitProfileUpdate: async () => {
+      submitProfileUpdate: async () => {
         const formData = new FormData(elements.form);
 
         const file = elements.fileInput.files[0];
@@ -124,39 +116,36 @@
           formData.delete("profileImage");
         }
 
+        formData.delete("oldPassword");
+        formData.delete("newPassword");
+        formData.delete("confirmPassword");
 
-      formData.delete("oldPassword");
-      formData.delete("newPassword");
-      formData.delete("confirmPassword");
+        try {
+          const response = await fetch(`${API_BASE_URL}/me`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: formData,
+          });
 
-      try {
-        const response = await fetch(`${API_BASE_URL}/me`, {
-          method: "PUT",
-          headers: { 
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-            // NO pongas Content-Type: multipart/form-data aquí. fetch lo maneja solo con FormData
-          },
-          body: formData,
-        });
-
-        if (!response.ok) throw new Error("Error al actualizar la información del perfil.");
-      } catch (error) {
-        alert(`Error de perfil: ${error.message}`);
-        throw error;
-      }
-    },
-
+          if (!response.ok) throw new Error("Error al actualizar la información del perfil.");
+        } catch (error) {
+          alert(`Error de perfil: ${error.message}`);
+          throw error;
+        }
+      },
 
       submitPasswordChange: async (oldPassword, newPassword) => {
         if (newPassword !== elements.confirmPassword.value) {
-            throw new Error("Las nuevas contraseñas no coinciden.");
+          throw new Error("Las nuevas contraseñas no coinciden.");
         }
 
         try {
           const response = await fetch(`${API_BASE_URL}/me/password`, {
             method: "PUT",
             headers: {
-              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ oldPassword, newPassword }),

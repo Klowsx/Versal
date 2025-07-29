@@ -34,7 +34,16 @@
 
         card.dataset.stripePriceId = pack.stripePriceId;
 
-        const price = (pack.coins / 20).toFixed(2);
+        let priceText = "";
+        if (pack.coins === 100) {
+          priceText = "2.99 USD";
+        } else if (pack.coins === 500) {
+          priceText = "7.99 USD";
+        } else if (pack.coins === 1000) {
+          priceText = "14.99 USD";
+        } else {
+          priceText = "Precio no disponible";
+        }
 
         card.innerHTML = `
             <h3 class="name">${pack.name}</h3>
@@ -42,7 +51,7 @@
             <p class="coins">
             <span class=monedita>⍟</span>
             ${pack.coins}</p>
-            <p class="price">${price} USD</p>
+            <p class="price">${priceText} USD</p>
             <button class="buy-btn">Comprar</button>
         `;
         return card;

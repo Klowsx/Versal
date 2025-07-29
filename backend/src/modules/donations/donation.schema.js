@@ -30,6 +30,7 @@ const makeDonationSchema = {
       description: "Donación realizada exitosamente.",
       type: "object",
       properties: {
+        success: { type: "boolean" },
         donation: {
           type: "object",
           properties: {
@@ -47,7 +48,10 @@ const makeDonationSchema = {
     400: {
       description: "Error en la petición.",
       type: "object",
-      properties: { error: { type: "string" } },
+      properties: {
+        success: { type: "boolean", default: false },
+        message: { type: "string" },
+      },
     },
   },
 };

@@ -1,4 +1,3 @@
-// Versal/backend/src/models/transaction.model.js
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
@@ -25,7 +24,7 @@ const transactionSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["pending", "completed", "failed", "canceled"],
-      default: "pending",
+      default: "canceled",
     },
     paymentMethod: {
       type: String,

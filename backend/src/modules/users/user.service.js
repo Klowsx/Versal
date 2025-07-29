@@ -90,14 +90,14 @@ async function changePassword({ userId, oldPassword, newPassword }) {
 
 // Ver seguidores
 async function getFollowers({ userId }) {
-  const user = await User.findById(userId).populate("followers", "username email");
+  const user = await User.findById(userId).populate("followers", "username profileImage");
   if (!user) throw new Error("Usuario no encontrado");
   return user.followers;
 }
 
 // Ver seguidos
 async function getFollowing({ userId }) {
-  const user = await User.findById(userId).populate("following", "username email");
+  const user = await User.findById(userId).populate("following", "username profileImage");
   if (!user) throw new Error("Usuario no encontrado");
   return user.following;
 }

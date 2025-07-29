@@ -48,7 +48,7 @@ async function makeDonation(donatorId, storyId, amount, message) {
       },
     });
 
-    return { donation: newDonation };
+    return { success: true, donation: newDonation };
   } catch (error) {
     console.error("Error al procesar la donación:", error);
     return { error: "Ocurrió un error inesperado al procesar la donación." };

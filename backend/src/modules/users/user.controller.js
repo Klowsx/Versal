@@ -1,9 +1,8 @@
-
-const fs = require('fs');
-const util = require('util');
-const path = require('path');
-const { pipeline } = require('stream');
-const pump = util.promisify(pipeline); // Herramienta para manejar streams
+const fs = require("fs");
+const util = require("util");
+const path = require("path");
+const { pipeline } = require("stream");
+const pump = util.promisify(pipeline);
 const userService = require("./user.service");
 
 //Registro de usuario
@@ -60,17 +59,21 @@ async function getUserProfileById(req, reply) {
 // Actualizar usuario
 async function updateProfile(req, reply) {
   const data = {};
-  let imageUrl = null;
 
   const parts = req.parts();
   for await (const part of parts) {
     if (part.file) {
+      const uploadDir = path.join(__dirname, `../../../uploads/avatars`);
+
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
       const uniqueFilename = `${Date.now()}-${part.filename}`;
-      const uploadPath = path.join(__dirname, `../../../uploads/avatars`, uniqueFilename);
+      const uploadPath = path.join(uploadDir, uniqueFilename);
       await pump(part.file, fs.createWriteStream(uploadPath));
 
       const imageUrl = `${req.protocol}://${req.headers.host}/uploads/avatars/${uniqueFilename}`;
-      data.profileImage = imageUrl
+      data.profileImage = imageUrl;
     } else {
       data[part.fieldname] = part.value;
     }
@@ -122,13 +125,15 @@ async function unfollowUser(req, reply) {
 
 // Ver seguidores
 async function getFollowers(req, reply) {
-  const followers = await userService.getFollowers({ userId: req.user.userId });
+  const userId = req.params.id || req.user.userId;
+  const followers = await userService.getFollowers({ userId });
   reply.send(followers);
 }
 
 // Ver seguidos
 async function getFollowing(req, reply) {
-  const following = await userService.getFollowing({ userId: req.user.userId });
+  const userId = req.params.id || req.user.userId;
+  const following = await userService.getFollowing({ userId });
   reply.send(following);
 }
 

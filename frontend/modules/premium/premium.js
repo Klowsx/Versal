@@ -43,7 +43,7 @@
       renderPlanDetails(plan) {
         if (!plan) return;
 
-        const price = "4.99";
+        const price = "5.00";
 
         htmlElements.planName.textContent = plan.name;
         htmlElements.planDescription.textContent = plan.description;
@@ -84,7 +84,6 @@
         }
       },
 
-      // Manejar el clic en el botón de compra
       async handleBuyClick() {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -100,7 +99,6 @@
         htmlElements.buyButton.textContent = "Procesando...";
         htmlElements.buyButton.disabled = true;
 
-        // Iniciar el proceso de pago
         const result = await methods.fetchAPI(API_ENDPOINTS.CREATE_CHECKOUT, {
           method: "POST",
           headers: {
@@ -119,7 +117,6 @@
         }
       },
 
-      // Verificar si el usuario es Premium
       async checkUserStatus() {
         const token = localStorage.getItem("token");
         if (!token) {

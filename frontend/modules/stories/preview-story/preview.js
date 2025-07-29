@@ -230,7 +230,7 @@
     const handlers = {
       async handlePageLoad() {
         // REMOVED: fetch("/frontend/modules/main/navbar/navbar.html") - navbar.js handles this globally
-        
+
         const story = await methods.fetchStoryDetails();
         if (!story) return;
 
@@ -321,11 +321,13 @@
           return;
         }
 
+        console.log("Donando a: ", API_ENDPOINTS.DONATE_STORY(storyId));
         const donationResult = await methods.fetchAPI(API_ENDPOINTS.DONATE_STORY(storyId), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ amount }),
         });
+        console.log("Result: ", donationResult);
 
         if (donationResult && donationResult.success) {
           methods.showNotification("¡Donación realizada con éxito! Gracias por tu apoyo.");

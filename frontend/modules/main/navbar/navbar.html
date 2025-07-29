@@ -17,27 +17,29 @@
         </a>
 
         <div class="nav-item dropdown">
-          <button class="nav-link" onclick="window.location.href='/frontend/modules/stories/explore-story/explore_story.html'">Explorar ▼</button>
+          <button class="nav-link"
+            onclick="window.location.href='/frontend/modules/stories/explore-story/explore_story.html'">Explorar</button>
         </div>
 
         <div class="search-container">
           <input type="text" id="search-input" placeholder="Buscar historias, autores, géneros..." />
           <div id="search-results-dropdown" class="search-results-dropdown">
-            </div>
+          </div>
           <div id="filter-indicator" class="filter-indicator"></div>
         </div>
 
         <a href="/frontend/modules/stories/create-story/create_story.html" class="icon-button" title="Escribir">Crear
           historia</a>
 
-        <a href="/frontend/modules/coins/coins.html" class="icon-button" title="Donar">⍟ Monedas</a>
+        <a href="/frontend/modules/coins/coins.html" class="icon-button" title="Donar" id="nav-coins-link">⍟
+        </a>
 
         <a href="/frontend/modules/premium/premium.html" class="icon-button" title="Adquirir Premium">💎 Premium</a>
 
         <div class="nav-item dropdown">
           <button class="icon-button" title="Perfil">👤</button>
           <div class="dropdown-menu right">
-            <a href="/frontend/modules/user/public-profile/publicprofile.html">Perfil público</a>
+            <a href="#" id="public-profile-link">Perfil público</a>
             <a href="/frontend/modules/user/profile/profile.html">Ver perfil</a>
             <a href="/frontend/modules/stories/my-story/mystory.html">Mis Historias</a>
             <a href="#" id="logoutBtn">Cerrar Sesión</a>

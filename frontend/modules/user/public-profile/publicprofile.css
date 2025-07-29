@@ -33,10 +33,11 @@ a {
 
 /* Asegura que el perfil no se oculte detrás del navbar */
 .main {
-  padding-top: 90px; /* Ajuste para el navbar fijo, si tiene altura similar a 90px */
+  padding-top: 110px; /* Un poco más de espacio para el navbar fijo */
   max-width: 960px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .header-actions {
@@ -62,25 +63,27 @@ a {
 }
 
 .profile-hero {
-  position: relative;
-  margin-bottom: 4rem;
-}
-
-.hero-bg {
-  height: 260px;
+  /* Aplicamos el fondo directamente aquí */
   background: linear-gradient(to right, #9333ea, #7e22ce, #4f46e5);
   border-radius: 1.5rem;
-  position: relative;
+
+  /* Convertimos en un contenedor de columna */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centramos todo horizontalmente */
+
+  padding: 2rem; /* Espaciado interno */
+  margin-bottom: 2rem; /* Espacio hasta la tarjeta de la biografía */
 }
 
 .profile-content {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 40px);
+  /* Eliminamos el posicionamiento absoluto */
   text-align: center;
   width: 100%;
   color: white;
+
+  /* Hacemos que el avatar "suba" un poco para un efecto visual agradable */
+  margin-top: -80px;
 }
 
 .avatar-container {
@@ -204,14 +207,14 @@ a {
 }
 
 .stat-number {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
-  color: white; /* Asegurarse de que los números sean blancos sobre el hero-bg */
+  color: white;
 }
 
 .stat-label {
-  font-size: 0.75rem;
-  color: #e9d5ff; /* Color más claro para las etiquetas */
+  font-size: 1rem;
+  color: #e9d5ff;
 }
 
 .card {
@@ -344,4 +347,108 @@ a {
 
 .editor-notification.error {
   background-color: #f44336;
+}
+
+/* ... (Tus estilos existentes van aquí arriba) ... */
+
+/* --- INICIO DEL CÓDIGO A AÑADIR AL FINAL --- */
+
+/* Hace que las estadísticas parezcan interactivas */
+.stats > div {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.stats > div:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para el Modal */
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal-content h2 {
+  color: #6b21a8;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+/* Estilos para la lista de usuarios dentro del modal */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px; /* Altura máxima antes de hacer scroll */
+  overflow-y: auto;
+}
+
+.user-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+}
+
+.user-list-item:hover {
+  background-color: #f3e8ff;
+}
+
+.user-list-item img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-list-item span {
+  font-weight: 600;
+  color: #4b0082;
+}
+
+.user-list-item {
+  color: #111827;
+}
+
+#show-followers-btn {
+  color: #111827;
 }
