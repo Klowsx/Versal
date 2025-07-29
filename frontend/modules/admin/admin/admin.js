@@ -70,6 +70,14 @@
         return statuses[status] || status;
       },
 
+      mapReportStatus: (status) => {
+        const statuses = {
+          pending: "Pendiente",
+          resolved: "Resuelto",
+        };
+        return statuses[status] || status;
+      },
+
       showSection: (sectionId) => {
         htmlElements.contentSections.forEach((s) => s.classList.add("hidden"));
         document.getElementById(sectionId).classList.remove("hidden");
@@ -159,7 +167,9 @@
           tableHTML += `<tr data-row-id="${report._id}">
               <td>${report._id}</td>
               <td>${report.reason}</td>
-              <td><span class="status-badge ${report.status}">${report.status}</span></td>
+              <td><span class="status-badge ${report.status}">${methods.mapReportStatus(
+            report.status
+          )}</span></td>
               <td>${report.userId?.username || "N/A"}</td>
               <td>${new Date(report.createdAt).toLocaleDateString()}</td>
               <td class="action-buttons">
