@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - Versal</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <div id="admin-navbar-placeholder"></div>
+
+  <div class="admin-panel">
+    <main class="admin-content">
+      <section id="dashboard-section" class="content-section active">
+        <h2>Estadísticas Generales</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="total-users">0</div>
+            <div class="stat-label">Usuarios</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="total-stories">0</div>
+            <div class="stat-label">Historias</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value stat-value-red" id="total-reports">0</div>
+            <div class="stat-label">Reportes Pendientes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="total-assets">0</div>
+            <div class="stat-label">Activos</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="users-section" class="content-section hidden">
+        <h2>Gestión de Usuarios</h2>
+        <div id="users-data-container">
+          <p>Cargando usuarios...</p>
+        </div>
+      </section>
+
+      <section id="stories-section" class="content-section hidden">
+        <h2>Gestión de Historias</h2>
+        <div id="stories-data-container">
+          <p>Cargando historias...</p>
+        </div>
+      </section>
+
+      <section id="reports-section" class="content-section hidden">
+        <h2>Gestión de Reportes</h2>
+        <div id="reports-data-container">
+          <p>Cargando reportes...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f3eaff 0%, #e9ddff 100%);
+  color: #4c1d95;
+  margin: 0;
+  /* El padding-top debe ser suficiente para la altura de tu navbar fijo */
+  padding-top: 130px; /* Ajusta según la altura total de tu admin_navbar.html */
+}
+
+/* Estilos para el placeholder que contendrá la navbar fija */
+#admin-navbar-placeholder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f9f5ff; /* Color de fondo de la navbar */
+  z-index: 1000; /* Asegura que esté por encima de otros contenidos */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra para destacarla */
+}
+
+/* El admin-header y admin-nav ahora son hijos de #admin-navbar-placeholder */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: #f9f5ff; /* Asegura el fondo, aunque ya lo tiene el placeholder */
+  border-bottom: 1px solid #e9d5ff;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-logo {
+  height: 60px;
+  width: auto;
+}
+
+.admin-header-left h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #5b21b6;
+  margin: 0;
+}
+
+.admin-header-left p {
+  font-size: 0.9rem;
+  color: #6d28d9;
+  margin: 0;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-badge {
+  background-color: #ede9fe;
+  color: #7c3aed;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: #7c3aed;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #6d28d9;
+}
+
+.admin-nav {
+  background-color: #fefbff;
+  border-bottom: 1px solid #e9d5ff;
+  padding: 0 2rem;
+}
+
+.admin-nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-nav li {
+  margin-right: 1.5rem;
+}
+
+.admin-nav a {
+  display: block;
+  padding: 1rem 0;
+  color: #6d28d9;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.admin-nav a:hover {
+  color: #5b21b6;
+  border-bottom-color: #c4b5fd;
+}
+
+.admin-nav a.active {
+  color: #5b21b6;
+  border-bottom-color: #7c3aed;
+}
+
+.reports-count {
+  background-color: #ef4444; /* Rojo */
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  margin-left: 0.5rem;
+}
+
+.admin-panel {
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding-bottom: 2rem; /* Añade padding inferior para que el contenido no se pegue al fondo */
+}
+
+.admin-content {
+  padding: 2rem;
+}
+
+.content-section h2 {
+  font-size: 1.5rem;
+  color: #5b21b6;
+  margin-bottom: 1.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background-color: #f3eaff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #7c3aed;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value-red {
+  color: #ef4444; /* Rojo para reportes */
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #6d28d9;
+}
+
+.content-section.hidden {
+  display: none;
+}
+
+/* Estilos para tablas de datos dinámicos */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden; /* Para que los bordes redondeados se apliquen a los thead/tbody */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.data-table th,
+.data-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9d5ff;
+}
+
+.data-table th {
+  background-color: #ede9fe;
+  color: #5b21b6;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9f5ff;
+}
+
+.data-table .action-buttons button {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.data-table .action-buttons button:hover {
+  color: #5b21b6;
+}
+
+.data-table .action-buttons .delete-btn {
+  color: #ef4444;
+}
+.data-table .action-buttons .delete-btn:hover {
+  color: #dc2626;
+}

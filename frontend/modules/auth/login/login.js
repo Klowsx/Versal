@@ -1,13 +1,15 @@
+// login.js
 (() => {
-    const checkIfLoggedIn = () => {
+  const checkIfLoggedIn = () => {
     const token = localStorage.getItem("token");
     if (token) {
-      console.warn("Usuario ya autenticado. Redirigiendo al dashboard.");
-      window.location.replace("/frontend/modules/main/dashboard.html");
+      console.warn("Usuario ya autenticado. Intento de redirigir.");
+      window.location.replace("/frontend/modules/main/dashboard.html"); // Default redirect for already logged-in users
     }
   };
 
   checkIfLoggedIn();
+
   const App = (() => {
     const htmlElements = {
       loginForm: document.getElementById("loginForm"),
@@ -15,7 +17,7 @@
       password: document.querySelector('input[name="password"]'),
     };
 
-    const API_URL = "http://localhost:3000/api/user/login";
+    const API_URL = "http://localhost:3000/api/user/login"; // Your Fastify login endpoint
 
     const methods = {
       async fetchLogin(credentials) {
@@ -34,12 +36,12 @@
               const error = await response.json();
               errorMessage = error.error || error.message || errorMessage;
             } catch {
-              // No es JSON válido o viene vacío
+              // Not valid JSON or empty
             }
             throw new Error(errorMessage);
           }
 
-          return await response.json(); // { user, token }
+          return await response.json(); // Expected: { user: { _id, role, ... }, token }
         } catch (err) {
           console.error("Error en fetchLogin:", err);
           alert(err.message || "No se pudo conectar con el servidor.");
@@ -60,13 +62,23 @@
         console.log("Intentando login con:", credentials);
 
         const result = await methods.fetchLogin(credentials);
-
-        if (result && result.token) {
+        console.log("Resultado del login:", result);
+        if (result && result.token && result.user) { // Ensure user object is also present
           localStorage.setItem("token", result.token);
+          // Store user details, especially role, in localStorage for client-side checks
+          localStorage.setItem("userRole", result.user.role); // Store the user's role
+
           alert("Inicio de sesión exitoso.");
-          window.location.href = "/frontend/modules/main/dashboard.html";
+
+          // Role-based redirection
+          if (result.user.role === 'admin') {
+            window.location.href = "/frontend/modules/admin/admin.html"; // Redirect to admin panel
+          } else {
+            window.location.href = "/frontend/modules/main/dashboard.html"; // Redirect to regular dashboard
+          }
         } else {
           console.warn("Inicio de sesión fallido. Respuesta:", result);
+          // The error message from fetchLogin (via alert) should suffice for user feedback
         }
       },
     };
