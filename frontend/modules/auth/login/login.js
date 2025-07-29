@@ -4,7 +4,7 @@
     const token = localStorage.getItem("token");
     if (token) {
       console.warn("Usuario ya autenticado. Intento de redirigir.");
-      window.location.replace("/frontend/modules/main/dashboard.html"); // Default redirect for already logged-in users
+      window.location.replace("/frontend/modules/main/dashboard.html");
     }
   };
 
@@ -17,7 +17,7 @@
       password: document.querySelector('input[name="password"]'),
     };
 
-    const API_URL = "http://localhost:3000/api/user/login"; // Your Fastify login endpoint
+    const API_URL = "http://localhost:3000/api/user/login";
 
     const methods = {
       async fetchLogin(credentials) {
@@ -35,13 +35,11 @@
             try {
               const error = await response.json();
               errorMessage = error.error || error.message || errorMessage;
-            } catch {
-              // Not valid JSON or empty
-            }
+            } catch {}
             throw new Error(errorMessage);
           }
 
-          return await response.json(); // Expected: { user: { _id, role, ... }, token }
+          return await response.json();
         } catch (err) {
           console.error("Error en fetchLogin:", err);
           alert(err.message || "No se pudo conectar con el servidor.");
@@ -63,22 +61,21 @@
 
         const result = await methods.fetchLogin(credentials);
         console.log("Resultado del login:", result);
-        if (result && result.token && result.user) { // Ensure user object is also present
+        if (result && result.token && result.user) {
           localStorage.setItem("token", result.token);
-          // Store user details, especially role, in localStorage for client-side checks
-          localStorage.setItem("userRole", result.user.role); // Store the user's role
 
+          localStorage.setItem("userRole", result.user.role);
+
+          console.log(result.user.role);
           alert("Inicio de sesión exitoso.");
 
-          // Role-based redirection
-          if (result.user.role === 'admin') {
-            window.location.href = "/frontend/modules/admin/admin.html"; // Redirect to admin panel
+          if (result.user.role === "admin") {
+            window.location.href = "/frontend/modules/admin/admin/admin.html";
           } else {
-            window.location.href = "/frontend/modules/main/dashboard.html"; // Redirect to regular dashboard
+            window.location.href = "/frontend/modules/main/dashboard.html";
           }
         } else {
           console.warn("Inicio de sesión fallido. Respuesta:", result);
-          // The error message from fetchLogin (via alert) should suffice for user feedback
         }
       },
     };

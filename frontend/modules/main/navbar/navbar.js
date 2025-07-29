@@ -1,4 +1,12 @@
 (() => {
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
   const checkAuthentication = () => {
     const token = localStorage.getItem("token");
     const currentPage = window.location.pathname;
@@ -9,12 +17,38 @@
       "/frontend/modules/main/tyc.html",
     ];
 
-    if (!token && !publicRoutes.includes(currentPage)) {
-      console.warn("Usuario no autenticado. Redirigiendo a la página de login.");
+    if (!token) {
+      if (!publicRoutes.includes(currentPage)) {
+        console.warn("Usuario no autenticado. Redirigiendo a la página de login.");
+        window.location.replace("/frontend/modules/auth/login/login.html");
+      }
+      return;
+    }
+
+    const payload = parseJwt(token);
+
+    if (!payload) {
+      console.error("Token inválido o corrupto. Limpiando y redirigiendo al login.");
+      localStorage.removeItem("token");
       window.location.replace("/frontend/modules/auth/login/login.html");
+      return;
+    }
+
+    const isAdmin = payload.role === "admin";
+    const adminDashboard = "/frontend/modules/admin/admin/admin.html";
+    const userDashboard = "/frontend/modules/main/dashboard.html";
+
+    if (isAdmin && currentPage.includes("dashboard.html")) {
+      console.log("Admin detectado. Redirigiendo al panel de administrador.");
+      window.location.replace(adminDashboard);
+      return;
+    }
+
+    if (!isAdmin && currentPage.includes("admin.html")) {
+      console.warn("Acceso denegado al panel de administrador. Redirigiendo...");
+      window.location.replace(userDashboard);
     }
   };
-
   checkAuthentication();
 
   const loadNavbar = async () => {

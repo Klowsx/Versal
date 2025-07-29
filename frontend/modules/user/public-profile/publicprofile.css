@@ -3,6 +3,7 @@ body {
   font-family: system-ui, sans-serif;
   background: linear-gradient(to bottom right, #f3e8ff, #ffffff, #ede9fe);
   color: #4b0082;
+  padding-top: 20px;
 }
 
 a {
@@ -33,7 +34,7 @@ a {
 
 /* Asegura que el perfil no se oculte detrás del navbar */
 .main {
-  padding-top: 110px; /* Un poco más de espacio para el navbar fijo */
+  padding-top: 150px; /* Un poco más de espacio para el navbar fijo */
   max-width: 960px;
   margin: 0 auto;
   padding-left: 1rem;
