@@ -1,4 +1,13 @@
 (() => {
+    const checkIfLoggedIn = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.warn("Usuario ya autenticado. Redirigiendo al dashboard.");
+      window.location.replace("/frontend/modules/main/dashboard.html");
+    }
+  };
+
+  checkIfLoggedIn();
   const App = (() => {
     const htmlElements = {
       loginForm: document.getElementById("loginForm"),

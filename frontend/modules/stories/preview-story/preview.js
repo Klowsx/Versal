@@ -229,13 +229,8 @@
     };
     const handlers = {
       async handlePageLoad() {
-        fetch("/frontend/modules/main/navbar/navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            htmlElements.navbarPlaceholder.innerHTML = html;
-          })
-          .catch((error) => console.error("Error al cargar el navbar:", error));
-
+        // REMOVED: fetch("/frontend/modules/main/navbar/navbar.html") - navbar.js handles this globally
+        
         const story = await methods.fetchStoryDetails();
         if (!story) return;
 

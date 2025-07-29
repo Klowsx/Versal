@@ -101,7 +101,7 @@ html, body {
 
 .versal-navbar .search-container {
   flex: 1 1 300px;
-  position: relative;
+  position: relative; /* Asegura que el dropdown se posicione correctamente */
 }
 
 .versal-navbar .search-container input {
@@ -121,6 +121,62 @@ html, body {
   padding-left: 0.5rem;
 }
 
+/* Estilos para el nuevo dropdown de resultados de búsqueda */
+.search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 5px); /* Justo debajo del input de búsqueda */
+  left: 0;
+  width: 100%;
+  max-width: 400px; /* Ancho similar al input */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 990; /* Por debajo de la navbar principal pero por encima del contenido */
+  display: none; /* Oculto por defecto */
+  overflow: hidden; /* Para contener las imágenes */
+}
+
+.search-results-dropdown.show {
+  display: block;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eee;
+  text-decoration: none;
+  color: #4c1d95;
+  transition: background-color 0.2s;
+}
+
+.search-result-item:last-child {
+  border-bottom: none; /* No border for the last item */
+}
+
+.search-result-item:hover {
+  background-color: #f3eaff;
+}
+
+.search-result-item img {
+  width: 40px; /* Tamaño pequeño para la imagen */
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.search-result-item span {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.search-result-item span strong {
+  font-weight: 700;
+  color: #6b21a8; /* Color para el texto en negrita */
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .versal-navbar .navbar-container {
@@ -135,5 +191,12 @@ html, body {
 
   .versal-navbar .search-container input {
     max-width: 100%;
+  }
+
+  /* Ajuste para el dropdown en móvil */
+  .search-results-dropdown {
+    position: static; /* No absolute positioning in mobile for better flow */
+    max-width: 100%;
+    margin-top: 0.5rem;
   }
 }

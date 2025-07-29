@@ -1,4 +1,13 @@
 (() => {
+  const checkIfLoggedIn = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.warn("Usuario ya autenticado. Redirigiendo al dashboard.");
+      window.location.replace("/frontend/modules/main/dashboard.html");
+    }
+  };
+
+  checkIfLoggedIn();
   const App = (() => {
     const htmlElements = {
       registerForm: document.getElementById("registerForm"),
@@ -56,7 +65,8 @@
         const result = await methods.fetchAPI(`${API_URL}/register`, options);
         if (result) {
           alert("Registro exitoso. Inicia sesión.");
-          window.location.href = "../login/login.html";
+          // CAMBIO: Usar replace() para evitar que la página de registro quede en el historial
+          window.location.replace("../login/login.html");
         }
       },
     };

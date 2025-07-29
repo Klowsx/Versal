@@ -17,16 +17,13 @@
         </a>
 
         <div class="nav-item dropdown">
-          <button class="nav-link">Explorar ▼</button>
-          <div class="dropdown-menu" id="categorias-dropdown">
-            <a href="#" data-filter="todas">Todas</a>
-            <a href="#" data-filter="categoria">Categorías</a>
-            <a href="#" data-filter="etiqueta">Etiquetas</a>
-          </div>
+          <button class="nav-link" onclick="window.location.href='/frontend/modules/stories/explore-story/explore_story.html'">Explorar ▼</button>
         </div>
 
         <div class="search-container">
           <input type="text" id="search-input" placeholder="Buscar historias, autores, géneros..." />
+          <div id="search-results-dropdown" class="search-results-dropdown">
+            </div>
           <div id="filter-indicator" class="filter-indicator"></div>
         </div>
 
@@ -43,7 +40,7 @@
             <a href="/frontend/modules/user/public-profile/publicprofile.html">Perfil público</a>
             <a href="/frontend/modules/user/profile/profile.html">Ver perfil</a>
             <a href="/frontend/modules/stories/my-story/mystory.html">Mis Historias</a>
-            <a href="/frontend/modules/auth/login/login.html">Cerrar Sesión</a>
+            <a href="#" id="logoutBtn">Cerrar Sesión</a>
           </div>
         </div>
       </div>

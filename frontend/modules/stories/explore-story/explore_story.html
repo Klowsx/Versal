@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explorar Historias</title>
+  <link rel="stylesheet" href="explore_story.css" />
+  <link rel="stylesheet" href="/frontend/modules/main/navbar/navbar.css" />
+</head>
+<body class="bg-gradient">
+
+   <div id="navbar-placeholder"></div>
+
+  <main class="container main-content">
+    <section class="explore">
+      <div class="filter-group">
+        <h3 class="filter-title">Categorías <span id="catCount">(0/5)</span></h3>
+        <div id="categorias" class="filter-tags"></div>
+      </div>
+
+      <div class="filter-group">
+        <h3 class="filter-title">Etiquetas <span id="tagCount">(0/5)</span></h3>
+        <div id="tags" class="filter-tags"></div>
+      </div>
+
+      <div id="filtrosActivos" class="active-filters hidden">
+        <div class="active-tags" id="activeTagsContainer"></div>
+        <button id="clearFilters" class="btn clear-btn">Limpiar filtros</button>
+      </div>
+    </section>
+
+    <section class="resultados">
+      <h2 id="resultCount" class="results-heading">0 historias encontradas</h2>
+      <div id="historiasGrid" class="historias-grid grid-view"></div>
+    </section>
+
+    <section id="noResults" class="no-results hidden">
+      <span class="icon-search big-icon"></span>
+      <h3>No se encontraron historias</h3>
+      <p>Intenta ajustar tus filtros o términos de búsqueda</p>
+    </section>
+  </main>
+
+  <script src="/frontend/modules/main/navbar/navbar.js"></script>
+  <script src="explore_story.js"></script>
+</body>
+</html>

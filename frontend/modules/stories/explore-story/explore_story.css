@@ -1,0 +1,217 @@
+/* General layout */
+body.bg-gradient {
+  background: linear-gradient(to bottom right, #f5eafa, #ffffff, #f3e8ff);
+  font-family: sans-serif;
+  margin: 0;
+}
+
+/* Container */
+.container {
+  margin-top: 90px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.explore {
+  margin-top: 120px;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #d9bfff;
+  background-color: #ffffffb3;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background-color: #f4ecff;
+}
+
+.clear-btn,
+.clear-all-btn {
+  color: #6f42c1;
+  border-color: #d0b0ff;
+}
+
+/* Filter groups */
+.filter-group {
+  margin-bottom: 1.5rem;
+}
+
+.filter-title {
+  color: #4c1d95;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-tags button {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  /* Default style for filter buttons */
+  background-color: #e9d5ff; /* Light purple */
+  color: #7e22ce; /* Darker purple text */
+  transition: all 0.2s;
+}
+
+.filter-tags button.selected {
+  background: linear-gradient(to right, #6f42c1, #693ab7);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(108, 69, 167, 0.3);
+}
+
+.filter-tags button:not(.selected):hover {
+  background-color: #d8b4fe; /* Slightly darker light purple */
+}
+
+/* Active filters */
+.active-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  border-top: 1px solid #e4d5fb;
+  padding-top: 1rem;
+}
+
+.active-filters.hidden {
+  display: none;
+}
+
+.active-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.active-tag {
+  background-color: #d8b4fe;
+  color: #6f42c1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Results section */
+.resultados {
+  margin-top: 2rem;
+}
+
+.results-heading {
+  color: #4c1d95;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Story cards grid */
+.historias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Unified Story Card Styles (from dashboard.css) */
+.story-card { /* Applied to the <a> element */
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex; /* Ensures content stacks nicely */
+  flex-direction: column;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-image-container {
+  width: 100%;
+  height: 200px; /* Consistent image height */
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 15px 15px 0 0; /* Only top corners rounded */
+}
+
+.card-content {
+  padding: 1rem;
+  flex-grow: 1; /* Allows content to expand */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes meta info to bottom if needed */
+}
+
+.story-card .story-title { /* Changed from .card h3 to target .story-title specifically */
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4c1d95;
+  margin-bottom: 0.5rem;
+}
+
+.story-card .story-author { /* Changed from .card p to target .story-author specifically */
+  font-size: 0.9rem;
+  color: #6b21a8;
+  margin-bottom: 0.8rem;
+}
+
+.story-meta { /* Added from dashboard.css */
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #7e22ce;
+  margin-top: 0.4rem; /* Adjusted for consistency */
+}
+
+
+/* No results message */
+.no-results {
+  text-align: center;
+  padding: 3rem 0;
+  color: #6f42c1;
+}
+
+.no-results.hidden {
+  display: none;
+}
+
+.no-results .big-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.no-results h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-results p {
+  font-size: 1rem;
+  color: #8a2be2;
+}
