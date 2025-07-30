@@ -160,9 +160,7 @@
       },
     };
 
-    // --------------------------------------------------
-    // 3. INIT
-    // --------------------------------------------------
+
     const init = () => {
       if (!elements.form) return;
       document.addEventListener("DOMContentLoaded", methods.loadAndPopulateUserData);

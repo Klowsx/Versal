@@ -5,8 +5,8 @@
       GET_MY_STORIES: `${API_BASE_URL}/stories/me`,
       UPDATE_STORY: (id) => `${API_BASE_URL}/stories/${id}`,
       DELETE_STORY: (id) => `${API_BASE_URL}/stories/${id}`,
-      GET_TAGS: `${API_BASE_URL}/stories/tags`, // Necesario para el modal de edición
-      GET_CATEGORIES: `${API_BASE_URL}/stories/categories`, // Necesario para el modal de edición
+      GET_TAGS: `${API_BASE_URL}/stories/tags`, 
+      GET_CATEGORIES: `${API_BASE_URL}/stories/categories`,
     };
 
     const htmlElements = {
@@ -177,7 +177,6 @@
         });
       },
 
-      // --- Métodos para el Modal de Edición ---
       createEditModal() {
         if (htmlElements.editModal) return;
 
@@ -397,7 +396,7 @@
     };
 
     const init = () => {
-      // REMOVED: fetch("/frontend/modules/main/navbar/navbar.html") - navbar.js handles this globally
+    
 
       methods.createEditModal();
       methods.loadCategoriesAndTagsForModal();

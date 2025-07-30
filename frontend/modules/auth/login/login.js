@@ -1,4 +1,4 @@
-// login.js
+
 (() => {
   const checkIfLoggedIn = () => {
     const token = localStorage.getItem("token");

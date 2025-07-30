@@ -8,9 +8,9 @@ const userService = require("./user.service");
 //Registro de usuario
 async function register(request, reply) {
   const { email, password, username, fullName } = request.body;
-
+  console.log("Datos de registro:", { email, username, fullName });
   const result = await userService.registerUser({ email, password, username, fullName });
-
+  console.log("CONTROLLER Resultado de userService.registerUser:", result);
   if (result.error) {
     return reply.code(400).send({ error: result.error });
   }

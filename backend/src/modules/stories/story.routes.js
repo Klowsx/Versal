@@ -1,4 +1,4 @@
-// versal/backend/src/modules/stories/story.routes.js
+
 
 const storyController = require("./story.controller");
 const {

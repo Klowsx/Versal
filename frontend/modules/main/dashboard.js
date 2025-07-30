@@ -1,6 +1,6 @@
 (() => {
   const App = (() => {
-    const API_URL = "http://localhost:3000/api/stories"; // Asume que este endpoint devuelve todas las historias publicadas
+    const API_URL = "http://localhost:3000/api/stories";
 
     const htmlElements = {
       featuredContainer: document.getElementById("featured-stories"),
@@ -18,15 +18,15 @@
           return await response.json();
         } catch (err) {
           console.error("Error en fetchAPI:", err);
-          return { stories: [] }; // Devuelve un objeto con una propiedad 'stories' para consistencia
+          return { stories: [] }; 
         }
       },
 
       createFeaturedCard(story) {
-        const card = document.createElement("a"); // Usamos 'a' para que sea clickeable
+        const card = document.createElement("a"); 
         card.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
         card.className = "card";
-        // Añadimos la imagen de portada
+       
         card.innerHTML = `
           <div class="card-image-container">
             <img src="${story.coverImage || '/images/default-cover.jpg'}" alt="${story.title}" class="card-image">
@@ -41,10 +41,9 @@
       },
 
       createRecommendedCard(story) {
-        const card = document.createElement("a"); // Usamos 'a' para que sea clickeable
+        const card = document.createElement("a"); 
         card.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
         card.className = "card small";
-        // Incluimos la imagen para la tarjeta pequeña si es necesario
         card.innerHTML = `
           <div class="card-image-container">
             <img src="${story.coverImage || '/images/default-cover.jpg'}" alt="${story.title}" class="card-image-small">
@@ -62,14 +61,13 @@
     const handlers = {
       async loadStories() {
         const response = await methods.fetchAPI(API_URL);
-        const stories = response.stories || []; // Accede a la propiedad 'stories'
+        const stories = response.stories || []; 
 
         if (!stories.length) {
             console.log("No se encontraron historias para mostrar.");
             return;
         }
 
-        // Historias destacadas (primeras 3)
         const featured = stories.slice(0, 3);
         featured.forEach((story) => {
           const el = methods.createFeaturedCard(story);
@@ -78,7 +76,6 @@
           }
         });
 
-        // Recomendadas (siguientes 6)
         const recommended = stories.slice(3, 9);
         recommended.forEach((story) => {
           const el = methods.createRecommendedCard(story);

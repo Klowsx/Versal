@@ -67,7 +67,7 @@
         }
       },
       addCharacterField() {
-        const characterId = Date.now(); // ID único para el contenedor
+        const characterId = Date.now();
         const newField = document.createElement("div");
         newField.className = "character-entry";
         newField.id = `character-${characterId}`;
@@ -153,7 +153,7 @@
         });
 
         if (result && result.story) {
-          const storyId = result.story._id; // Obtén el ID de la historia creada
+          const storyId = result.story._id; 
           window.location.href = `/frontend/modules/stories/write-story/write_story.html?storyId=${storyId}`;
         } else {
           alert(`Error al crear la historia: ${result ? result.error : "Error desconocido"}`);

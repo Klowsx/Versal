@@ -11,7 +11,6 @@ const fastifyMultipart = require("@fastify/multipart");
 const fastifyStatic = require("@fastify/static");
 const fastifyRawBody = require("fastify-raw-body");
 
-// Tus módulos
 const connectDB = require("./src/config/db");
 const storyRoutes = require("./src/modules/stories/story.routes");
 const authPlugin = require("./src/plugins/auth.plugin");

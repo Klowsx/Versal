@@ -2,7 +2,6 @@ const User = require("../../models/user.model");
 const bcrypt = require("bcrypt");
 
 // Validación de contraseña
-// Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial
 function isValidPassword(password) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}$/;
   return regex.test(password);
@@ -10,6 +9,7 @@ function isValidPassword(password) {
 
 // Registro de usuario
 async function registerUser({ email, password, username, fullName }) {
+  console.log("Datos de registro en service:", { email, username, fullName });
   if (!isValidPassword(password)) {
     return {
       error:

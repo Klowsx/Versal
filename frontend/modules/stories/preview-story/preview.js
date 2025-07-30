@@ -39,14 +39,12 @@
       availableCoinsSpan: document.getElementById("availableCoins"),
       confirmDonationBtn: document.getElementById("confirmDonation"),
       cancelDonationBtn: document.getElementById("cancelDonation"),
-      // Ya no necesitamos 'donationModalMessage' directamente para los toasts.
 
       reportModal: document.getElementById("reportModal"),
       reportReasonSelect: document.getElementById("reportReason"),
       reportDetailsTextarea: document.getElementById("reportDetails"),
       confirmReportBtn: document.getElementById("confirmReport"),
       cancelReportBtn: document.getElementById("cancelReport"),
-      // Ya no necesitamos 'reportModalMessage' directamente para los toasts.
 
       navbarPlaceholder: document.getElementById("navbar-placeholder"),
     };
@@ -229,7 +227,6 @@
     };
     const handlers = {
       async handlePageLoad() {
-        // REMOVED: fetch("/frontend/modules/main/navbar/navbar.html") - navbar.js handles this globally
 
         const story = await methods.fetchStoryDetails();
         if (!story) return;

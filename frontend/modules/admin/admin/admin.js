@@ -307,7 +307,6 @@
       handleLogout() {
         localStorage.clear();
 
-        alert("a");
         setTimeout(() => {
           window.location.replace("/frontend/modules/auth/login/login.html");
         }, 1500);
@@ -331,7 +330,7 @@
             });
           }
 
-          // Asignar listeners del modal
+
           htmlElements.reportModalCloseBtn.addEventListener("click", handlers.closeReportModal);
           window.addEventListener("click", (event) => {
             if (event.target === htmlElements.reportModal) {

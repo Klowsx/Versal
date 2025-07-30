@@ -121,7 +121,7 @@ async function uploadChapterImage(request, reply) {
   try {
     await pump(file.file, fs.createWriteStream(filePath));
 
-    // Lo más importante: construye y devuelve la URL pública
+   
     const url = `http://localhost:3000/uploads/chapters/${storedFileName}`;
     return { url };
   } catch (error) {

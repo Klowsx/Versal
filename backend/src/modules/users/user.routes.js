@@ -25,7 +25,7 @@ async function userRoutes(fastify) {
     async (request, reply) => {
       console.log("Intento de registro:", request.body);
       const result = await userController.register(request, reply);
-
+      console.log("ROUTTES Resultado de userController.register:", result);
       if (result.error) {
         return reply.code(400).send({ error: result.error });
       }
@@ -99,7 +99,7 @@ async function userRoutes(fastify) {
     // Actualizar perfil
     privateRoutes.put(
       "/me",
-      // { schema: { body: updateProfileSchema } },
+      
       userController.updateProfile
     );
 

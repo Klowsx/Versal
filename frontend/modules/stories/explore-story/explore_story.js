@@ -1,5 +1,5 @@
 (() => {
-  const ExploreApp = (() => { // Renamed to ExploreApp for semantic correctness
+  const ExploreApp = (() => { 
     const htmlElements = {
       categoriesContainer: document.getElementById("categorias"),
       tagsContainer: document.getElementById("tags"),
@@ -8,17 +8,17 @@
       resultCount: document.getElementById("resultCount"),
       storiesGrid: document.getElementById("historiasGrid"),
       noResultsSection: document.getElementById("noResults"),
-      catCount: document.getElementById("catCount"), // Para el contador (1/1) o (0/1)
-      tagCount: document.getElementById("tagCount"), // Para el contador (1/1) o (0/1)
-      filtrosActivos: document.getElementById("filtrosActivos"), // Contenedor padre de filtros activos
+      catCount: document.getElementById("catCount"), 
+      tagCount: document.getElementById("tagCount"),
+      filtrosActivos: document.getElementById("filtrosActivos"), 
     };
 
     const API_BASE_URL = "http://localhost:3000/api/stories";
 
     let allCategories = [];
     let allTags = [];
-    let selectedCategory = null; // Puede ser null o el nombre de una categoría
-    let selectedTag = null;     // Puede ser null o el nombre de una etiqueta
+    let selectedCategory = null; 
+    let selectedTag = null;   
 
     const methods = {
       async fetchAPI(url, options = {}) {
@@ -31,7 +31,7 @@
           return await response.json();
         } catch (err) {
           console.error(`Error en fetchAPI para ${url}:`, err);
-          return null; // Devuelve null en caso de error de red o similar
+          return null; 
         }
       },
 
@@ -69,7 +69,6 @@
           button.addEventListener("click", () => handlers.toggleFilter("category", category.name));
           htmlElements.categoriesContainer.appendChild(button);
         });
-        // Update category count (1/1) or (0/1)
         htmlElements.catCount.textContent = `(${selectedCategory ? '1' : '0'}/1)`;
       },
 
@@ -85,7 +84,6 @@
           button.addEventListener("click", () => handlers.toggleFilter("tag", tag.name));
           htmlElements.tagsContainer.appendChild(button);
         });
-        // Update tag count (1/1) or (0/1)
         htmlElements.tagCount.textContent = `(${selectedTag ? '1' : '0'}/1)`;
       },
 
@@ -93,22 +91,20 @@
         let storiesToRender = [];
         let fetchedStories = [];
 
-        // Case 1: Both category and tag are selected (frontend filtering)
         if (selectedCategory && selectedTag) {
           try {
-            const data = await methods.fetchAPI(`${API_BASE_URL}`); // Fetch all stories
+            const data = await methods.fetchAPI(`${API_BASE_URL}`); 
             fetchedStories = data?.stories || [];
-            // Apply both filters in the frontend
             storiesToRender = fetchedStories.filter(story => 
-                story.tags.some(tag => tag.name === selectedCategory) && // Assuming category is also a tag in data
+                story.tags.some(tag => tag.name === selectedCategory) && 
                 story.tags.some(tag => tag.name === selectedTag)
             );
           } catch (error) {
             console.error("Error al obtener todas las historias para filtrar combinado:", error);
-            // Fallback: render empty or error message
+           
           }
         } 
-        // Case 2: Only category is selected (backend filtering)
+      
         else if (selectedCategory) {
           try {
             const data = await methods.fetchAPI(`${API_BASE_URL}/category/${encodeURIComponent(selectedCategory)}`);
@@ -117,7 +113,6 @@
             console.error("Error al filtrar por categoría:", error);
           }
         } 
-        // Case 3: Only tag is selected (backend filtering)
         else if (selectedTag) {
           try {
             const data = await methods.fetchAPI(`${API_BASE_URL}/tag/${encodeURIComponent(selectedTag)}`);
@@ -126,7 +121,7 @@
             console.error("Error al filtrar por etiqueta:", error);
           }
         } 
-        // Case 4: No filters selected (fetch all stories)
+      
         else {
           try {
             const data = await methods.fetchAPI(`${API_BASE_URL}`);
@@ -139,11 +134,10 @@
         methods.renderStories(storiesToRender);
       },
 
-      // Function to create a story card, matching dashboard.js structure
       createStoryCard(story) {
         const card = document.createElement("a");
         card.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
-        card.className = "story-card"; // Using .story-card from explore_story.css
+        card.className = "story-card";
 
         card.innerHTML = `
           <div class="card-image-container">
@@ -208,26 +202,26 @@
       async handlePageLoad() {
         await methods.fetchCategories();
         await methods.fetchTags();
-        await methods.filterStories(); // Load all stories initially
-        methods.updateActiveFiltersUI(); // Update active filters section on load
+        await methods.filterStories(); 
+        methods.updateActiveFiltersUI(); 
       },
 
       toggleFilter(type, name) {
         if (type === "category") {
           if (selectedCategory === name) {
-            selectedCategory = null; // Deselect if already selected
+            selectedCategory = null;
           } else {
-            selectedCategory = name; // Select new category
+            selectedCategory = name;
           }
         } else if (type === "tag") {
           if (selectedTag === name) {
-            selectedTag = null; // Deselect if already selected
+            selectedTag = null; 
           } else {
-            selectedTag = name; // Select new tag
+            selectedTag = name;
           }
         }
-        methods.renderCategories(); // Re-render to update selected state and count
-        methods.renderTags();       // Re-render to update selected state and count
+        methods.renderCategories(); 
+        methods.renderTags();     
         methods.updateActiveFiltersUI();
         methods.filterStories();
       },

@@ -23,7 +23,7 @@ async function chapterRoutes(fastify) {
 
   // Obtener cantidad de capítulos publicados
   fastify.get(
-    "/stories/:storyId/published-chapters-count", // Nuevo endpoint
+    "/stories/:storyId/published-chapters-count",
     { schema: getPublishedChapterCountSchema },
     chapterController.getPublishedChapterCount
   );

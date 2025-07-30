@@ -1,4 +1,4 @@
-// Versal/backend/src/models/user.model.js
+
 const mongoose = require("mongoose");
 
 const subscriptionSchema = new mongoose.Schema({
@@ -24,21 +24,14 @@ const userSchema = new mongoose.Schema({
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
-  stripeCustomerId: { type: String, default: null },
+  stripeCustomerId: { type: String, unique: false, sparse: true, default: null },
   isPremium: { type: Boolean, default: false },
-  premiumSubscriptionId: { type: String, default: null },
-  subscriptionPlanId: { type: String, sparse: true, default: null },
+  premiumSubscriptionId: { type: String, unique: false, sparse: true, default: null },
+  subscriptionPlanId: { type: String, unique: false, sparse: true, default: null },
   coins: { type: Number, default: 0 },
 });
 
-userSchema.index(
-  { stripeCustomerId: 1 },
-  { unique: true, partialFilterExpression: { stripeCustomerId: { $type: "string" } } }
-);
-userSchema.index(
-  { premiumSubscriptionId: 1 },
-  { unique: true, partialFilterExpression: { premiumSubscriptionId: { $type: "string" } } }
-);
+
 
 const UserModel = mongoose.model("User", userSchema);
 module.exports = UserModel;

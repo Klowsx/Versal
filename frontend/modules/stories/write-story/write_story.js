@@ -133,13 +133,12 @@
           }
 
           if (options.redirectTo) {
-            // Un pequeño retraso para que la notificación sea visible, si se muestra.
             setTimeout(
               () => {
                 window.location.href = options.redirectTo;
               },
               options.showNotification ? 1000 : 0
-            ); // Espera 1 segundo si hay notificación
+            ); 
           }
         } catch (error) {
           console.error("Error capturado en saveOrUpdateChapter:", error);
@@ -209,8 +208,7 @@
 
       renderChapter: (index) => {
         if (!state.chapters[index]) {
-          // Si el índice no existe (ej. al borrar)
-          if (state.chapters.length > 0) methods.renderChapter(0); // Renderiza el primero
+          if (state.chapters.length > 0) methods.renderChapter(0); 
           return;
         }
         state.currentChapterIndex = index;
@@ -270,14 +268,12 @@
 
           if (act === "status") {
             chapterToUpdate.status = currentStatus === "draft" ? "published" : "draft";
-            state.currentChapterIndex = index; // Aseguramos el índice correcto
+            state.currentChapterIndex = index;
             await methods.saveOrUpdateChapter();
             methods.renderChapter(index);
             methods.updateStats();
           } else if (act === "eliminar") {
-            // ¡NUEVA VALIDACIÓN DE BORRADO!
             if (!chapterToUpdate._id) {
-              // Si no tiene ID, solo existe en el frontend
               state.chapters.splice(index, 1);
               methods.renderChapterList();
               methods.renderChapter(
@@ -287,7 +283,6 @@
               return;
             }
 
-            // Si sí tiene ID, procedemos con el borrado en el backend
             if (
               confirm(`¿Seguro de eliminar "${chapterToUpdate.title || `Capítulo ${index + 1}`}"?`)
             ) {

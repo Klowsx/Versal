@@ -1,44 +1,41 @@
-const mongoose = require("mongoose"); // Necesario para mongoose.Types.ObjectId
+const mongoose = require("mongoose"); 
 const Interaction = require("../../models/interaction.model");
-const { Story } = require("../../models/story.model"); // Importar el modelo Story
-const Chapter = require("../../models/chapter.model"); // Importar el modelo Chapter
+const { Story } = require("../../models/story.model"); 
+const Chapter = require("../../models/chapter.model"); 
 
-/**
- * Función auxiliar para recalcular y actualizar el campo totalLikes de una historia.
- * @param {string} storyId - El ID de la historia a actualizar.
- */
+
 async function updateStoryTotalLikes(storyId) {
   try {
-    // Agregación para sumar los likes de todos los capítulos de una historia
+    
     const totalLikesResult = await Interaction.aggregate([
       {
         $lookup: {
-          from: "chapters", // Nombre de la colección de capítulos (plural por defecto de Mongoose)
-          localField: "contentId", // Campo en la colección 'interactions' (es el chapterId)
-          foreignField: "_id", // Campo en la colección 'chapters'
+          from: "chapters", 
+          localField: "contentId", 
+          foreignField: "_id", 
           as: "chapterInfo",
         },
       },
       {
-        $unwind: "$chapterInfo", // Desestructura el array 'chapterInfo' para procesar cada capítulo
+        $unwind: "$chapterInfo", 
       },
       {
         $match: {
-          "chapterInfo.story": new mongoose.Types.ObjectId(storyId), // Filtra por el ID de la historia
-          interactionType: "like", // Solo cuenta las interacciones de tipo 'like'
+          "chapterInfo.story": new mongoose.Types.ObjectId(storyId), 
+          interactionType: "like", 
         },
       },
       {
         $group: {
-          _id: null, // Agrupa todos los resultados en un solo documento
-          totalLikes: { $sum: 1 }, // Cuenta el número de 'likes' (cada like es un documento)
+          _id: null, 
+          totalLikes: { $sum: 1 },
         },
       },
     ]);
 
     const newTotalLikes = totalLikesResult.length > 0 ? totalLikesResult[0].totalLikes : 0;
 
-    // Actualiza el campo totalLikes en el modelo Story
+
     await Story.findByIdAndUpdate(storyId, { totalLikes: newTotalLikes });
     console.log(`Story ${storyId} totalLikes updated to ${newTotalLikes}`);
   } catch (error) {
@@ -57,23 +54,21 @@ async function addInteractionToChapter({ chapterId, userId, interactionType, tex
       });
 
       let storyId = null;
-      // Obtener el ID de la historia a la que pertenece este capítulo
       const chapter = await Chapter.findById(chapterId);
       if (chapter && chapter.story) {
-        // Asume que el modelo Chapter tiene un campo 'story'
         storyId = chapter.story;
       }
 
       if (existingLike) {
-        await existingLike.deleteOne(); // Eliminar el like existente (es un "unlike")
+        await existingLike.deleteOne(); 
         if (storyId) {
-          await updateStoryTotalLikes(storyId); // Actualizar el total de likes de la historia
+          await updateStoryTotalLikes(storyId); 
         }
         return { status: "unliked", message: "Me gusta quitado." };
       } else {
-        const like = await Interaction.create({ contentId: chapterId, userId, interactionType }); // Crear un nuevo like
+        const like = await Interaction.create({ contentId: chapterId, userId, interactionType }); 
         if (storyId) {
-          await updateStoryTotalLikes(storyId); // Actualizar el total de likes de la historia
+          await updateStoryTotalLikes(storyId); 
         }
         return { status: "liked", like, message: "¡Me gusta!" };
       }
@@ -122,15 +117,15 @@ async function deleteInteraction({ interactionId, userId, userRole }) {
     }
 
     const isLike = interaction.interactionType === "like";
-    const chapterIdAffected = interaction.contentId; // El contentId es el chapterId en este caso
+    const chapterIdAffected = interaction.contentId; 
 
-    await interaction.deleteOne(); // Eliminar la interacción
+    await interaction.deleteOne(); 
 
     if (isLike) {
-      // Si la interacción eliminada era un like, actualiza el contador de likes de la historia
+    
       const chapter = await Chapter.findById(chapterIdAffected);
       if (chapter && chapter.story) {
-        // Asume que el modelo Chapter tiene un campo 'story'
+    
         await updateStoryTotalLikes(chapter.story);
       }
     }

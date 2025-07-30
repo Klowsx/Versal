@@ -45,7 +45,7 @@ const createSubscriptionCheckoutSchema = {
   headers: headersAuth,
   body: {
     type: "object",
-    required: ["planId"], // Asume que tienes IDs de planes predefinidos en Stripe
+    required: ["planId"], 
     properties: {
       planId: { type: "string", description: "ID del precio del plan de suscripción en Stripe" },
     },

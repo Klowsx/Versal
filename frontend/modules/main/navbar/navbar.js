@@ -174,7 +174,7 @@
       if (stories && stories.length > 0) {
         stories.slice(0, 3).forEach((story) => {
           const resultItem = document.createElement("a");
-          resultItem.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`; // Enlace a la página de vista previa
+          resultItem.href = `/frontend/modules/stories/preview-story/preview.html?id=${story._id}`;
           resultItem.classList.add("search-result-item");
 
           const title = story.title;

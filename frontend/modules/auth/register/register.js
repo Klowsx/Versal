@@ -65,7 +65,6 @@
         const result = await methods.fetchAPI(`${API_URL}/register`, options);
         if (result) {
           alert("Registro exitoso. Inicia sesión.");
-          // CAMBIO: Usar replace() para evitar que la página de registro quede en el historial
           window.location.replace("../login/login.html");
         }
       },

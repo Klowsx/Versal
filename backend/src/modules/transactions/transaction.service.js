@@ -1,4 +1,4 @@
-// Versal/backend/src/modules/transactions/transaction.service.js
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Transaction = require("../../models/transaction.model");
 const User = require("../../models/user.model");
